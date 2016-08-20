@@ -1,0 +1,8 @@
+# Ignore everything
+config/*
+
+# But not these files...
+!CMakeLists.txt
+!LincedInServerConfig.h.in
+# etc...
+

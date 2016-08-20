@@ -1,0 +1,3 @@
+// the configured options and settings for LincedInServer
+#define LincedInServer_VERSION_MAJOR @LincedInServer_VERSION_MAJOR@
+#define LincedInServer_VERSION_MINOR @LincedInServer_VERSION_MINOR@
