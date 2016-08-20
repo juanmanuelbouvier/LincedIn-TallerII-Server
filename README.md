@@ -1,5 +1,5 @@
 # LincedIn-TallerII-Server
-Trabajo Practico de Taller de Programación II (75.52) | Facultad de Ingeniería - Universidad de Buenos Aires
+Trabajo Práctico de Taller de Programación II (75.52) | Facultad de Ingeniería - Universidad de Buenos Aires
 
 ## Descripción
 Server C++ del TP.
@@ -7,7 +7,7 @@ Server C++ del TP.
 ### Herramientas
   - CMake
 
-###Integrantes:
+### Integrantes:
   - Octavio Iogha
   - Etchanchú Facundo
   - Bouvier Juan Manuel
