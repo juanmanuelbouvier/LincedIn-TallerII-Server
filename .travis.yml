@@ -1,6 +1,7 @@
 language: cpp
 
-script: cmake config/CMakeLists.txt && make
+script: cmake config/CMakeLists.txt
+after_script: cd config && make
 
 branches:
   only:
