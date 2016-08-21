@@ -16,5 +16,5 @@ Server C++ del TP.
 ## Instrucciones
 
 ### Compilación
-Comando para compilar el proyecto y obtener un ejecutable: `cmake CMakeLists.txt && make`
+Comando para compilar el proyecto y obtener un ejecutable: `cmake CMakeLists.txt && make`<br />
 Debemos estar parados en el directorio _config_ para ejecutar el comando. El ejecutable se creará en dicho directorio.
