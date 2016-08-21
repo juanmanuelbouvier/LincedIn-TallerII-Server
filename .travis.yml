@@ -1,0 +1,7 @@
+language: cpp
+
+script: cmake config/CMakeLists.txt && make
+
+branches:
+  only:
+  - master
