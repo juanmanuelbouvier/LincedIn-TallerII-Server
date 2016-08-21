@@ -17,3 +17,19 @@ configure_file (
 include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable(LincedInServer ../src/AppInitializer.cpp)
+
+### TESTING ###
+include(CTest)
+
+# does the application run 
+add_test (RunsOK LincedInServer)
+
+#define a macro to simplify adding tests, then use it
+macro (do_test name app arg result)
+  add_test (${name} ${app} ${arg})
+  set_tests_properties (${arg}
+    PROPERTIES PASS_REGULAR_EXPRESSION ${result})
+endmacro (do_test)
+ 
+# do a bunch of result based tests
+do_test ("VersionIsOK" LincedInServer "" "1.0")
