@@ -1,3 +1,8 @@
+sudo: required
+
+services:
+  - docker
+
 language: cpp
 
 script: cmake config/CMakeLists.txt && cd config && make
