@@ -1,8 +1,13 @@
 # Ignore everything
 config/*
+docs/*
 
 # But not these files...
 !CMakeLists.txt
+!cmake
 !LincedInServerConfig.h.in
+!conf.py.in
+!index.rst
 # etc...
+
 
