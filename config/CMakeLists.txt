@@ -21,7 +21,7 @@ configure_file (
 # so that we will find LincedInServerConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(LincedInServer ../src/AppInitializer.cpp)
+add_executable(LincedInServer ../src/main/AppInitializer.cpp)
 
 ### TESTING ###
 include(CTest)

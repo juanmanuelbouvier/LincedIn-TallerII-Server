@@ -7,6 +7,7 @@ Server C++ del TP.
 ### Herramientas
   - CMake
   - Sphinx
+  - Doxygen
 
 ### Integrantes:
   - Octavio Iogha
@@ -30,5 +31,6 @@ La documentación se encontrará en el archivo _docs/build/html/index.html_<br /
 ### Limpiar archivos generados por CMake
 Para limpiar los archivos generados por CMake hay que ejecutar el comando `make clean`<br />
 Este comando remueve los directorios _build_<br />
+Borra los archivos generados al compilar y también toda la documentación generada por Sphinx y Doxygen.<br />
 
 

@@ -5,9 +5,9 @@ services:
 
 language: cpp
 
-script: cd config && cmake CMakeLists.txt && make
+script: make build
 
-after_script: cd ../docs && cmake CMakeLists.txt && make
+after_script: make doc
 
 branches:
   only:

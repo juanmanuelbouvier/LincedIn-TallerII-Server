@@ -27,7 +27,7 @@ configure_file(
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
  
-add_custom_target(my_project_docs ALL
+add_custom_target(LincedInServer_docs ALL
     ${SPHINX_EXECUTABLE}
         -q -b html
         -c "${BINARY_BUILD_DIR}"
@@ -36,3 +36,25 @@ add_custom_target(my_project_docs ALL
         "${SPHINX_HTML_DIR}"
     COMMENT "Building HTML documentation with Sphinx")
 # ----- ! Sphinx ----- #
+
+# ----- Doxygen ----- #
+macro(add_sphinx_target TARGET_NAME BUILDER COMMENT_STR)
+    add_custom_target(${TARGET_NAME}
+    COMMAND sphinx-build -b ${BUILDER} . ${CMAKE_CURRENT_BINARY_DIR}/${BUILDER}
+        WORKING_DIRECTORY doxymentation
+        DEPENDS doxygen
+        COMMENT ${COMMENT_STR}
+    )
+
+endmacro(add_sphinx_target)
+
+add_custom_target(doxygen ALL
+    COMMAND doxygen Doxyfile
+    COMMENT "Build doxygen xml files used by sphinx/breathe."
+)
+
+add_sphinx_target(docs-html
+    html
+    "Build html documentation"
+)
+# ----- ! Doxygen ----- #

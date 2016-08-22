@@ -3,6 +3,10 @@
 
 using namespace std;
 
+/**
+* Launchs the application server.<BR>
+* Prints the app-server version.
+*/
 int main()
 {
     // TODO
