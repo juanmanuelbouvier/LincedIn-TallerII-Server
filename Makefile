@@ -6,3 +6,7 @@ doc:
 clean:
 	rm -rf config/build/ docs/build/ docs/doxymentation
 
+### REMOVE ###
+doxygen:
+	cd docs && doxygen Doxyfile
+
