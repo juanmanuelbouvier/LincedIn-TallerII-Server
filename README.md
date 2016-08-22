@@ -16,10 +16,13 @@ Server C++ del TP.
 
 ## Instrucciones
 
-### Compilación
-Para compilar el proyecto y obtener un ejecutable debemos estar parados en el directorio _config_ y ejecutar el comando: `cmake CMakeLists.txt && make`<br />
-El ejecutable se creará en dicho directorio.<br />
+El comando `make` compila el proyecto, genera un ejecutable y además genera automáticamente documentación HTML del proyecto.
 
-### Documentación
-Para generar documentación HTML del proyecto automáticamente debemos estar parados en el directorio _docs_ y ejecutar el comando: `cmake CMakeLists.txt && make`<br />
-La documentación HTML se encontrará en _html/index.html_ en dicho directorio.<br />
+### Sólo Compilación
+Para compilar el proyecto hay que ejecutar el comando `make build`<br />
+El ejecutable se creará en el directorio _config/bin_.<br />
+
+### Sólo Documentación
+Para generar documentación HTML del proyecto hay que ejecutar el comando `make doc`<br />
+La documentación se encontrará en el archivo _docs/html/index.html_.<br />
+
