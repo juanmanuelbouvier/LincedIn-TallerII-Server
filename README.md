@@ -17,7 +17,7 @@ Server C++ del TP.
 
 ## Instrucciones CMake
 
-El comando `make` compila el proyecto, genera un ejecutable y además genera automáticamente documentación del proyecto.<br />
+El comando `make` compila el proyecto y además genera automáticamente documentación del proyecto.<br />
 Todos los archivos generados por CMake (temporales o no) se guardan en directorios _build_ dentro de cada directorio particular donde se ejecuten instrucciones CMake.<br />
 
 ### Sólo Compilación
