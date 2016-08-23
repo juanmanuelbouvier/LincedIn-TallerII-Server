@@ -26,7 +26,7 @@ El ejecutable se creará en el directorio _config/build/bin_<br />
 
 ### Sólo Documentación
 Para generar documentación del proyecto hay que ejecutar el comando `make doc`<br />
-Se genera documentación con dos herramientas distintas: Sphinx y Doxygen. Se recomienda consultar la documentación de Doxygen pues la de Sphinx podría estar desactualizada al no ser una herramienta de tipo *autodoc*<br />
+Se genera documentación con dos herramientas distintas: **Sphinx** y **Doxygen**. Se recomienda consultar la documentación de Doxygen pues la de Sphinx podría estar desactualizada al no ser una herramienta de tipo autodoc.<br />
 La documentación HTML de Doxygen se encontrará en el archivo _docs/build/doxymentation/html/index.html_<br />
 La documentación HTML de Sphinx se encontrará en el archivo _docs/build/sphinx/html/index.html_<br />
 
