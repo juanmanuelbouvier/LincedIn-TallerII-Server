@@ -1,9 +1,9 @@
 sudo: required
 
+language: cpp
+
 services:
   - docker
-
-language: cpp
 
 script: make build
 
