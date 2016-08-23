@@ -1,9 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 
-# ----- Sphinx ----- #
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+# ----- Sphinx ----- #
 find_package(Sphinx REQUIRED)
+
+set(SPHINX_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/sphinx")
  
 if(NOT DEFINED SPHINX_THEME)
     set(SPHINX_THEME default)
@@ -14,20 +16,20 @@ if(NOT DEFINED SPHINX_THEME_DIR)
 endif()
  
 # configured documentation tools and intermediate build results
-set(BINARY_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
+set(BINARY_BUILD_DIR "${SPHINX_BINARY_DIR}/_build")
  
 # Sphinx cache with pickled ReST documents
-set(SPHINX_CACHE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_doctrees")
+set(SPHINX_CACHE_DIR "${SPHINX_BINARY_DIR}/_doctrees")
  
 # HTML output directory
-set(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
+set(SPHINX_HTML_DIR "${SPHINX_BINARY_DIR}/html")
  
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in"
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
  
-add_custom_target(LincedInServer_docs ALL
+add_custom_target(my_project_docs ALL
     ${SPHINX_EXECUTABLE}
         -q -b html
         -c "${BINARY_BUILD_DIR}"
@@ -49,7 +51,7 @@ macro(add_sphinx_target TARGET_NAME BUILDER COMMENT_STR)
 endmacro(add_sphinx_target)
 
 add_custom_target(doxygen ALL
-    COMMAND doxygen Doxyfile
+    COMMAND doxygen ../Doxyfile
     COMMENT "Build doxygen xml files used by sphinx/breathe."
 )
 
@@ -58,3 +60,6 @@ add_sphinx_target(docs-html
     "Build html documentation"
 )
 # ----- ! Doxygen ----- #
+
+
+
