@@ -1,12 +1,9 @@
 FROM ubuntu
 
 RUN apt-get -y update
-RUN apt-get install -y cmake doxygen graphviz python3-setuptools
+RUN apt-get install -y git g++ make cmake doxygen graphviz python3-setuptools
 RUN easy_install3 pip
 
-RUN apt-get install -y git
-RUN mkdir /home/LincedIn-AppServer
-RUN cd /home/LincedIn-AppServer/
-RUN git clone https://github.com/juanmanuelbouvier/LincedIn-TallerII-Server.git
+RUN mkdir /root/LincedIn && cd /root/LincedIn/ && git clone https://github.com/juanmanuelbouvier/LincedIn-TallerII-Server.git && cd LincedIn-TallerII-Server && make
 
-CMD make
+CMD /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/LincedInServer
