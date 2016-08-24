@@ -16,7 +16,7 @@ Server C++ del TP.
   - Bouvier Juan Manuel
   - Bert Tomás
 
-## Instruccione
+## Instrucciones
 
 ### CMake
 El comando `make` compila el proyecto y además genera automáticamente documentación del proyecto.<br />
@@ -39,7 +39,7 @@ Borra los archivos generados al compilar y también toda la documentación gener
 
 ### Docker
 Al hacer el `build` del Dockerfile se crea una imagen del entorno con las dependencias instaladas y el proyecto ya compilado. Por ejemplo, utilizar el comando `sudo docker build -t lincedin-appserver`<br />
-Al correr la imagen se levanta el servidor dentro del container. Siguiente con el ejemplo anterior, el comando sería `sudo docker run lincedin-appserver`<br />
+Al correr la imagen se levanta el servidor dentro del container. Siguiendo con el ejemplo anterior, el comando sería `sudo docker run lincedin-appserver`<br />
 
 
 
