@@ -1,5 +1,6 @@
 # LincedIn-TallerII-Server
 Trabajo Práctico de Taller de Programación II (75.52) | Facultad de Ingeniería - Universidad de Buenos Aires
+![Build Status](https://travis-ci.org/juanmanuelbouvier/LincedIn-TallerII-Server.svg?branch=master)
 
 ## Descripción
 Server C++ del TP.
