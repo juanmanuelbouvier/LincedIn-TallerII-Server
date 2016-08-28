@@ -38,7 +38,7 @@ Este comando remueve los directorios _build_<br />
 Borra los archivos generados al compilar y también toda la documentación generada por Sphinx y Doxygen.<br />
 
 ### Docker
-Al hacer el `build` del Dockerfile se crea una imagen del entorno con las dependencias instaladas y el proyecto ya compilado. Por ejemplo, utilizar el comando `sudo docker build -t lincedin-appserver`<br />
+Al hacer el `build` del Dockerfile se crea una imagen del entorno con las dependencias instaladas y el proyecto ya compilado. Por ejemplo, utilizar el comando `sudo docker build -t lincedin-appserver .`<br />
 Al correr la imagen se levanta el servidor dentro del container. Siguiendo con el ejemplo anterior, el comando sería `sudo docker run lincedin-appserver`<br />
 
 
