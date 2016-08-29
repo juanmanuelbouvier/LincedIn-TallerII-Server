@@ -24,6 +24,27 @@ include_directories("${PROJECT_BINARY_DIR}")
 add_executable(LincedInServer ../src/main/AppInitializer.cpp)
 
 ### TESTING ###
+
+################################
+# GTest
+################################
+ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/googletest)
+enable_testing()
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+add_executable(RunUnitTests
+	${PROJECT_SOURCE_DIR}/../src/test/test_main.cpp
+)
+target_link_libraries(RunUnitTests gtest gtest_main)
+
+add_test(
+	NAME RunUnitTests
+	COMMAND RunUnitTests
+)
+
+################################
+# CTest
+################################
 include(CTest)
 
 # does the application run 

@@ -30,7 +30,7 @@ if (SPHINX_FOUND)
     		"${BINARY_BUILD_DIR}/conf.py"
     	@ONLY)
  
-	add_custom_target(my_project_docs ALL
+	add_custom_target(lincedin-appserver_docs ALL
     		${SPHINX_EXECUTABLE}
         		-q -b html
         		-c "${BINARY_BUILD_DIR}"
