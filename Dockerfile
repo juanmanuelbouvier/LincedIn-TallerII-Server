@@ -9,4 +9,5 @@ RUN git clone https://github.com/juanmanuelbouvier/LincedIn-TallerII-Server.git
 WORKDIR /root/LincedIn/LincedIn-TallerII-Server
 RUN make
 
-CMD config/build/bin/LincedInServer
+WORKDIR /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/
+CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/LincedInServer ; /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests"]
