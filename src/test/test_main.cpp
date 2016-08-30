@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "gtest/include/gtest/gtest.h"
+#include "gtest/gtest.h"
 #include "DummyTests.cpp"	// TODO: include .h, NEVER .cpp!
 
 int main(int argc, char **argv) {

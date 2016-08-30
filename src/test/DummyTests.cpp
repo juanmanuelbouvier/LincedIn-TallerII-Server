@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "gtest/include/gtest/gtest.h"
+#include "gtest/gtest.h"
 
 TEST(sample_test_case, sample_test)
 {
