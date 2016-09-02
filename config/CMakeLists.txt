@@ -24,9 +24,9 @@ include_directories("${PROJECT_BINARY_DIR}")
 set (APP_SOURCE "${PROJECT_SOURCE_DIR}/../src/main")
 
 set (SOURCES
-    ${APP_SOURCE}/Logger/Logger.cpp
-    ${APP_SOURCE}/Util/Util.cpp
-    ${APP_SOURCE}/MongooseServer/Server.cpp
+    ${APP_SOURCE}/service/Logger/Logger.cpp
+    ${APP_SOURCE}/service/Utils/DateUtils.cpp
+    ${APP_SOURCE}/service/MongooseServer/Server.cpp
     )
     
 set (MAIN_CPP
@@ -73,7 +73,7 @@ if (WIN32)
 endif (WIN32)
 
 set (MONGOOSE_SOURCES
-    ${APP_SOURCE}/MongooseServer/mongoose/mongoose.c
+    ${APP_SOURCE}/service/MongooseServer/mongoose/mongoose.c
     )
 
 add_definitions(-DMG_ENABLE_THREADS)    
@@ -83,7 +83,7 @@ add_library (mongoose ${MONGOOSE_SOURCES})
 target_link_libraries (mongoose ${EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
 set (JSON_SOURCES
-    ${APP_SOURCE}/Json/json/jsoncpp.cpp
+    ${APP_SOURCE}/service/Json/json/jsoncpp.cpp
     )
 add_library(json ${JSON_SOURCES})
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "LincedInServerConfig.h"
-#include "MongooseServer/Server.h"
-#include "Logger/Logger.h"
+#include "service/MongooseServer/Server.h"
+#include "service/Logger/Logger.h"
 
 using namespace std;
 

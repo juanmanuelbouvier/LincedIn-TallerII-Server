@@ -1,5 +1,5 @@
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef DATE_UTILS_H_
+#define DATE_UTILS_H_
 
 #include <iostream>
 
@@ -8,4 +8,4 @@ using namespace std;
 const string getTimeWithFormat(string Format = "[%Y/%m/%d %X] ");
 
 
-#endif /* UTIL_H_ */
+#endif /* DATE_UTILS_H_ */
