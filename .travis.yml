@@ -13,6 +13,8 @@ before_install:
 
 script: 
   - make build
+
+after_success:
   - ./config/build/bin/RunUnitTests 
 
 after_script: 
