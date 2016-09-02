@@ -1,6 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 project (LincedInServer)
 
+# Compiler
+SET (CMAKE_CXX_FLAGS "-std=c++11 -g -fprofile-arcs -ftest-coverage")
+SET(CMAKE_C_FLAGS "-g -fprofile-arcs -ftest-coverage")
+SET(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
+
 # CMake output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -57,8 +62,6 @@ add_test(
 ##################################
 # Mongoose and JSON libraries
 ##################################
-
-SET (CMAKE_CXX_FLAGS "-std=c++11")
 
 find_package (Threads)
 

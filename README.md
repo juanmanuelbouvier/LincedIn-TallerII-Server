@@ -38,7 +38,7 @@ Este comando remueve los directorios _build_<br />
 Borra los archivos generados al compilar y también toda la documentación generada por Sphinx y Doxygen.<br />
 
 ### Testing
-Para correr los tests unitarios una vez compilado el proyecto con `make`, ir al directorio `config/build/bin/` y ejecutar `RunUnitTests`.<br />
+Para correr los tests unitarios una vez generado el ejecutable del servidor, ejecutar `make test` o ir al directorio `config/build/bin/` y correr `RunUnitTests`.<br />
 
 ### Valgrind
 Para correr el chequeo de memoria de valgrind, ejecutar el comando `make valgrind` una vez compilado el proyecto y generado el ejecutable correspondiente.<br />

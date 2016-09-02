@@ -15,7 +15,7 @@ script:
   - make build
 
 after_success:
-  - ./config/build/bin/RunUnitTests 
+  - make test
 
 after_script: 
   - make doc
