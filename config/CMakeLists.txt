@@ -21,7 +21,19 @@ configure_file (
 # so that we will find LincedInServerConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(LincedInServer ../src/main/AppInitializer.cpp)
+set (APP_SOURCE "${PROJECT_SOURCE_DIR}/../src/main")
+
+set (SOURCES
+    ${APP_SOURCE}/Logger/Logger.cpp
+    ${APP_SOURCE}/Util/Util.cpp
+    ${APP_SOURCE}/MongooseServer/Server.cpp
+    )
+    
+set (MAIN_CPP
+    ${APP_SOURCE}/AppInitializer.cpp
+    )
+
+add_executable(LincedInAppServer ${MAIN_CPP} ${SOURCES})
 
 ### TESTING ###
 
@@ -41,3 +53,39 @@ add_test(
 	NAME RunUnitTests
 	COMMAND RunUnitTests
 )
+
+##################################
+# Mongoose and JSON libraries
+##################################
+
+SET (CMAKE_CXX_FLAGS "-std=c++11")
+
+find_package (Threads)
+
+# Adding dl
+if (NOT WIN32)
+    set (EXTRA_LIBS ${EXTRA_LIBS} dl)
+endif (NOT WIN32)
+
+# Adding sockets for Win32
+if (WIN32)
+    set (EXTRA_LIBS ${EXTRA_LIBS} ws2_32)
+endif (WIN32)
+
+set (MONGOOSE_SOURCES
+    ${APP_SOURCE}/MongooseServer/mongoose/mongoose.c
+    )
+
+add_definitions(-DMG_ENABLE_THREADS)    
+
+add_library (mongoose ${MONGOOSE_SOURCES})
+
+target_link_libraries (mongoose ${EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+
+set (JSON_SOURCES
+    ${APP_SOURCE}/Json/json/jsoncpp.cpp
+    )
+add_library(json ${JSON_SOURCES})
+
+target_link_libraries (LincedInAppServer mongoose)
+target_link_libraries (LincedInAppServer json)
