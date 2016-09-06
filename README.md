@@ -28,7 +28,7 @@ El ejecutable se creará en el directorio _config/build/bin_<br />
 
 #### Correr
 Para ejecutar el proyecto con parametros default hay que ejecutar el comando `make run`<br />
-`El servidor estará escuchando en [localhost:8080](localhost:8080).`<br/>
+El servidor estará escuchando en: [localhost:8080](http://localhost:8080).<br/>
 `El log se guardar en la carpeta logs y también funciona por stdout.`<br/><br/>
 
 Para ver ayuda y versión `./config/build/bin/LincedInAppServer -h`<br/>
