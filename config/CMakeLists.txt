@@ -32,6 +32,8 @@ set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
     ${APP_SOURCE}/service/Utils/DateUtils.cpp
     ${APP_SOURCE}/service/MongooseServer/Server.cpp
+    ${APP_SOURCE}/service/MongooseServer/HTTPEndPoints.cpp
+    ${APP_SOURCE}/service/Handlers/HelloWorldJsonHandler.cpp
     )
     
 set (MAIN_CPP

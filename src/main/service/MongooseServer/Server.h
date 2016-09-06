@@ -10,6 +10,7 @@
 
 #include "mongoose/mongoose.h"
 #include "../Logger/Logger.h"
+#include "HTTPEndPoints.h"
 #include <iostream>
 
 using namespace std;
@@ -26,15 +27,20 @@ private:
 
 	string port;
 
+	HTTPEndPoints* endPoints;
+
 	void settingUpConnection();
 	static void stop(int signal = 0);
 	static void eventHandler(struct mg_connection* connection, int eventCode, void* eventData); //Handler propio para manipular los eventos de los request
-
 
 public:
 	Server(int port);
 
 	void start();
+
+	void setHTTPHandler(string uri, mg_event_handler_t handler);
+
+	Handler* getHandler(string uriName);
 
 	virtual ~Server();
 };

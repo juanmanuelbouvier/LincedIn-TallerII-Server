@@ -8,5 +8,9 @@ WORKDIR /root/LincedIn/LincedIn-TallerII-Server
 COPY . .
 RUN make
 
+#TODO: El container tiene que mover la documentacion compilada al host.
+
 WORKDIR /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/
-CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/LincedInAppServer ; /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests"]
+
+# No es necesario correr el bin del Server ya que es un ciclo infinito que espera interaccion para ser parado.
+CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests"]

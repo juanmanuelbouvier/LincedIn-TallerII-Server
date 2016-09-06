@@ -25,6 +25,10 @@ Todos los archivos generados por CMake (temporales o no) se guardan en directori
 #### Sólo Compilación
 Para compilar el proyecto hay que ejecutar el comando `make build`<br />
 El ejecutable se creará en el directorio _config/build/bin_<br />
+Para ejecutar el proyecto hay que ejecutar el comando `make run`<br />
+`El servidor estará escuchando en [localhost:8080](localhost:8080).`<br/>
+`El log se guardar en la carpeta logs y también funciona por stdout.`<br/>
+
 
 #### Sólo Documentación
 Para generar documentación del proyecto hay que ejecutar el comando `make doc`<br />

@@ -35,17 +35,11 @@ void Server::start(){
 void Server::settingUpConnection(){
 	mg_set_protocol_http_websocket(mongooseConnection);
 	mg_enable_multithreading(mongooseConnection);
-}
 
-map<int, string> DEBUG_eventCodes = {
-		{MG_EV_ACCEPT, "MG_EV_ACCEPT"},
-		{MG_EV_CONNECT, "MG_EV_CONNECT"},
-		{MG_EV_RECV, "MG_EV_RECV"},
-		{MG_EV_SEND, "MG_EV_SEND"},
-		{MG_EV_POLL, "MG_EV_POLL"},
-		{MG_EV_TIMER, "MG_EV_TIMER"},
-		{MG_EV_CLOSE,"MG_EV_CLOSE"}
-};
+	endPoints = new HTTPEndPoints();
+	Log("set up endpoint '/helloworld'");
+	this->setHTTPHandler("/helloworld",endPoints->helloWorld);
+}
 
 void Server::eventHandler(struct mg_connection* connection, int eventCode, void* eventData){
 	//Por el momento solo manejamos request del tipo http.
@@ -65,15 +59,21 @@ void Server::eventHandler(struct mg_connection* connection, int eventCode, void*
 
 		connection->flags |= MG_F_SEND_AND_CLOSE;
 
-	} else if (eventCode != MG_EV_POLL) {
-		Log("EventHandler received " + DEBUG_eventCodes[eventCode] + " (eventCode: " + to_string(eventCode) + ") [see more: bit.ly/2bIuVuI]",WARNING);
 	}
+}
+
+void Server::setHTTPHandler(string uri, mg_event_handler_t handlerFuncion){
+	mg_register_http_endpoint(mongooseConnection, uri.c_str(),handlerFuncion);
 }
 
 void Server::stop(int signal){
 	if(!SERVER_RUNNING) return;
 	SERVER_RUNNING = false;
 	Log("Server close");
+}
+
+Handler* Server::getHandler(string uriName){
+	return endPoints->getEndPoint(uriName);
 }
 
 
