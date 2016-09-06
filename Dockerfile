@@ -8,5 +8,7 @@ WORKDIR /root/LincedIn/LincedIn-TallerII-Server
 COPY . .
 RUN make
 
+EXPOSE 8080
+
 WORKDIR /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/
-CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests"]
+CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/LincedInAppServer"]

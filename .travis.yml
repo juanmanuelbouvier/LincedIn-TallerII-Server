@@ -7,9 +7,10 @@ services:
 
 before_install:
   - docker build -t lincedin-appserver .
-  - docker run -d -P lincedin-appserver
+  - docker run -d -P lincedin-appserver sh -c /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests
   - docker ps -a
-  - docker run lincedin-appserver
+  - docker run lincedin-appserver sh -c /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests
+
 
 script: 
   - make build
