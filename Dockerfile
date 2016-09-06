@@ -9,4 +9,4 @@ COPY . .
 RUN make
 
 WORKDIR /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/
-CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/LincedInAppServer ; /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests"]
+CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests"]
