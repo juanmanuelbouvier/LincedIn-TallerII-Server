@@ -3,6 +3,11 @@ all: build doc
 build:
 	cd config && cmake -H. -Bbuild && cd build && make && cd ../..
 
+run:
+	@#Default log dir
+	@mkdir -p logs
+	./config/build/bin/LincedInAppServer -w logs/LincedInAppServer.log
+
 test:
 	config/build/bin/RunUnitTests
 	

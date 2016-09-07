@@ -3,12 +3,10 @@
 
 #include <iostream>
 #include <fstream>
-#include "../Utils/DateUtils.h"
+#include "../../Utils/DateUtils.h"
 #include "LincedInServerConfig.h"
 
 using namespace std;
-
-#define DEFAULT_LOG_PATH "config/logs/ServerLog.log" 
 
 enum LogLevel {
     ERROR, WARNING, INFO, DEBUG
@@ -16,11 +14,12 @@ enum LogLevel {
 
 struct LoggerSetting{
 	int LoggerLevel = ERROR;
-	string LoggerPathFile = DEFAULT_LOG_PATH;
+	string LoggerPathFile = NULL;
 	bool LoggerConsole = false;
+	bool init = false;
 };
 
-void LoggerInit(int level = ERROR, bool log_console = false, string path = NULL);
+void LoggerInit(int level, bool log_console, string path);
 void Log(string mensaje, LogLevel typeOfLog = DEBUG);
 
 

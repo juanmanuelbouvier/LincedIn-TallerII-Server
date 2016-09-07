@@ -2,17 +2,14 @@
 config/build/
 docs/build/
 
-# Any log file
+# Any log file or log folder
+logs/
 *.log
 
 #If Works with Eclipse Project
 .cproject
 .project
 .settings/
-
-# TEMPORAL main.cpp
-src/main/main.cpp
-
 
 
 
