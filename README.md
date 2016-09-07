@@ -45,7 +45,7 @@ Para correr el chequeo de memoria de valgrind, ejecutar el comando `make valgrin
 
 ### Docker
 Al hacer el `build` del Dockerfile se crea una imagen del entorno con las dependencias instaladas y el proyecto ya compilado. Por ejemplo, utilizar el comando `sudo docker build -t lincedin-appserver .` Es importante que el Dockerfile se encuentre en el directorio raíz del proyecto puesto que los archivos se copian al contenedor de Docker a través del comando `COPY`; es decir, el repositorio no se clona desde el Dockerfile sino que ya debe estar creado previamente.<br />
-Al correr la imagen se levanta el servidor dentro del container. Siguiendo con el ejemplo anterior, el comando sería `sudo docker run lincedin-appserver`<br />
-
-
+Al correr la imagen se levanta el servidor dentro del container. Siguiendo con el ejemplo anterior, el comando sería `sudo docker run -p 8080:8080 -t -i lincedin-appserver`<br />
+Notar que en el ejemplo anterior se indica explícitamente que el puerto local 8080 está escuchando al puerto 8080 expuesto por el container. Si se desea utilizar otro puerto local debe tenerse en cuenta también que en la app de Android el 8080 está hardcodeado, por lo cual también deberá cambiarse este puerto en el código fuente de la misma.<br />
+Por otro lado, los _flags_ `-t` y `-i` permiten correr una terminal interactiva dentro del container.<br />
 
