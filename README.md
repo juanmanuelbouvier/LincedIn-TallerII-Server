@@ -25,9 +25,25 @@ Todos los archivos generados por CMake (temporales o no) se guardan en directori
 #### Sólo Compilación
 Para compilar el proyecto hay que ejecutar el comando `make build`<br />
 El ejecutable se creará en el directorio _config/build/bin_<br />
-Para ejecutar el proyecto hay que ejecutar el comando `make run`<br />
-`El servidor estará escuchando en [localhost:8080](localhost:8080).`<br/>
-`El log se guardar en la carpeta logs y también funciona por stdout.`<br/>
+
+#### Correr
+Para ejecutar el proyecto con parametros default hay que ejecutar el comando `make run`<br />
+El servidor estará escuchando en: [localhost:8080](http://localhost:8080).<br/>
+`El log se guardar en la carpeta logs y también funciona por stdout.`<br/><br/>
+
+Para ver ayuda y versión `./config/build/bin/LincedInAppServer -h`<br/>
+Parametros:<br/>
+`LincedInAppServer -l [LOG_LEVEL] -w [LOG_PATH] -o [BOOL] -p [LISTEN_PORT]`<br/>
+- **LOG_LEVEL** (Default 3). Nivel de logger.<br/>
+  - 0 = ERROR.<br/>
+  - 1 = WARNING. (incluye ERROR)<br/>
+  - 2 = INFO. (incluye WARNING,ERROR)<br/>
+  - 3 = DEBUG. (incluye INFO,WARNING y ERROR)<br/>
+- **LOG_PATH** (Default: _log.log_). Setear archivo de log.<br/>
+- **BOOL**	(Default 1). Si es distinto a 0 se logea, ademas del archivo, en stdout.<br/>
+- **LISTEN_PORT** (Default: 8080). Puerto donde escucha el server. <br/>
+
+
 
 
 #### Sólo Documentación
