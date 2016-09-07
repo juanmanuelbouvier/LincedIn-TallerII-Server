@@ -76,7 +76,6 @@ Handler* Server::getHandler(string uriName){
 	return endPoints->getEndPoint(uriName);
 }
 
-
 Server::~Server() {
 	if (SERVER_RUNNING) this->stop();
 	mg_mgr_free(&eventManager);

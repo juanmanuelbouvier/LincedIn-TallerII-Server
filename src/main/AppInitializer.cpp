@@ -7,7 +7,7 @@
 #define DEFAULT_APP_SERVER_PORT		8080
 #define DEFAULT_APP_LOG_LEVEL		DEBUG
 #define DEFAULT_APP_LOG_STDOUT		true
-#define DEFAULT_APP_LOG_PATH		"log.log"
+#define DEFAULT_APP_LOG_PATH		"logs/LincedInAppServer.log"
 
 using namespace std;
 
@@ -22,7 +22,10 @@ void parseArguments(int argc, char** argv){
 	string logPath = DEFAULT_APP_LOG_PATH;
 	bool logStdOut = DEFAULT_APP_LOG_STDOUT;
 
-	string helpMSG = "Options:\n"
+	bool changeLogDir = false;
+
+	string helpMSG = "==== LincedInAppServer | version: " + to_string(LincedInServer_VERSION_MAJOR) + "." + to_string(LincedInServer_VERSION_MINOR) + " ====\n"
+						"Options:\n"
 						" -h \t\t\tShows help.\n"
 						" -l [LOG_LEVEL]\t\tSets log level. 0 => ERROR; 1 => WARNING; 2 => INFO; 3 => DEBUG.\n"
 						"\t\t\tDefault " + to_string(DEFAULT_APP_LOG_LEVEL) + "\n"
@@ -54,6 +57,7 @@ void parseArguments(int argc, char** argv){
 				string pathOfLog = getFolderOfFilePath(log_path) + "/";
 				if (isValidPath(pathOfLog)){
 					logPath = log_path;
+					changeLogDir = true;
 				} else {
 					cout << "Invalid Log Path (folder '" + pathOfLog + "' not exist). Using Default [" + DEFAULT_APP_LOG_PATH + "]" << endl;
 				}
@@ -74,12 +78,17 @@ void parseArguments(int argc, char** argv){
 				break;
 			}
 			default: {
-				cout << "ERROR: Invalid Arguuments.\n\n" << endl;
+				cout << "ERROR: Invalid Arguments. See the help (-h)." << endl;
 				cout << helpMSG;
 				abort();
 			}
 		}
 
+
+	if ( !changeLogDir && !isValidPath(getFolderOfFilePath(logPath) + "/") ){
+		cout << "WARN: Logs directory not found (logs/). Logger work in log.log" << endl;
+		logPath = "log.log";
+	}
 	LoggerInit(logLevel, logStdOut, logPath);
 
 	for (int index = optind; index < argc; index++)
@@ -90,7 +99,6 @@ void parseArguments(int argc, char** argv){
 
 /**
 * Launchs the application server.<BR>
-* Prints the app-server version.
 */
 int main(int argc, char **argv) {
 	parseArguments(argc,argv);
