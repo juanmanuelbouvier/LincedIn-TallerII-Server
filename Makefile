@@ -18,5 +18,5 @@ valgrind:
 	valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all config/build/bin/LincedInAppServer
 
 clean:
-	rm -rf config/build/ docs/build/ *.log
+	rm -rf config/build/ docs/build/ 
 
