@@ -10,7 +10,7 @@
 
 #include "mongoose/mongoose.h"
 #include "../Logger/Logger.h"
-#include "HTTPEndPoints.h"
+#include "HTTPRequestHandler.h"
 #include <iostream>
 
 using namespace std;
@@ -25,12 +25,14 @@ private:
 	//TODO: Acceder a la documentacion para sacarle provecho a este attr
 	struct mg_bind_opts bindOptions; //Opciones personales para la conexion (mongoose no lo utiliza. Solo lo transporta)
 
+	string documentRoot;
+
 	string port;
 
-	HTTPEndPoints* endPoints;
+	HTTPRequestHandler* HTTPHandler;
 
 	void settingUpConnection();
-	static void stop(int signal = 0);
+
 	static void eventHandler(struct mg_connection* connection, int eventCode, void* eventData); //Handler propio para manipular los eventos de los request
 
 public:
@@ -38,9 +40,7 @@ public:
 
 	void start();
 
-	void setHTTPHandler(string uri, mg_event_handler_t handler);
-
-	Handler* getHandler(string uriName);
+	static void stop(int signal = 0);
 
 	virtual ~Server();
 };
