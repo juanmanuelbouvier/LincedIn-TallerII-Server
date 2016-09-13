@@ -14,7 +14,7 @@ enum LogLevel {
 
 struct LoggerSetting{
 	int LoggerLevel = ERROR;
-	string LoggerPathFile = NULL;
+	string LoggerPathFile = "";
 	bool LoggerConsole = false;
 	bool init = false;
 };

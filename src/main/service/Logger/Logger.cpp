@@ -35,7 +35,7 @@ void LoggerInit(int level, bool log_console, string path){
  */
 void Log(string message, LogLevel typeOfLog){
     if (!LogSetting.init){
-    	cout << "ERROR: Logger must be initialized to Log" << endl;
+    	cout << "ERROR: Logger must be initialized with `LoggerInit(level,log_console,path)`" << endl;
     	return;
     }
 	if (typeOfLog <= LogSetting.LoggerLevel) {

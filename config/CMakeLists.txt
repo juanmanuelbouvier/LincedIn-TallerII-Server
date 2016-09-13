@@ -31,8 +31,10 @@ set (APP_SOURCE "${PROJECT_SOURCE_DIR}/../src/main")
 set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
     ${APP_SOURCE}/service/MongooseServer/Server.cpp
-    ${APP_SOURCE}/service/MongooseServer/HTTPEndPoints.cpp
+    ${APP_SOURCE}/service/MongooseServer/HTTPRequestHandler.cpp
+    ${APP_SOURCE}/service/MongooseServer/HTTPRequest.cpp
     ${APP_SOURCE}/service/Handlers/HelloWorldJsonHandler.cpp
+    ${APP_SOURCE}/service/Handlers/DefaultHandler.cpp
     ${APP_SOURCE}/Utils/DateUtils.cpp
     ${APP_SOURCE}/Utils/PathUtils.cpp
     )
@@ -63,7 +65,7 @@ add_test(
 )
 
 ##################################
-# Mongoose and JSON libraries
+# Mongoose / JSON / LevelDB libraries
 ##################################
 
 find_package (Threads)
@@ -95,3 +97,8 @@ add_library(json ${JSON_SOURCES})
 
 target_link_libraries (LincedInAppServer mongoose)
 target_link_libraries (LincedInAppServer json)
+
+#LevelDB is installed from apt-get install libsnappy-dev libleveldb-dev
+target_link_libraries (LincedInAppServer pthread)
+target_link_libraries (LincedInAppServer snappy)
+target_link_libraries (LincedInAppServer leveldb)

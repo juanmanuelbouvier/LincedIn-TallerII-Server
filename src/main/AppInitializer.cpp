@@ -87,7 +87,7 @@ void parseArguments(int argc, char** argv){
 
 	if ( !changeLogDir && !isValidPath(getFolderOfFilePath(logPath) + "/") ){
 		cout << "WARN: Logs directory not found (logs/). Logger work in log.log" << endl;
-		logPath = "log.log";
+		logPath = "LincedInAppServer.log";
 	}
 	LoggerInit(logLevel, logStdOut, logPath);
 
@@ -109,6 +109,5 @@ int main(int argc, char **argv) {
 	server->start();
 
 	delete server;
-
     return 0;
 }

@@ -11,7 +11,7 @@
 HelloWorldJsonHandler::HelloWorldJsonHandler() {
 }
 
-char* HelloWorldJsonHandler::handle(){
+string HelloWorldJsonHandler::handle(HTTPRequest* http_request){
 	Json::Value event;
 	Json::Value vec(Json::arrayValue);
 	vec.append(Json::Value(1));
@@ -37,8 +37,8 @@ char* HelloWorldJsonHandler::handle(){
 	writer.omitEndingLineFeed();
 	string toReturn = writer.write(event);
 
-	string body = "HTTP/1.0 200 OK\r\n\r\nContent-type:application/json\r\n" + toReturn;
-	return (char*)body.c_str();
+	string body = "\r\nContent-type:application/json\r\n\r\n" + toReturn + "\r\n";
+	return body.c_str();
 }
 
 HelloWorldJsonHandler::~HelloWorldJsonHandler(){
