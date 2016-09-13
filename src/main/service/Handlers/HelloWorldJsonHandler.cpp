@@ -37,7 +37,7 @@ string HelloWorldJsonHandler::handle(HTTPRequest* http_request){
 	writer.omitEndingLineFeed();
 	string toReturn = writer.write(event);
 
-	string body = "HTTP/1.0 200 OK\r\n\r\nContent-type:application/json\r\n" + toReturn;
+	string body = "\r\nContent-type:application/json\r\n\r\n" + toReturn + "\r\n";
 	return body.c_str();
 }
 
