@@ -6,7 +6,7 @@ docs/build/
 logs/
 *.log
 
-#If Works with Eclipse Project
+#If you like and works with Eclipse Project C/C++
 .cproject
 .project
 .settings/

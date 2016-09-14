@@ -2,16 +2,18 @@ sudo: required
 
 language: cpp
 
+os:
+  - linux
+
 services:
   - docker
 
 before_install:
+  - sudo apt-get install -y g++ make cmake doxygen graphviz python3-setuptools libsnappy-dev libleveldb-dev
+  - sudo easy_install3 pip
   - docker build -t lincedin-appserver .
   - docker run -d -P lincedin-appserver sh -c /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests
-  - docker ps -a
-  - docker run lincedin-appserver sh -c /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests
-
-
+  
 script: 
   - make build
 
