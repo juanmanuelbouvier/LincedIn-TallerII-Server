@@ -12,7 +12,7 @@ DefaultHandler::DefaultHandler() {
 }
 
 string DefaultHandler::handle(HTTPRequest* http_request){
-	string mensaje = "<!DOCTYPE html><html><body><h1>Linced In App Server</h1>\n"
+	string mensaje = "\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html><body><h1>Linced In App Server</h1>\n"
 						"<h3><b>Metod: </b>" 	+ http_request->getMethod() 	+ "</h3>\n"
 						"<h3><b>URI: </b>" 		+ http_request->getURI() 	+ "</h3>\n"
 						"<h3><b>QUERY: </b>"	+ http_request->getQuery() 	+ "</h3>\n"
