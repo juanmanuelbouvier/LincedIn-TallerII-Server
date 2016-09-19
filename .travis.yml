@@ -26,3 +26,7 @@ after_script:
 branches:
   only:
   - master
+  - develop
+
+notifications:
+  slack: lincedintallerii:hLCoIuj2T2VsBI3rUuEUdKxq
