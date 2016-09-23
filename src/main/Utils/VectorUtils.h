@@ -7,6 +7,9 @@
 
 using namespace std;
 
-string joinVector(vector<string> theVector, string separator = " ");
+class VectorUtils {
+public:
+	static string joinVector(vector<string> theVector, string separator = " ");
+};
 
 #endif /* SRC_MAIN_UTILS_VECTORUTILS_H_ */

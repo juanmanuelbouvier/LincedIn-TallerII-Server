@@ -40,7 +40,7 @@ void Log(string message, LogLevel typeOfLog){
     }
 	if (typeOfLog <= LogSetting.LoggerLevel) {
         std::fstream logfile;
-        string full_msg = getTimeWithFormat() + LoggerLevelToString[typeOfLog] + " : " + message;
+        string full_msg = DateUtils::getTimeWithFormat() + LoggerLevelToString[typeOfLog] + " : " + message;
         logfile.open(LogSetting.LoggerPathFile.c_str(), std::fstream::app | std::fstream::out);
         logfile << full_msg << endl;
 

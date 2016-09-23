@@ -10,7 +10,7 @@
 //!
 //! @param file path string
 //! @return folder path of the file path
-string getFolderOfFilePath(const string& str) {
+string PathUtils::getFolderOfFilePath(const string& str) {
   size_t found;
   found = str.find_last_of("/\\");
   return str.substr(0,found);
@@ -22,7 +22,7 @@ string getFolderOfFilePath(const string& str) {
 //!
 //! @param path <pathname>
 //! @return true if path exists
-bool isValidPath(string pathname) {
+bool PathUtils::isValidPath(string pathname) {
 	if (pathname.back() != '/'){
 		pathname += "/";
 	}
@@ -35,7 +35,7 @@ bool isValidPath(string pathname) {
 //! @param sub-path name string
 //! @return if the subpath satisfy a \b PATH_VARIABLE_INDICATOR in \b STR_POSITION_VARIABLE_INDICATOR.
 //! @note a sub-path is a part of path. if path is \a `"hello/world"`, the sub-paths are \a `"hello"` and \a `"world"`
-bool isVariableSubPath( string subpath ) {
+bool PathUtils::isVariableSubPath( string subpath ) {
 	return ( subpath[STR_POSITION_VARIABLE_INDICATOR] == PATH_VARIABLE_INDICATOR);
 }
 
@@ -46,7 +46,7 @@ bool isVariableSubPath( string subpath ) {
 //!
 //! @param sub-path variable string
 //! @return return name of variable
-string variableSubPathToKey( string subpath ) {
+string PathUtils::variableSubPathToKey( string subpath ) {
 	string key = subpath;
 	if ( !isVariableSubPath(subpath) ){
 		return key;
@@ -62,12 +62,12 @@ string variableSubPathToKey( string subpath ) {
 //!
 //! @param full path with variables
 //! @return return a regular expression.
-string generateRegexPath( string uri_path_with_variables ) {
+string PathUtils::generateRegexPath( string uri_path_with_variables ) {
 	/*
 	 *
 	 *
 	 */
-	vector<string> splitUriPath = splitString(uri_path_with_variables,"/");
+	vector<string> splitUriPath = StringUtils::splitString(uri_path_with_variables,"/");
 	string regularExpresion = "^";
 	for(vector<string>::iterator it = splitUriPath.begin(); it != splitUriPath.end(); ++it) {
 	    regularExpresion += "\\/";
@@ -87,7 +87,7 @@ string generateRegexPath( string uri_path_with_variables ) {
 //! @param full path with variables
 //! @param path with varible
 //! @return true if match.
-bool matchPathRegexp(string path, string uri_path_regx){
+bool PathUtils::matchPathRegexp(string path, string uri_path_regx){
 	regex regular_expresion_uri( generateRegexPath(uri_path_regx) );
 	smatch base_match;
 	return regex_match(path,regular_expresion_uri);
@@ -101,22 +101,22 @@ bool matchPathRegexp(string path, string uri_path_regx){
 //! @return map with variable values and route.
 //! @note The map always contains key "_route" who is the input. If the input rout has a query the map will also contain a key "_query".<BR>If the parameters not match, the map only contains the root (and the query, if have).
 //! @note Example with `hello/:first/:second`:<BR>/hello/one/two?query1=true` ==> { _route : /hello/world, _query : query1=true, first : one, second : two }
-map<string,string> routerParser( string uriPath, string pathRegexp ){
+map<string,string> PathUtils::routerParser( string uriPath, string pathRegexp ){
 	map<string,string> keys;
 
-	vector<string> splitQuery = splitString(uriPath,"?");
+	vector<string> splitQuery = StringUtils::splitString(uriPath,"?");
 	string path = splitQuery[0];
 	splitQuery.erase(splitQuery.begin());
 	if (splitQuery.size() > 0){
-		keys["_query"] = joinVector(splitQuery,"");
+		keys["_query"] = VectorUtils::joinVector(splitQuery,"");
 	}
 
 	keys["_route"] = path;
 	if ( !matchPathRegexp(uriPath,pathRegexp) ){
 		return keys;
 	}
-	vector<string> splitedUriPath = splitString(path,"/");
-	vector<string> splitedpathRegexp = splitString(pathRegexp,"/");
+	vector<string> splitedUriPath = StringUtils::splitString(path,"/");
+	vector<string> splitedpathRegexp = StringUtils::splitString(pathRegexp,"/");
 	string key,value,subPath;
 	for (size_t i = 0; i < splitedUriPath.size(); i++) {
 		subPath = splitedpathRegexp[i];

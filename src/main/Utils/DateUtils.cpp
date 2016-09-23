@@ -6,7 +6,7 @@
  * Default is: '[%Y/%m/%d %X]'<BR>
  *  ej. [2016/09/07 08:42:49]
  */
-const string getTimeWithFormat(string format) {
+const string DateUtils::getTimeWithFormat(string format) {
     time_t now = time(0);
     struct tm tstruct;
     char buf[80];

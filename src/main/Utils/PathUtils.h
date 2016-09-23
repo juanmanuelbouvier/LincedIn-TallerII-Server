@@ -20,21 +20,23 @@
 
 using namespace std;
 
-string getFolderOfFilePath(const string& str);
+class PathUtils {
+public:
+	static string getFolderOfFilePath(const string& str);
 
-bool isValidPath(string pathname);
+	static bool isValidPath(string pathname);
 
-vector<string> splitPath(string path, string prefix = "/");
+	static vector<string> splitPath(string path, string prefix = "/");
 
-bool isVariableSubPath( string subpath );
+	static bool isVariableSubPath( string subpath );
 
-string variableSubPathToKey( string subpath );
+	static string variableSubPathToKey( string subpath );
 
-string generateRegexPath( string uri_path_with_variables );
+	static string generateRegexPath( string uri_path_with_variables );
 
-bool matchPathRegexp(string path, string uri_path_regx);
+	static bool matchPathRegexp(string path, string uri_path_regx);
 
-map<string,string> routerParser( string uriPath, string pathRegexp );
-
+	static map<string,string> routerParser( string uriPath, string pathRegexp );
+};
 
 #endif /* SRC_MAIN_UTILS_PATHUTILS_H_ */
