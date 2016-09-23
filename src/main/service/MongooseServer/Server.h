@@ -10,7 +10,7 @@
 
 #include "mongoose/mongoose.h"
 #include "../Logger/Logger.h"
-#include "HTTPRequestHandler.h"
+#include "HTTP/HTTPRequestHandler.h"
 #include <iostream>
 
 using namespace std;

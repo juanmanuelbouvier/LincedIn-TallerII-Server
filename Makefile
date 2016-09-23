@@ -18,6 +18,9 @@ doc:
 valgrind:
 	valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all config/build/bin/LincedInAppServer
 
+valgrind-test:
+	valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all config/build/bin/RunUnitTests
+
 clean:
 	@echo -n "Limpiando.."
 	@rm -rf config/build/ docs/build/

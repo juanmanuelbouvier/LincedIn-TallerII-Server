@@ -8,10 +8,11 @@
 #ifndef SRC_MAIN_SERVICE_MONGOOSESERVER_HTTPREQUESTHANDLER_H_
 #define SRC_MAIN_SERVICE_MONGOOSESERVER_HTTPREQUESTHANDLER_H_
 
-#include "../Handlers/HelloWorldJsonHandler.h"
-#include "../Handlers/DefaultHandler.h"
+#include "../../Handlers/HelloWorldJsonHandler.h"
+#include "../../Handlers/DefaultHandler.h"
+#include "../../Logger/Logger.h"
+
 #include "HTTPRequest.h"
-#include "../Logger/Logger.h"
 
 #include <map>
 

@@ -11,10 +11,10 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	// Inicialize all Handlers.
 
 	//TODO: Se tiene que resolver mediante regular expresion las uris con variables
-	HTTPEndPointsHandlers["/helloworld"] = (Handler*)new HelloWorldJsonHandler();
+	HTTPEndPointsHandlers["/helloworld"] = new HelloWorldJsonHandler();
 
 	//Defaults
-	HTTPEndPointsHandlers["/"] = (Handler*)new DefaultHandler();
+	HTTPEndPointsHandlers["/"] = new DefaultHandler();
 	HTTPEndPointsHandlers["/index"] = HTTPEndPointsHandlers["/"];
 
 }
