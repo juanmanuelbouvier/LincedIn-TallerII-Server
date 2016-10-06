@@ -35,6 +35,7 @@ set (SOURCES
     ${APP_SOURCE}/service/MongooseServer/HTTP/HTTPRequest.cpp
     ${APP_SOURCE}/service/Handlers/HelloWorldJsonHandler.cpp
     ${APP_SOURCE}/service/Handlers/DefaultHandler.cpp
+    ${APP_SOURCE}/service/Handlers/SharedServerHandler.cpp
     ${APP_SOURCE}/Utils/DateUtils.cpp
     ${APP_SOURCE}/Utils/PathUtils.cpp
     ${APP_SOURCE}/Utils/StringUtils.cpp

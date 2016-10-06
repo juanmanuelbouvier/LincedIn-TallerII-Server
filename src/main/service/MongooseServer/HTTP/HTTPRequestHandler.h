@@ -10,6 +10,7 @@
 
 #include "../../Handlers/HelloWorldJsonHandler.h"
 #include "../../Handlers/DefaultHandler.h"
+#include "../../Handlers/SharedServerHandler.h"
 #include "../../Logger/Logger.h"
 
 #include "HTTPRequest.h"

@@ -17,6 +17,8 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	HTTPEndPointsHandlers["/"] = new DefaultHandler();
 	HTTPEndPointsHandlers["/index"] = HTTPEndPointsHandlers["/"];
 
+	HTTPEndPointsHandlers["/skills"] = new SharedServerHandler();
+
 }
 
 string HTTPRequestHandler::handle(HTTPRequest* http_request){
