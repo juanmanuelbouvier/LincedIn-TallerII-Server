@@ -60,11 +60,11 @@ void Server::eventHandler(struct mg_connection* connection, int eventCode, void*
 		HTTPRequest* theRequest = new HTTPRequest((struct http_message *)eventData);
 
 		if (thisServer->HTTPHandler->isHandledRequest(theRequest)){
-			string mensaje = thisServer->HTTPHandler->handle(theRequest);
+			HTTPResponse* mensaje = thisServer->HTTPHandler->handle(theRequest);
 
 			//TODO 2: El status code y los extra headers tienen que venir desde el handler
 			//mg_send_head(connection, 200, mensaje.length(), "HTTP/1.1");
-			mg_printf(connection, "HTTP/1.1 200 OK%s",mensaje.c_str());
+			mg_printf(connection, "%s",mensaje->toString().c_str());
 
 		} else {
 			struct mg_serve_http_opts opts = { .document_root = (thisServer->documentRoot).c_str() };

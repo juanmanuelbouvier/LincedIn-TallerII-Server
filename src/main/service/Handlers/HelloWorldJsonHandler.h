@@ -10,7 +10,7 @@ class HelloWorldJsonHandler : public Handler {
 public:
 	HelloWorldJsonHandler();
 
-	string handle(HTTPRequest* http_request);
+	HTTPResponse* handle(HTTPRequest* http_request);
 
 	virtual ~HelloWorldJsonHandler();
 };

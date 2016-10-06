@@ -11,8 +11,8 @@ DefaultHandler::DefaultHandler() {
 
 }
 
-string DefaultHandler::handle(HTTPRequest* http_request){
-	string mensaje = "\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html><body><h1>Linced In App Server</h1>\n"
+HTTPResponse* DefaultHandler::handle(HTTPRequest* http_request){
+	string mensaje = "<!DOCTYPE html><html><body><h1>Linced In App Server</h1>\n"
 						"<h3><b>Metod: </b>" 	+ http_request->getMethod() 	+ "</h3>\n"
 						"<h3><b>URI: </b>" 		+ http_request->getURI() 	+ "</h3>\n"
 						"<h3><b>QUERY: </b>"	+ http_request->getQuery() 	+ "</h3>\n"
@@ -38,7 +38,12 @@ string DefaultHandler::handle(HTTPRequest* http_request){
 						"</form>"
 						"<script type='text/javascript'> function changeMethod(value){ document.getElementById('myForm').method = value; document.getElementById('current').innerHTML = value.toUpperCase(); }</script>"
 						"</body></html>\n";
-	return mensaje;
+
+
+	ResponseBuilder* builder = new ResponseBuilder();
+	builder = (ResponseBuilder*)builder->appendHeader("Content-Type","text/html; charset=utf-8");
+	builder = (ResponseBuilder*)builder->setBody(mensaje);
+	return builder->build();
 }
 
 DefaultHandler::~DefaultHandler() {

@@ -21,7 +21,7 @@ HTTPRequestHandler::HTTPRequestHandler() {
 
 }
 
-string HTTPRequestHandler::handle(HTTPRequest* http_request){
+HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 	//TODO: Si no existe URI devuelve NOT FOUND
 	string uri = http_request->getURI();
 

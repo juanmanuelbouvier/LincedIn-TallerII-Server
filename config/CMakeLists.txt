@@ -30,12 +30,22 @@ set (APP_SOURCE "${PROJECT_SOURCE_DIR}/../src/main")
 
 set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
+    
     ${APP_SOURCE}/service/MongooseServer/Server.cpp
-    ${APP_SOURCE}/service/MongooseServer/HTTP/HTTPRequestHandler.cpp
-    ${APP_SOURCE}/service/MongooseServer/HTTP/HTTPRequest.cpp
+    ${APP_SOURCE}/service/MongooseServer/ServerClient.cpp
+    
+    ${APP_SOURCE}/service/HTTP/HTTPRequestHandler.cpp
+    
+    ${APP_SOURCE}/service/HTTP/Message/HTTPRequest.cpp
+    ${APP_SOURCE}/service/HTTP/Message/HTTPResponse.cpp
+    ${APP_SOURCE}/service/HTTP/Message/HTTPMessageBuilder.cpp
+    
     ${APP_SOURCE}/service/Handlers/HelloWorldJsonHandler.cpp
     ${APP_SOURCE}/service/Handlers/DefaultHandler.cpp
     ${APP_SOURCE}/service/Handlers/SharedServerHandler.cpp
+    
+    ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
+    
     ${APP_SOURCE}/Utils/DateUtils.cpp
     ${APP_SOURCE}/Utils/PathUtils.cpp
     ${APP_SOURCE}/Utils/StringUtils.cpp

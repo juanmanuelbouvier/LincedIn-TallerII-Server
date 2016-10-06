@@ -4,7 +4,11 @@
 #include "service/Logger/Logger.h"
 #include "Utils/PathUtils.h"
 
-#define DEFAULT_APP_SERVER_PORT		8080
+#include "service/MongooseServer/ServerClient.h"
+#include "service/HTTP/Message/HTTPRequest.h"
+#include "service/HTTP/Message/HTTPResponse.h"
+
+#define DEFAULT_APP_SERVER_PORT		8081
 #define DEFAULT_APP_LOG_LEVEL		DEBUG
 #define DEFAULT_APP_LOG_STDOUT		true
 #define DEFAULT_APP_LOG_PATH		"logs/LincedInAppServer.log"
@@ -109,5 +113,6 @@ int main(int argc, char **argv) {
 	server->start();
 
 	delete server;
-    return 0;
+
+	return 0;
 }

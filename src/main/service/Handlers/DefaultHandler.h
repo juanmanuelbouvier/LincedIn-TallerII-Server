@@ -10,7 +10,7 @@ class DefaultHandler : public Handler {
 public:
 	DefaultHandler();
 
-	string handle(HTTPRequest* http_request);
+	HTTPResponse* handle(HTTPRequest* http_request);
 
 	virtual ~DefaultHandler();
 };

@@ -10,7 +10,7 @@ class SharedServerHandler : public Handler {
 public:
 	SharedServerHandler();
 
-	string handle(HTTPRequest* http_request);
+	HTTPResponse* handle(HTTPRequest* http_request);
 
 	virtual ~SharedServerHandler();
 };
