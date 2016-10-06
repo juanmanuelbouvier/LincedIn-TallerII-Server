@@ -1,10 +1,11 @@
 #include <stdio.h>
 
 #include "gtest/gtest.h"
-#include "DummyTests.cpp"	// TODO: include .h, NEVER .cpp!
+
+#include "UtilsTest.h"
 
 int main(int argc, char **argv) {
-  printf("Running main() from test_main.cpp");
+  printf("Running main() from %s\n", __FILE__);
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

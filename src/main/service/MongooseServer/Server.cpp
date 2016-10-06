@@ -84,6 +84,7 @@ void Server::stop(int signal){
 
 Server::~Server() {
 	if (SERVER_RUNNING) this->stop();
+	delete HTTPHandler;
 	mg_mgr_free(&eventManager);
 }
 

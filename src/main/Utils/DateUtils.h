@@ -5,7 +5,9 @@
 
 using namespace std;
 
-const string getTimeWithFormat(string Format = "[%Y/%m/%d %X] ");
-
+class DateUtils {
+public:
+	static const string getTimeWithFormat(string Format = "[%Y/%m/%d %X] ");
+};
 
 #endif /* DATE_UTILS_H_ */

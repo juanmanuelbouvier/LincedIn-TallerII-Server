@@ -31,41 +31,28 @@ set (APP_SOURCE "${PROJECT_SOURCE_DIR}/../src/main")
 set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
     ${APP_SOURCE}/service/MongooseServer/Server.cpp
-    ${APP_SOURCE}/service/MongooseServer/HTTPRequestHandler.cpp
-    ${APP_SOURCE}/service/MongooseServer/HTTPRequest.cpp
+    ${APP_SOURCE}/service/MongooseServer/HTTP/HTTPRequestHandler.cpp
+    ${APP_SOURCE}/service/MongooseServer/HTTP/HTTPRequest.cpp
     ${APP_SOURCE}/service/Handlers/HelloWorldJsonHandler.cpp
     ${APP_SOURCE}/service/Handlers/DefaultHandler.cpp
     ${APP_SOURCE}/Utils/DateUtils.cpp
     ${APP_SOURCE}/Utils/PathUtils.cpp
+    ${APP_SOURCE}/Utils/StringUtils.cpp
+    ${APP_SOURCE}/Utils/VectorUtils.cpp
     )
     
 set (MAIN_CPP
     ${APP_SOURCE}/AppInitializer.cpp
     )
 
-add_executable(LincedInAppServer ${MAIN_CPP} ${SOURCES})
+add_library(lincedinapp ${SOURCES})
 
-### TESTING ###
+add_executable(LincedInAppServer ${MAIN_CPP})
 
-################################
-# GTest
-################################
-ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/googletest)
-enable_testing()
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
-add_executable(RunUnitTests
-	${PROJECT_SOURCE_DIR}/../src/test/test_main.cpp
-)
-target_link_libraries(RunUnitTests gtest gtest_main)
-
-add_test(
-	NAME RunUnitTests
-	COMMAND RunUnitTests
-)
+target_link_libraries (LincedInAppServer lincedinapp)
 
 ##################################
-# Mongoose / JSON / LevelDB libraries
+# External Libraries
 ##################################
 
 find_package (Threads)
@@ -80,6 +67,7 @@ if (WIN32)
     set (EXTRA_LIBS ${EXTRA_LIBS} ws2_32)
 endif (WIN32)
 
+# MONGOOSE
 set (MONGOOSE_SOURCES
     ${APP_SOURCE}/service/MongooseServer/mongoose/mongoose.c
     )
@@ -90,15 +78,42 @@ add_library (mongoose ${MONGOOSE_SOURCES})
 
 target_link_libraries (mongoose ${EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
+# JSON CPP
 set (JSON_SOURCES
     ${APP_SOURCE}/service/Json/json/jsoncpp.cpp
     )
 add_library(json ${JSON_SOURCES})
 
-target_link_libraries (LincedInAppServer mongoose)
-target_link_libraries (LincedInAppServer json)
+target_link_libraries (LincedInAppServer mongoose json pthread)
 
 #LevelDB is installed from apt-get install libsnappy-dev libleveldb-dev
-target_link_libraries (LincedInAppServer pthread)
-target_link_libraries (LincedInAppServer snappy)
-target_link_libraries (LincedInAppServer leveldb)
+target_link_libraries (LincedInAppServer snappy leveldb)
+
+### TESTING ###
+
+################################
+# GTest
+################################
+ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/googletest)
+enable_testing()
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+set (TEST_SOURCE "${PROJECT_SOURCE_DIR}/../src/test")
+
+add_executable(RunUnitTests
+	${TEST_SOURCE}/test_main.cpp
+	${TEST_SOURCE}/UtilsTest.cpp
+)
+# Test libraries
+target_link_libraries(RunUnitTests gtest gtest_main)
+
+#Libraries from LincedInAppServer
+target_link_libraries (RunUnitTests lincedinapp)
+
+#External libraries
+target_link_libraries (RunUnitTests mongoose json pthread snappy leveldb)
+
+add_test(
+	NAME RunUnitTests
+	COMMAND RunUnitTests
+)

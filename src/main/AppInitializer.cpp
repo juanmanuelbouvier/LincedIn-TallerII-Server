@@ -54,8 +54,8 @@ void parseArguments(int argc, char** argv){
 			}
 			case 'w': {
 				string log_path = string(optarg);
-				string pathOfLog = getFolderOfFilePath(log_path) + "/";
-				if (isValidPath(pathOfLog)){
+				string pathOfLog = PathUtils::getFolderOfFilePath(log_path) + "/";
+				if ( PathUtils::isValidPath(pathOfLog) ){
 					logPath = log_path;
 					changeLogDir = true;
 				} else {
@@ -85,7 +85,7 @@ void parseArguments(int argc, char** argv){
 		}
 
 
-	if ( !changeLogDir && !isValidPath(getFolderOfFilePath(logPath) + "/") ){
+	if ( !changeLogDir && !PathUtils::isValidPath(PathUtils::getFolderOfFilePath(logPath) + "/") ){
 		cout << "WARN: Logs directory not found (logs/). Logger work in log.log" << endl;
 		logPath = "LincedInAppServer.log";
 	}

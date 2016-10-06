@@ -8,7 +8,7 @@
 #ifndef SRC_MAIN_SERVICE_HANDLERS_HANDLER_H_
 #define SRC_MAIN_SERVICE_HANDLERS_HANDLER_H_
 
-#include "../MongooseServer/HTTPRequest.h"
+#include "../MongooseServer/HTTP/HTTPRequest.h"
 #include <iostream>
 using namespace std;
 
