@@ -9,7 +9,8 @@
 
 using namespace std;
 
-#define SHARED_SERVER_URL "localhost:8080"
+#define SHARED_SERVER_LOCAL_URL "localhost:8080"
+#define SHARED_SERVER_HEROKU_URL "lincedin.herokuapp.com:80"
 
 class SharedServerAPI {
 private:

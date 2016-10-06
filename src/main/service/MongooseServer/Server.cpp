@@ -61,6 +61,10 @@ void Server::eventHandler(struct mg_connection* connection, int eventCode, void*
 
 		if (thisServer->HTTPHandler->isHandledRequest(theRequest)){
 			HTTPResponse* mensaje = thisServer->HTTPHandler->handle(theRequest);
+			if (!mensaje){
+				map<string,string> emptyHeaders;
+				mensaje = new HTTPResponse("400","ERROR","",emptyHeaders);
+			}
 
 			//TODO 2: El status code y los extra headers tienen que venir desde el handler
 			//mg_send_head(connection, 200, mensaje.length(), "HTTP/1.1");

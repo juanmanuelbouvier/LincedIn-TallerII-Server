@@ -14,7 +14,7 @@ SharedServerAPI* SharedServerAPI::instaceAPI = NULL;
 
 SharedServerAPI::SharedServerAPI() {
 	client = new ServerClient();
-	if (!client->connectToUrl(SHARED_SERVER_URL)) {
+	if (!client->connectToUrl(SHARED_SERVER_LOCAL_URL)) {
 		delete client;
 	}
 
@@ -29,8 +29,12 @@ SharedServerAPI* SharedServerAPI::getInstance(){
 
 
 HTTPResponse* SharedServerAPI::getSkills(){
-	RequestBuilder builder;
-	HTTPRequest* theRequest = builder.GET()->setUri("/skills")->build();
+	if (!client->connectToUrl(SHARED_SERVER_LOCAL_URL)){
+		return NULL;
+	}
+	RequestBuilder* builder = RequestBuilder().GET()->setUri("/skills");
+	builder = (RequestBuilder*)builder->appendHeader("Host",string(SHARED_SERVER_LOCAL_URL));
+	HTTPRequest* theRequest = builder->build();
 	return client->sendRequest(theRequest);
 
 
