@@ -4,18 +4,17 @@
 #include <services/Server/ServerClient.h>
 #include <services/HTTP/Message/HTTPRequest.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
+#include <settings/SettingManager.h>
 
 using namespace std;
-
-#define SHARED_SERVER_LOCAL_URL "localhost:8080"
-#define SHARED_SERVER_HEROKU_URL "lincedin.herokuapp.com:80"
 
 SharedServerAPI* SharedServerAPI::instaceAPI = NULL;
 
 
 SharedServerAPI::SharedServerAPI() {
 	client = new ServerClient();
-	if (!client->connectToUrl(SHARED_SERVER_HEROKU_URL)) {
+	sharedURL = SettingManager::getInstance()->getSharedServerURL();
+	if (!client->connectToUrl(sharedURL)) {
 		delete client;
 	}
 
@@ -28,13 +27,18 @@ SharedServerAPI* SharedServerAPI::getInstance(){
 	return instaceAPI;
 }
 
+void SharedServerAPI::deleteInstance(){
+	delete instaceAPI;
+	instaceAPI = NULL;
+}
+
 
 HTTPResponse* SharedServerAPI::getSkills(){
-	if (!client->connectToUrl(SHARED_SERVER_LOCAL_URL)){
+	if (!client->connectToUrl(sharedURL)){
 		return NULL;
 	}
 	RequestBuilder* builder = RequestBuilder().GET()->setUri("/skills");
-	builder = (RequestBuilder*)builder->appendHeader("Host",string(SHARED_SERVER_LOCAL_URL));
+	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	return client->sendRequest(theRequest);
 
@@ -44,8 +48,5 @@ HTTPResponse* SharedServerAPI::getSkills(){
 
 SharedServerAPI::~SharedServerAPI() {
 	delete client;
-	if(instaceAPI){
-		instaceAPI = NULL;
-	}
 }
 

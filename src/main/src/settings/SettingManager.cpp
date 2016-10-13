@@ -11,18 +11,20 @@ using namespace std;
 #define DEFAULT_LOG_LEVEL		DEBUG
 #define DEFAULT_LOG_STDOUT		true
 #define DEFAULT_LOG_FILE		"logs/LincedInAppServer.log"
+#define DEFAULT_SHARED_URL 		"lincedin.herokuapp.com:80"
 
 SettingManager* SettingManager::settingsInstance = NULL;
-
-SettingManager::SettingManager() {
-	settingsInstance = NULL;
-}
 
 SettingManager* SettingManager::getInstance(){
 	if (!settingsInstance) {
 		settingsInstance = new SettingManager();
 	}
 	return settingsInstance;
+}
+
+void SettingManager::deleteInstance(){
+	delete settingsInstance;
+	settingsInstance = NULL;
 }
 
 bool SettingManager::readFile( string file ) {
@@ -37,6 +39,21 @@ bool SettingManager::readFile( string file ) {
 		return false;
 	}
 	return true;
+}
+
+string SettingManager::getJSONStructure(){
+	string message = ""
+			"Setting JSON structure:\n"
+			"{\n"
+				"\tlogger: {\n"
+					"\t\tlevel: type number \t\tSets log level. ERROR(0), WARNING(1), INFO(2), DEBUG(3). Default: " + to_string(DEFAULT_LOG_LEVEL) + "\n"
+					"\t\tfile: type string\t\tSet Path to write log. Default: \"" + string(DEFAULT_LOG_FILE) + "\"\n"
+					"\t\tshow_in_stdout: type boolean\tIf true the logs also be displayed in stdout. Default: " + (DEFAULT_LOG_STDOUT ? "true" : "false") + "\n"
+				"\t}\n"
+				"\tport: type int\tSets port for incomming connections. Default: " + to_string(DEFAULT_SERVER_PORT) + "\n"
+				"\tshared_server_url: type string\t Url to shared server client. Format \"(URL|IP):PORT\". Default: \"" + string(DEFAULT_SHARED_URL) + "\"\n"
+			"}\n\n";
+	return message;
 }
 
 string SettingManager::getDirectValue( string tag ) {
@@ -111,6 +128,15 @@ int SettingManager::getServerPort(){
 	return DEFAULT_SERVER_PORT;
 }
 
+string SettingManager::getSharedServerURL(){
+	string url = getDirectValue("shared_server_url");
+	if (url != ""){
+		return url;
+	}
+	Log("No URL for Shared Server API was detected. Using default: \"" + string(DEFAULT_SHARED_URL) + "\"",WARNING);
+	return DEFAULT_SHARED_URL;
+}
+
 void SettingManager::initLogger(){
 	int level;
 	string file;
@@ -136,7 +162,4 @@ void SettingManager::initDefaultLogger(){
 	LoggerInit(DEFAULT_LOG_LEVEL,DEFAULT_LOG_STDOUT,DEFAULT_LOG_FILE);
 }
 
-SettingManager::~SettingManager() {
-	delete settingsInstance;
-}
 

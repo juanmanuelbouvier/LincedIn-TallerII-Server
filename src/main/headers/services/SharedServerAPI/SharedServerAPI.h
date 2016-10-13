@@ -9,6 +9,7 @@ using namespace std;
 class SharedServerAPI {
 private:
 	ServerClient* client;
+	string sharedURL;
 
 	SharedServerAPI();
 
@@ -18,6 +19,7 @@ public:
 
 	//Singleton
 	static SharedServerAPI* getInstance();
+	static void deleteInstance();
 
 	// API Rest
 	HTTPResponse* getSkills();

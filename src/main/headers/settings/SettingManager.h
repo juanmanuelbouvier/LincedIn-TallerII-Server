@@ -12,14 +12,17 @@ private:
 
 	Json::Value setting;
 
-	SettingManager();
+	SettingManager(){};
 
 	bool areLoggerSettings();
 
 public:
 	static SettingManager* getInstance();
+	static void deleteInstance();
 
 	bool readFile(string file);
+
+	string getJSONStructure();
 
 	string getDirectValue( string tag );
 
@@ -29,10 +32,12 @@ public:
 
 	int getServerPort();
 
+	string getSharedServerURL();
+
 	void initLogger();
 	void initDefaultLogger();
 
-	virtual ~SettingManager();
+	virtual ~SettingManager(){};
 };
 
 #endif /* SRC_MAIN_SRC_SETTINGS_SETTINGMANAGER_H_ */
