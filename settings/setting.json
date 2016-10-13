@@ -1,0 +1,8 @@
+{
+	"port" : "8081",
+	"logger" : {
+		"file" : "logs/LincedInAppServer.log",
+		"show_in_stout" : true,
+		"level" : 3
+	}
+}

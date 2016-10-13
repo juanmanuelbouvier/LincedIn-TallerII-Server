@@ -26,13 +26,17 @@ configure_file (
 # so that we will find LincedInServerConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-set (APP_SOURCE "${PROJECT_SOURCE_DIR}/../src/main")
+set (APP_SOURCE "${PROJECT_SOURCE_DIR}/../src/main/src")
+set (APP_HEADERS "${PROJECT_SOURCE_DIR}/../src/main/headers")
+
+# Headers Files of source
+include_directories("${APP_HEADERS}")
 
 set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
     
-    ${APP_SOURCE}/service/MongooseServer/Server.cpp
-    ${APP_SOURCE}/service/MongooseServer/ServerClient.cpp
+    ${APP_SOURCE}/service/Server/Server.cpp
+    ${APP_SOURCE}/service/Server/ServerClient.cpp
     
     ${APP_SOURCE}/service/HTTP/HTTPRequestHandler.cpp
     
@@ -46,10 +50,12 @@ set (SOURCES
     
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
     
-    ${APP_SOURCE}/Utils/DateUtils.cpp
-    ${APP_SOURCE}/Utils/PathUtils.cpp
-    ${APP_SOURCE}/Utils/StringUtils.cpp
-    ${APP_SOURCE}/Utils/VectorUtils.cpp
+    ${APP_SOURCE}/utils/DateUtils.cpp
+    ${APP_SOURCE}/utils/PathUtils.cpp
+    ${APP_SOURCE}/utils/StringUtils.cpp
+    ${APP_SOURCE}/utils/VectorUtils.cpp
+    
+    ${APP_SOURCE}/settings/SettingManager.cpp
     )
     
 set (MAIN_CPP
@@ -80,7 +86,7 @@ endif (WIN32)
 
 # MONGOOSE
 set (MONGOOSE_SOURCES
-    ${APP_SOURCE}/service/MongooseServer/mongoose/mongoose.c
+    ${APP_SOURCE}/extern/mongoose.c
     )
 
 add_definitions(-DMG_ENABLE_THREADS)    
@@ -91,7 +97,7 @@ target_link_libraries (mongoose ${EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
 # JSON CPP
 set (JSON_SOURCES
-    ${APP_SOURCE}/service/Json/json/jsoncpp.cpp
+    ${APP_SOURCE}/extern/jsoncpp.cpp
     )
 add_library(json ${JSON_SOURCES})
 
@@ -109,11 +115,15 @@ ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/googletest)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-set (TEST_SOURCE "${PROJECT_SOURCE_DIR}/../src/test")
+set (TEST_SOURCE "${PROJECT_SOURCE_DIR}/../src/test/src")
+set (TEST_HEADERS "${PROJECT_SOURCE_DIR}/../src/test/headers")
+
+include_directories(${TEST_HEADERS})
 
 add_executable(RunUnitTests
-	${TEST_SOURCE}/test_main.cpp
+	${TEST_SOURCE}/mainTests.cpp
 	${TEST_SOURCE}/UtilsTest.cpp
+	${TEST_SOURCE}/SettingManagerTest.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)
