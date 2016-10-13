@@ -14,7 +14,7 @@ TEST(SettingManagerTest, readJsonSetting) {
 	EXPECT_EQ(settings->getServerPort(), 8081);
 	EXPECT_EQ(settings->getLogFile(), "logs/LincedInAppServer.log");
 	EXPECT_EQ(settings->getLogLevel(), 3);
-	EXPECT_FALSE(settings->showLoggerInStdout());
+	EXPECT_TRUE(settings->showLoggerInStdout());
 
 
 
