@@ -1,0 +1,496 @@
+swagger: '2.0'
+info:
+  title: LincedIn - Server API
+  description: API para el server de LincedIn
+  version: "Alpha 0.1"
+host: lincedin.ddns.net
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /search:
+    get:
+      summary: Busqueda de personas
+      description: |
+        Se podrá realizar una búsqueda sobre los profesionales que posee el sistema y ver la información asociada. Esta búsqueda puede ser parametrizable, se puede realizar una búsqueda por palabras claves, skills, un cierto rango de distancia a partir de la geolocalización actual del usuario. Además se podrá ordenar, por fecha, alfabeticamente y por popularidad.
+      parameters:
+        - description: Puesto a dar de alta
+          in: body
+          name: body
+          required: false
+          schema:
+            type: object
+            properties:
+              keywords:
+                type: string
+              skills:
+                type: array
+                items:
+                  type: string
+              geo:
+                type: object
+                properties:
+                  latitude:
+                    type: string
+                  longitude:
+                    type: string
+              orden:
+                type: string
+      responses:
+        200:
+          description: Resultados de la búsqueda
+          schema:
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+              metadata:
+                $ref: '#/definitions/Metadata'
+          examples:
+            application/json:
+              search:
+                - name: Tomas Bert
+                  ubicacion: CABA, Argentina
+                  description: Desarrollador
+                - name: Octavio Iogha
+                  ubicacion: Mar del Plata, Buenos Aires, Argentina
+                  description: Empleado estatal
+                - name: Facundo Etchanchu
+                  ubicacion: Rawson, Buenos Aires, Argentina
+                  description: Disenador de DT's 125
+              metadata:
+                version: 0.1
+                total: 3
+                count: 3
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+            
+  /friends/{action}/{destination_user_id}:
+    parameters:
+      - description: Token de acceso
+        in: header
+        name: access_token
+        required: true
+        type: string
+      - description: User id referido al token de acceso
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: Usuario Destino
+        in: path
+        name: destination_user_id
+        required: true
+        type: string
+      - description: Acción {add|confirm|reject}
+        in: path
+        name: action
+        required: true
+        type: string
+        
+
+          
+    post:
+      summary: Enviar, Aceptar o Rechazar solicitud para formar parte de la red
+      description: |
+        El servidor proveerá un servicio en donde el usuario podrá mandar una solicitud al contacto para que pueda ser parte de su red profesional. El usuario destinatario puede aceptar o rechazar dicha solicitud.
+      parameters:
+        - description: Mensaje de la acción
+          in: body
+          name: body
+          required: false
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+      responses:
+        200:
+          description: Solicitud para agregar a la red enviada
+          schema:
+            $ref: '#/definitions/Metadata'
+        400:
+          description: Token de acceso invalido
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: Usuario destino inexistente
+          schema:
+            $ref: '#/definitions/Error'
+        408:
+          description: Usuario ya es parte de la red
+          schema:
+            $ref: '#/definitions/Error'
+        412:
+          description: Solicitud no puede ser rechazada o aceptada debido a su inexistencia.
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+      
+        
+  /chat:
+    parameters:
+      - description: Token de acceso
+        in: header
+        name: access_token
+        required: true
+        type: string
+      - description: User id referido al token de acceso.
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: Cantidad de elementos en la respuesta.
+        in: query
+        name: size
+        required: false
+        type: integer
+    get:
+      summary: Listado de conversaciones
+      description: |
+        Posibilidad de acceder a todas las conversaciones realizadas.
+      responses:
+        200:
+          description: Todas los chats existentes
+          schema:
+            properties:
+              chats:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: string
+                      description: Id unico del usuario emisor
+                    user_name:
+                      type: string
+                      description: Nombre del usuario
+                    last_message:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                        time:
+                          type: integer
+                          description: Time stamp del mensaje
+              metadata:
+                $ref: '#/definitions/Metadata'
+          examples:
+            application/json:
+              chats:
+                - useri_d: tomibert
+                  user_name: Tomas A. Bert
+                  last_message:
+                    message: "Chau che"
+                    time: 466236557
+                - useri_d: juanmanuelbouvier
+                  user_name: Juan Manuel Bouvier
+                  last_message:
+                    message: "Hola, me prestas plata?"
+                    time: 466262235
+              metadata:
+                version: '0.1'
+                total: 15
+                count: 2
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  
+  /chat/online:
+    parameters:
+      - description: Token de acceso
+        in: header
+        name: access_token
+        required: true
+        type: string
+      - description: User id referido al token de acceso.
+        in: header
+        name: user_id
+        required: true
+        type: string
+    get:
+      summary: Listado de usuarios que están online.
+      description: |
+        Posibilidad de ver los usuarios activos que forman parte de la red.
+      responses:
+        200:
+          description: Todas los usuarios online pertenecientes a la red. 
+          schema:
+            properties:
+              chats:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: string
+                      description: Usuario id
+                    user_name:
+                      type: string
+                      description: Nombre del usuario
+              metadata:
+                $ref: '#/definitions/Metadata'
+          examples:
+            application/json:
+              chats:
+                - useri_d: tomibert
+                  user_name: Tomas A. Bert
+                - useri_d: juanmanuelbouvier
+                  user_name: Juan Manuel Bouvier
+              metadata:
+                version: '0.1'
+                total: 2
+                count: 2
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  
+  /chat/{destination_user_id}:
+    parameters:
+      - description: Token de acceso
+        in: header
+        name: access_token
+        required: true
+        type: string
+      - description: User id referido al token de acceso.
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: Usuario destino en la conversación.
+        in: path
+        name: destination_user_id
+        required: true
+        type: string
+      
+    get:
+      summary: Obtener conversación
+      description: |
+        **inserte simple descripcion aqui**, el orden es cronologico desde desde el mas nuevo al mas antiguo
+      parameters:
+        - description: Cantidad de mensajes a cargar del chat.
+          in: query
+          name: size
+          required: false
+          type: string
+      responses:
+        200:
+          description: Conversacion con user_id
+          schema:
+            properties:
+              messages:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: string
+                      description: Id del usuario destino
+                    user_name:
+                      type: string
+                      description: Nombre del usuario destino
+                    message:
+                      type: string
+                    time_stamp:
+                      type: integer
+              metadata:
+                $ref: '#/definitions/Metadata'
+          examples:
+            application/json:
+              messages:
+                - useri_d: tomibert
+                  user_name: Tomas A. Bert
+                  message: "Hola!"
+                  time: 466236557
+                - useri_d: juanmanuelbouvier
+                  user_name: Juan Manuel Bouvier
+                  message: "Hola, como estas?"
+                  time: 466262235
+              metadata:
+                version: '0.1'
+                total: 15
+                count: 2
+            
+            
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Enviar mensaje
+      description: |
+        **inserte simple descripcion aqui**
+      parameters:
+        - description: Puesto a dar de alta
+          in: body
+          name: body
+          required: false
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              time_stamp:
+                type: integer
+      responses:
+        200:
+          description: Mensaje enviado
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Eliminar conversacion
+      description: |
+        Se permite eliminar conversacion con usuario.
+      responses:
+        200:
+          description: Conversacion eliminada
+        400:
+          description: No existe conversacion
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+      
+      
+   
+  /{user_id}:
+    parameters:
+      - description: Usuario id
+        in: path
+        name: user_id
+        required: true
+        type: string
+        
+    get:
+      summary: Perfil del usuario indicado
+      description: |
+        ** Descripcion **
+      responses:
+        200:
+          description: Perfil de usuario en cuestion
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: Usuario inexistente
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    
+    put:
+      summary: Modificar perfil
+      description: |
+        ** Descripcion **
+      parameters:
+        - description: Token de acceso referido al user id
+          in: header
+          name: access_token
+          required: true
+          type: string
+        - description: Informacion a modificar
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Perfil modificado.
+        400:
+          description: Parametros invalidos
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                parameter:
+                  type: string
+                error_message:
+                  type: string
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+              
+    delete:
+      summary: Eliminar perfil
+      description: |
+        El usuario tiene el derecho de eliminarse de la plataforma
+      responses:
+        200:
+          description: Perfil eliminado
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Nombre
+      description:
+        type: string
+        description: Descripcion
+      avatar_url:
+        type: string
+        description: URL foto de perfil
+      skills:
+        type: array
+        items:
+          type: string
+        description: Skills
+      localization:
+        type: object
+        properties:
+          latitude:
+            description: Latitud
+            type: string
+          longitude:
+            description: Longitud
+            type: string
+      job_experience:
+        type: string
+        description: Experiencia laboral
+  
+  Metadata:
+    type: object
+    properties:
+      version:
+        type: string
+        description: Versión de la api
+      total:
+        type: integer
+        description: Cantidad total de elementos
+      count:
+        type: integer
+        description: Cantidad de elementos en la respuesta
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
