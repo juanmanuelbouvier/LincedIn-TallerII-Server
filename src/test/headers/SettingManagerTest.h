@@ -1,7 +1,7 @@
 #ifndef SRC_TEST_SETTINGMANAGERTEST_H_
 #define SRC_TEST_SETTINGMANAGERTEST_H_
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 class SettingManagerTest : public ::testing::Test {

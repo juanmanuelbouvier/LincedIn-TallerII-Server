@@ -77,7 +77,10 @@ string HTTPRequest::getBody(){
 }
 
 string HTTPRequest::getFromHeader(string key){
-	return headers[key];
+	if ( headers.find(key) != headers.end() ) {
+		return headers[key];
+	}
+	return "";
 }
 
 string HTTPRequest::toString(){

@@ -3,11 +3,15 @@
 
 #include "Handler.h"
 
+#include <vector>
+
 class SharedServerHandler : public Handler {
 public:
 	SharedServerHandler();
 
 	HTTPResponse* handle(HTTPRequest* http_request);
+
+	vector<string> getKnowURLs();
 
 	virtual ~SharedServerHandler();
 };

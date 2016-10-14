@@ -3,27 +3,35 @@
 #include <services/Handlers/DefaultHandler.h>
 #include <services/Handlers/SharedServerHandler.h>
 #include <services/Logger/Logger.h>
+#include <utils/PathUtils.h>
 
 #include <string>
 
 using namespace std;
 
+#define NOT_FOUND "HTTPRequestHandler::NOTFOUND"
+
 HTTPRequestHandler::HTTPRequestHandler() {
 	// Inicialize all Handlers.
 
-	//TODO: Se tiene que resolver mediante regular expresion las uris con variables
-	HTTPEndPointsHandlers["/helloworld"] = new HelloWorldJsonHandler();
+	//Tets JSON Handler
+	addHandler("/helloworld",new HelloWorldJsonHandler());
 
 	//Defaults
-	HTTPEndPointsHandlers["/"] = new DefaultHandler();
-	HTTPEndPointsHandlers["/index"] = HTTPEndPointsHandlers["/"];
+	DefaultHandler* defaultHandler = new DefaultHandler();
+	addHandler("/"		,defaultHandler);
+	addHandler("/index"	,defaultHandler);
 
-	HTTPEndPointsHandlers["/skills"] = new SharedServerHandler();
+	//Shared
+	SharedServerHandler* sharedHandler = new SharedServerHandler();
+	vector<string> sharedGetURLS = sharedHandler->getKnowURLs();
+	for ( string& url : sharedGetURLS ) {
+		addHandler(url, sharedHandler);
+	}
 
 }
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
-	//TODO: Si no existe URI devuelve NOT FOUND
 	string uri = http_request->getURI();
 
 	//Se supone que por decision del server esto ya tiene que venir verificado
@@ -31,19 +39,43 @@ HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 		Log("No Handler for endpoint = `" + uri + "` go to DefaultHandler",INFO);
 		return HTTPEndPointsHandlers["/"]->handle(http_request);
 	}
-	return HTTPEndPointsHandlers[uri]->handle(http_request);
+	return HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
 }
 
 bool HTTPRequestHandler::isHandledRequest(HTTPRequest* http_request) {
 	string uri = http_request->getURI();
-	if (uri.empty() || uri == "/"){
-		return true;
-	}
-
-	if (HTTPEndPointsHandlers.find(uri) != HTTPEndPointsHandlers.end()){
+	//TODO: View empty case
+	if (uri.empty() || matchPath(uri) != NOT_FOUND ){
 		return true;
 	}
 	return false;
+}
+
+#include <iostream>
+
+string HTTPRequestHandler::matchPath( string path ){
+	for(string& aPath : workingPaths) {
+	    if ( PathUtils::matchPathRegexp(path,aPath) ) {
+	    	return aPath;
+	    }
+	}
+	return NOT_FOUND;
+}
+
+void HTTPRequestHandler::registerPath( string path ) {
+	workingPaths.push_back(path);
+	sort(workingPaths.begin(), workingPaths.end());
+}
+
+bool HTTPRequestHandler::addHandler(string uri_path, Handler* handler) {
+	map<string,string> headers;
+	HTTPRequest theRequest("GET",uri_path,"","",headers);
+	if (isHandledRequest(&theRequest) || uri_path == NOT_FOUND){
+		return false;
+	}
+	registerPath(uri_path);
+	HTTPEndPointsHandlers[uri_path] = handler;
+	return true;
 }
 
 HTTPRequestHandler::~HTTPRequestHandler() {

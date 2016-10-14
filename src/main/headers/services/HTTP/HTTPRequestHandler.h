@@ -7,6 +7,7 @@
 #include "Message/HTTPResponse.h"
 
 #include <map>
+#include <vector>
 
 
 using namespace std;
@@ -15,6 +16,10 @@ class HTTPRequestHandler {
 
 private:
 	map<string,Handler*> HTTPEndPointsHandlers;
+	vector<string> workingPaths;
+
+	string matchPath( string uri );
+	void registerPath( string path );
 
 public:
 	HTTPRequestHandler();
@@ -22,6 +27,7 @@ public:
 	HTTPResponse* handle(HTTPRequest* http_request);
 
 	bool isHandledRequest(HTTPRequest* http_request);
+	bool addHandler(string uri_path, Handler* handler);
 
 	virtual ~HTTPRequestHandler();
 };

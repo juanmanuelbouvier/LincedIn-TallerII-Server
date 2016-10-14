@@ -124,6 +124,7 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/mainTests.cpp
 	${TEST_SOURCE}/UtilsTest.cpp
 	${TEST_SOURCE}/SettingManagerTest.cpp
+	${TEST_SOURCE}/HTTPHandlerTests.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)
@@ -140,7 +141,7 @@ add_test(
 )
 
 
-## GCOV y LCOV
+### GCOV with LCOV ###
 ## sudo apt-get install lcov 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake_modules/")
 set(CMAKE_BUILD_TYPE "Debug")
@@ -148,5 +149,5 @@ set(CMAKE_BUILD_TYPE "Debug")
 if(CMAKE_COMPILER_IS_GNUCXX)
     include(CodeCoverage)
     setup_target_for_coverage(run_coverage RunUnitTests coverage)
-    target_link_libraries(RunUnitTests gcov)
+    target_link_libraries(lincedinapp gcov)
 endif()

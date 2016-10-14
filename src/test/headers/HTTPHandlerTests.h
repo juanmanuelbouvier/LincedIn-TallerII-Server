@@ -1,18 +1,17 @@
-#ifndef SRC_TEST_UTILSTEST_H_
-#define SRC_TEST_UTILSTEST_H_
+#ifndef SRC_TEST_SRC_HTTPHANDLERTESTS_H_
+#define SRC_TEST_SRC_HTTPHANDLERTESTS_H_
 
 #include <gtest/gtest.h>
 
-
-class UtilsTest : public ::testing::Test {
+class HTTPHandlerTests: public ::testing::Test {
 
 protected:
 
     // You can do set-up work for each test here.
-	UtilsTest();
+	HTTPHandlerTests();
 
     // You can do clean-up work that doesn't throw exceptions here.
-	virtual ~UtilsTest();
+	virtual ~HTTPHandlerTests();
 
     // If the constructor and destructor are not enough for setting up
     // and cleaning up each test, you can define the following methods:
@@ -27,4 +26,4 @@ protected:
 
 };
 
-#endif /* SRC_TEST_UTILSTEST_H_ */
+#endif /* SRC_TEST_SRC_HTTPHANDLERTESTS_H_ */

@@ -148,7 +148,7 @@ TEST(UtilsTest, integratedUsingRouteParse) {
 	EXPECT_EQ(resultNotValid.size(), 1);
 	EXPECT_EQ(resultNotValid["_route"],testNotValidPath);
 
-	string testPathWithQuery = "/hello/antonio/banderas?pelicula=elZorro";
+	string testPathWithQuery = "/hello/antonio/banderas?film=elZorro";
 
 	map<string,string> resultWithQuery = PathUtils::routerParser(testPathWithQuery,pathWithVariables);
 
@@ -156,18 +156,18 @@ TEST(UtilsTest, integratedUsingRouteParse) {
 	EXPECT_EQ(resultWithQuery["_route"],"/hello/antonio/banderas");
 	EXPECT_EQ(resultWithQuery["name"],"antonio");
 	EXPECT_EQ(resultWithQuery["surname"],"banderas");
-	EXPECT_EQ(resultWithQuery["_query"],"pelicula=elZorro");
+	EXPECT_EQ(resultWithQuery["_query"],"film=elZorro");
 
 }
 
 TEST(UtilsTest, DuummyGetTime) {
-	string date = DateUtils::getTimeWithFormat("[%Y]");
+	string date = DateUtils::getTimeWithFormat("Rand0m[%Y]Rand0m");
 
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
 	string expectedYear = to_string(1900 + timePtr->tm_year);
 
-	EXPECT_EQ(date,"[" + expectedYear + "]");
+	EXPECT_EQ(date,"Rand0m[" + expectedYear + "]Rand0m");
 
 }
 

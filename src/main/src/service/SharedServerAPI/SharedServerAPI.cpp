@@ -10,7 +10,6 @@ using namespace std;
 
 SharedServerAPI* SharedServerAPI::instaceAPI = NULL;
 
-
 SharedServerAPI::SharedServerAPI() {
 	client = new ServerClient();
 	sharedURL = SettingManager::getInstance()->getSharedServerURL();
@@ -32,17 +31,30 @@ void SharedServerAPI::deleteInstance(){
 	instaceAPI = NULL;
 }
 
+vector<string> SharedServerAPI::getsURL() {
+	vector<string> urls = {
+		"/job_positions/categories/:category",
+		"/job_positions",
+		"/skills",
+		"/skills/categories/:category/:name",
+		"/categories"
+	};
 
-HTTPResponse* SharedServerAPI::getSkills(){
+	return urls;
+}
+
+HTTPResponse* SharedServerAPI::doGet( string uri ){
 	if (!client->connectToUrl(sharedURL)){
 		return NULL;
 	}
-	RequestBuilder* builder = RequestBuilder().GET()->setUri("/skills");
+	RequestBuilder* builder = RequestBuilder().GET()->setUri(uri);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	return client->sendRequest(theRequest);
+}
 
-
+HTTPResponse* SharedServerAPI::getSkills(){
+	return doGet("/skills");
 }
 
 

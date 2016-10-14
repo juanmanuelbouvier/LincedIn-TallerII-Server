@@ -3,6 +3,7 @@
 
 #include <services/HTTP/Message/HTTPResponse.h>
 #include <services/Server/ServerClient.h>
+#include <vector>
 
 using namespace std;
 
@@ -23,6 +24,9 @@ public:
 
 	// API Rest
 	HTTPResponse* getSkills();
+	HTTPResponse* doGet( string uri );
+
+	vector<string> getsURL();
 
 	virtual ~SharedServerAPI();
 };

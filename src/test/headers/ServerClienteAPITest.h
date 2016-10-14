@@ -1,7 +1,7 @@
 #ifndef SRC_TEST_SRC_SERVERCLIENTEAPITEST_H_
 #define SRC_TEST_SRC_SERVERCLIENTEAPITEST_H_
 
-#include <extern/gtest/gtest.h>
+#include <gtest/gtest.h>
 
 class ServerClienteAPITest : public ::testing::Test {
 
