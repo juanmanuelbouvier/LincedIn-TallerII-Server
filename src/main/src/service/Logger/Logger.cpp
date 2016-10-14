@@ -38,16 +38,19 @@ void LoggerInit(int level, bool log_console, string path){
  * Log a message in Logger.<BR>
  *  typeOfLog: ERROR, WARNING, INFO, DEBUG.
  *  Default typeOfLog is DEBUG.
+ *  return string was logged.
  *
  */
-void Log(string message, LogLevel typeOfLog){
-    if (!LogSetting.init){
-    	cout << "ERROR: Logger must be initialized with `LoggerInit(level,log_console,path)`" << endl;
-    	return;
+string Log(string message, LogLevel typeOfLog){
+    string full_msg = "";
+	if (!LogSetting.init){
+		full_msg = "ERROR: Logger must be initialized with `LoggerInit(level,log_console,path)`";
+    	cout << full_msg << endl;
+    	return full_msg;
     }
 	if (typeOfLog <= LogSetting.LoggerLevel) {
         std::fstream logfile;
-        string full_msg = DateUtils::getTimeWithFormat() + "[" + LoggerLevelToString[typeOfLog] + "] " + message;
+        full_msg = DateUtils::getTimeWithFormat() + "[" + LoggerLevelToString[typeOfLog] + "] " + message;
         logfile.open(LogSetting.LoggerPathFile.c_str(), std::fstream::app | std::fstream::out);
         logfile << full_msg << endl;
 
@@ -55,6 +58,7 @@ void Log(string message, LogLevel typeOfLog){
         	cout << full_msg << endl;
         }
     }
+	return full_msg;
 }
 
 bool validLogLevel(int log_level){

@@ -18,7 +18,7 @@ struct LoggerSetting{
 };
 
 void LoggerInit(int level, bool log_console, string path);
-void Log(string mensaje, LogLevel typeOfLog = DEBUG);
+string Log(string mensaje, LogLevel typeOfLog = DEBUG);
 bool validLogLevel(int log_level);
 
 #endif /* LOGGER_H_ */

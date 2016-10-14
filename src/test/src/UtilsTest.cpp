@@ -3,6 +3,9 @@
 #include <utils/PathUtils.h>
 #include <utils/StringUtils.h>
 #include <utils/VectorUtils.h>
+#include <utils/DateUtils.h>
+
+#include <ctime>
 
 #include <string>
 
@@ -155,7 +158,16 @@ TEST(UtilsTest, integratedUsingRouteParse) {
 	EXPECT_EQ(resultWithQuery["surname"],"banderas");
 	EXPECT_EQ(resultWithQuery["_query"],"pelicula=elZorro");
 
+}
 
+TEST(UtilsTest, DuummyGetTime) {
+	string date = DateUtils::getTimeWithFormat("[%Y]");
+
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	string expectedYear = to_string(1900 + timePtr->tm_year);
+
+	EXPECT_EQ(date,"[" + expectedYear + "]");
 
 }
 

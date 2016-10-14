@@ -8,7 +8,7 @@
 #define STR_POSITION_VARIABLE_INDICATOR 0
 #define PATH_VARIABLE_INDICATOR ':'
 
-
+#include <iostream>
 //! Get the folder path of file.
 //!
 //! @note example: `getFolderOfFilePath("path/to/file.ext") => "path/to"`
@@ -18,6 +18,9 @@
 string PathUtils::getFolderOfFilePath(const string& str) {
   size_t found;
   found = str.find_last_of("/\\");
+  if (int(found) == -1){
+	  return "";
+  }
   return str.substr(0,found);
 }
 

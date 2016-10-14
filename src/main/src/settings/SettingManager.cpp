@@ -10,7 +10,7 @@ using namespace std;
 #define DEFAULT_SERVER_PORT		8081
 #define DEFAULT_LOG_LEVEL		DEBUG
 #define DEFAULT_LOG_STDOUT		true
-#define DEFAULT_LOG_FILE		"logs/LincedInAppServer.log"
+#define DEFAULT_LOG_FILE		"LincedInAppServer.log"
 #define DEFAULT_SHARED_URL 		"lincedin.herokuapp.com:80"
 
 SettingManager* SettingManager::settingsInstance = NULL;
@@ -78,10 +78,9 @@ int SettingManager::getLogLevel(){
 				cout << "Invalid Log Level (" << log_level << "). Using default [" << DEFAULT_LOG_LEVEL << "]" << endl;
 				return DEFAULT_LOG_LEVEL;
 			}
-		} else {
-			cout << "Invalid level logger setting value. Using default" << endl;
 		}
 	}
+	cout << "not found or invalid level logger setting value. Using default" << endl;
 	return DEFAULT_LOG_LEVEL;
 }
 
@@ -91,16 +90,12 @@ string SettingManager::getLogFile() {
 		if (filePath.isConvertibleTo(Json::stringValue)) {
 			string file = filePath.asString();
 			string pathOfLog = PathUtils::getFolderOfFilePath(file) + "/";
-			if ( PathUtils::isValidPath(pathOfLog) ){
+			if ( PathUtils::isValidPath(pathOfLog) or pathOfLog.size() == 1 ){
 				return file;
-			} else {
-				cout << "Invalid Log Path (folder '" + file + "' not exist). Using Default [" + DEFAULT_LOG_FILE + "]" << endl;
-				return DEFAULT_LOG_FILE;
 			}
-		} else {
-			cout << "Invalid file logger setting. Using default";
 		}
 	}
+	cout << "Invalid or not Found file logger setting. Using default";
 	return DEFAULT_LOG_FILE;
 }
 
@@ -109,10 +104,9 @@ bool SettingManager::showLoggerInStdout(){
 		Json::Value booleanStdout = setting["logger"]["show_in_stout"];
 		if (booleanStdout.isConvertibleTo(Json::booleanValue)){
 			return booleanStdout.asBool();
-		} else {
-			cout << "Cannot read show_in_stdout value. Work with default." << endl;
 		}
 	}
+	cout << "Cannot read show_in_stdout value. Work with default." << endl;
 	return DEFAULT_LOG_STDOUT;
 }
 
@@ -138,23 +132,9 @@ string SettingManager::getSharedServerURL(){
 }
 
 void SettingManager::initLogger(){
-	int level;
-	string file;
-	bool stdout;
-	try {
-		if ( !areLoggerSettings() ){
-			cout << "No setting for log detected. Using default values:" << endl;
-			cout << "\tlevel:\t\t" << DEFAULT_LOG_LEVEL << endl;
-			cout << "\tfile:\t\t" << DEFAULT_LOG_FILE << endl;
-			cout << "\tin stdout:\t" << (DEFAULT_LOG_STDOUT ? "true" : "false") << endl << endl;
-		}
-		level 	= getLogLevel();
-		file 	= getLogFile();
-		stdout	= showLoggerInStdout();
-	} catch (Json::RuntimeError& e) {
-		cout << "Error while reading setting of logger. Init with default values" << endl;
-		initDefaultLogger();
-	}
+	int level 	= getLogLevel();
+	string file = getLogFile();
+	bool stdout	= showLoggerInStdout();
 	LoggerInit(level,stdout,file);
 }
 

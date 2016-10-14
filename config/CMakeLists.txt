@@ -2,9 +2,9 @@ cmake_minimum_required (VERSION 2.6)
 project (LincedInServer)
 
 # Compiler
-SET (CMAKE_CXX_FLAGS "-std=c++11 -g -fprofile-arcs -ftest-coverage")
-SET(CMAKE_C_FLAGS "-g -fprofile-arcs -ftest-coverage")
-SET(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
+SET (CMAKE_CXX_FLAGS "-std=c++11 -g -O0 -fprofile-arcs -ftest-coverage")
+SET(CMAKE_C_FLAGS "-g -fprofile-arcs -O0 -ftest-coverage")
+SET(CMAKE_EXE_LINKER_FLAGS "-O0 -fprofile-arcs -ftest-coverage")
 
 # CMake output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -138,3 +138,15 @@ add_test(
 	NAME RunUnitTests
 	COMMAND RunUnitTests
 )
+
+
+## GCOV y LCOV
+## sudo apt-get install lcov 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake_modules/")
+set(CMAKE_BUILD_TYPE "Debug")
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    include(CodeCoverage)
+    setup_target_for_coverage(run_coverage RunUnitTests coverage)
+    target_link_libraries(RunUnitTests gcov)
+endif()
