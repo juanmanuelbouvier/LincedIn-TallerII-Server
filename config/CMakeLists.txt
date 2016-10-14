@@ -111,7 +111,7 @@ target_link_libraries (LincedInAppServer snappy leveldb)
 ################################
 # GTest
 ################################
-ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/googletest)
+ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/extern_libraries/googletest)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
