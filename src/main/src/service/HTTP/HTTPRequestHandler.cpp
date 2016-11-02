@@ -2,6 +2,7 @@
 #include <services/Handlers/HelloWorldJsonHandler.h>
 #include <services/Handlers/DefaultHandler.h>
 #include <services/Handlers/SharedServerHandler.h>
+#include <services/Handlers/UserHandler.h>
 #include <services/Logger/Logger.h>
 #include <utils/PathUtils.h>
 
@@ -14,13 +15,11 @@ using namespace std;
 HTTPRequestHandler::HTTPRequestHandler() {
 	// Inicialize all Handlers.
 
-	//Tets JSON Handler
-	addHandler("/helloworld",new HelloWorldJsonHandler());
 
 	//Defaults
 	DefaultHandler* defaultHandler = new DefaultHandler();
 	addHandler("/"		,defaultHandler);
-	addHandler("/index"	,defaultHandler);
+	//addHandler("/index"	,defaultHandler);
 
 	//Shared
 	SharedServerHandler* sharedHandler = new SharedServerHandler();
@@ -29,6 +28,11 @@ HTTPRequestHandler::HTTPRequestHandler() {
 		addHandler(url, sharedHandler);
 	}
 
+	addHandler("/:user_id", new UserHandler());
+
+	//addHandler("/search",);
+	//addHandler("/friends/:action/:destination_user_id",);
+	//addHandler("/chat",);
 }
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
