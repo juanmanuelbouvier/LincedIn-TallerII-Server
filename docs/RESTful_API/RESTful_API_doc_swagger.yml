@@ -18,28 +18,11 @@ paths:
       description: |
         Se podrá realizar una búsqueda sobre los profesionales que posee el sistema y ver la información asociada. Esta búsqueda puede ser parametrizable, se puede realizar una búsqueda por palabras claves, skills, un cierto rango de distancia a partir de la geolocalización actual del usuario. Además se podrá ordenar, por fecha, alfabeticamente y por popularidad.
       parameters:
-        - description: Puesto a dar de alta
-          in: body
-          name: body
+        - description: Texto a buscar
+          in: query
+          name: search_query
           required: false
-          schema:
-            type: object
-            properties:
-              keywords:
-                type: string
-              skills:
-                type: array
-                items:
-                  type: string
-              geo:
-                type: object
-                properties:
-                  latitude:
-                    type: string
-                  longitude:
-                    type: string
-              orden:
-                type: string
+          type: string
       responses:
         200:
           description: Resultados de la búsqueda
@@ -73,7 +56,7 @@ paths:
             $ref: '#/definitions/Error'
             
             
-  /friends/{action}/{destination_user_id}:
+  /friends/{destination_user_id}:
     parameters:
       - description: Token de acceso
         in: header
@@ -90,31 +73,20 @@ paths:
         name: destination_user_id
         required: true
         type: string
-      - description: Acción {add|confirm|reject}
-        in: path
-        name: action
-        required: true
-        type: string
         
 
           
     post:
-      summary: Enviar, Aceptar o Rechazar solicitud para formar parte de la red
+      summary: Enviar y, en caso de ya existir, solicitud para formar parte de la red.
       description: |
-        El servidor proveerá un servicio en donde el usuario podrá mandar una solicitud al contacto para que pueda ser parte de su red profesional. El usuario destinatario puede aceptar o rechazar dicha solicitud.
-      parameters:
-        - description: Mensaje de la acción
-          in: body
-          name: body
-          required: false
-          schema:
-            type: object
-            properties:
-              message: 
-                type: string
+        El servidor proveerá un servicio en donde el usuario podrá mandar una solicitud al contacto para que pueda ser parte de su red profesional. El usuario destinatario puede aceptar dicha solicitud.
       responses:
-        200:
+        202:
           description: Solicitud para agregar a la red enviada
+          schema:
+            $ref: '#/definitions/Metadata'
+        204:
+          description: Solicitud para agregar a la red aceptada
           schema:
             $ref: '#/definitions/Metadata'
         400:
@@ -129,12 +101,30 @@ paths:
           description: Usuario ya es parte de la red
           schema:
             $ref: '#/definitions/Error'
-        412:
-          description: Solicitud no puede ser rechazada o aceptada debido a su inexistencia.
-          schema:
-            $ref: '#/definitions/Error'
         500:
           description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+    delete:
+      summary: Rechazar solicitud para formar parte o eliminar contacto de la red
+      description: |
+        El usuario puede rechazar un solicitud que le ha sido enviada. Tambien, elimina
+      responses:
+        400:
+          description: Token de acceso invalido
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: Usuario destino inexistente
+          schema:
+            $ref: '#/definitions/Error'
+        408:
+          description: Usuario no es parte de la red
+          schema:
+            $ref: '#/definitions/Error'
+        412:
+          description: Solicitud no puede ser rechazada debido a su inexistencia.
           schema:
             $ref: '#/definitions/Error'
       
@@ -370,7 +360,7 @@ paths:
       
       
    
-  /{user_id}:
+  /user/{user_id}:
     parameters:
       - description: Usuario id
         in: path
