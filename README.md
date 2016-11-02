@@ -45,12 +45,12 @@ Parametros:<br/>
 ```javascript
 {
 	"logger": {
-		"level": type number 		Sets log level. ERROR(0), WARNING(1), INFO(2), DEBUG(3). Default: 3
-		"file": type string		Set Path to write log. Default: "LincedInAppServer.log"
-		"show_in_stdout": type boolean	If true the logs also be displayed in stdout. Default: true
-	}
-	"port": type int	Sets port for incomming connections. Default: 8081
-	"shared_server_url": type string	 Url to shared server client. Format "(URL|IP):PORT". Default: "lincedin.herokuapp.com:80"
+		"level": type number			//Sets log level. ERROR(0), WARNING(1), INFO(2), DEBUG(3). Default: 3
+		"file": type string			//Set Path to write log. Default: "LincedInAppServer.log"
+		"show_in_stdout": type boolean		//If true the logs also be displayed in stdout. Default: true
+	},
+	"port": type int			//Sets port for incomming connections. Default: 8081
+	"shared_server_url": type string	//Url to shared server client. Format "(URL|IP):PORT". Default: "lincedin.herokuapp.com:80"
 }
 
 ```
@@ -71,6 +71,9 @@ Borra los archivos generados al compilar y también toda la documentación gener
 
 ### Testing
 Para correr los tests unitarios una vez generado el ejecutable del servidor, ejecutar `make test` o ir al directorio `config/build/bin/` y correr `RunUnitTests`.<br />
+
+### Coverage
+El coverage de los test se genera con el comando `make coverage-test`. Para visualizar los resultados abrir con el navegador el archivo `/config/build/coverage/index.html`.
 
 ### Valgrind
 Para correr el chequeo de memoria de valgrind, ejecutar el comando `make valgrind` una vez compilado el proyecto y generado el ejecutable correspondiente.<br />
