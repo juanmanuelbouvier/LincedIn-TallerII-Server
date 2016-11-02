@@ -12,9 +12,9 @@ UserHandler::UserHandler() {
 
 //private methods
 HTTPResponse* _response(int code,string conten_type, string body);
-Json::Value _createJob(int from,int to, string company, string position);
+Json::Value _createJob(string from,string to, string company, string position);
 Json::Value _createSkill(string name,string category, string description);
-Json::Value _createEducation(int start,int end, string school, string degree);
+Json::Value _createEducation(string start,string end, string school, string degree);
 Json::Value _createRecomendation(string recommender, string text);
 
 
@@ -35,20 +35,20 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 			user["first_name"] = "Carlos";
 			user["last_name"] = "Fontela";
 			user["email"] =  path["user_id"] + "@lincedin.com";
-			user["date_of_birth‎"] = 14040000;
+			user["date_of_birth‎"] = "1964-04-12 16:22:00";
 			user["profile_picture"] = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
-			user["current_job"] = _createJob(1351684800,-1,"FIUBA","Buscando ser el director del depto de computación.");
+			user["current_job"] = _createJob("2016-10-25 17:22:00","","FIUBA","Buscando ser el director del depto de computación.");
 
 			user["skills"] = Json::arrayValue;
 			user["skills"].append(_createSkill("Java","Lenguaje de programacion", "programacion champagne en java."));
 			user["skills"].append(_createSkill("Patterns","Software design","programacion champagne con patrones que luego nadie puede usar."));
 
 			user["past_jobs"] = Json::arrayValue;
-			user["past_jobs"].append(_createJob(1351684800,1477915200,"Totos","Gerente comercial"));
-			user["past_jobs"].append(_createJob(1446454800,1477915200,"FIUBA","Profesor"));
+			user["past_jobs"].append(_createJob("2010-10-25 16:22:00","2011-10-25 16:22:00","Totos","Gerente comercial"));
+			user["past_jobs"].append(_createJob("2012-10-25 16:22:00","2016-10-25 16:22:00","FIUBA","Profesor"));
 
 			user["education"] = Json::arrayValue;
-			user["education"].append(_createEducation(352296000,636292800,"FIUBA","Ingeniero en casi todo"));
+			user["education"].append(_createEducation("1981-03-12 16:22:00","1990-12-12 23:22:00","FIUBA","Ingeniero en casi todo"));
 
 			Json::Value recommendations_received(Json::arrayValue);
 			user["recommendations_received"] = Json::arrayValue;
@@ -92,11 +92,11 @@ HTTPResponse* _response(int code,string conten_type, string body){
 	return builder->build();
 }
 
-Json::Value _createJob(int from,int to, string company, string position){
+Json::Value _createJob(string from,string to, string company, string position){
 
 	Json::Value job;
 	job["from"] = from;
-	if (to > 0) {
+	if (to != "") {
 		job["to"] = to;
 	}
 	job["company"] = company;
@@ -115,11 +115,11 @@ Json::Value _createSkill(string name,string category, string description){
 	return skill;
 }
 
-Json::Value _createEducation(int start,int end, string school, string degree){
+Json::Value _createEducation(string start,string end, string school, string degree){
 
 	Json::Value education;
 	education["start_date"] = start;
-	if (end > 0){
+	if (end != ""){
 		education["end_date"] = end;
 	}
 	education["school_name"] = school;
