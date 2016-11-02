@@ -1,4 +1,5 @@
 #include <services/HTTP/Message/HTTPRequest.h>
+#include <utils/StringUtils.h>
 
 #define HTTP_VERSION "HTTP/1.1"
 const string HTTP_CRLF = "\r\n";
@@ -67,7 +68,7 @@ string HTTPRequest::getMethod(){
 	return method;
 }
 string HTTPRequest::getURI(){
-	return uri;
+	return StringUtils::unescapeString(uri);
 }
 string HTTPRequest::getQuery(){
 	return query;

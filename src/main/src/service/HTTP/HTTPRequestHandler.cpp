@@ -3,10 +3,13 @@
 #include <services/Handlers/DefaultHandler.h>
 #include <services/Handlers/SharedServerHandler.h>
 #include <services/Handlers/UserHandler.h>
+#include <services/Handlers/ChatHandler.h>
 #include <services/Logger/Logger.h>
 #include <utils/PathUtils.h>
 
+
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -29,6 +32,8 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	}
 
 	addHandler("/:user_id", new UserHandler());
+
+	addHandler("/chat/:user_id", new ChatHandler() );
 
 	//addHandler("/search",);
 	//addHandler("/friends/:action/:destination_user_id",);

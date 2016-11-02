@@ -2,7 +2,6 @@
 #define SRC_MAIN_UTILS_PATHUTILS_H_
 
 #include <string>
-#include <regex>
 #include <vector>
 #include <map>
 

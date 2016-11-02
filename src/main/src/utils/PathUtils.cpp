@@ -2,13 +2,16 @@
 
 #include <utils/StringUtils.h>
 #include <utils/VectorUtils.h>
+#include <iostream>
+#include <string>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <regex>
 
 #define STR_POSITION_VARIABLE_INDICATOR 0
 #define PATH_VARIABLE_INDICATOR ':'
 
-#include <iostream>
+
 //! Get the folder path of file.
 //!
 //! @note example: `getFolderOfFilePath("path/to/file.ext") => "path/to"`

@@ -6,9 +6,9 @@ RUN easy_install3 pip
 
 WORKDIR /root/LincedIn/LincedIn-TallerII-Server
 COPY . .
-RUN make
+RUN make build
+RUN make test
 
-EXPOSE 8080
+EXPOSE 8081
 
-WORKDIR /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/
 CMD ["sh", "-c", "/root/LincedIn/LincedIn-TallerII-Server/config/build/bin/LincedInAppServer"]
