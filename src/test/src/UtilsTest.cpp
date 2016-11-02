@@ -40,6 +40,20 @@ TEST(UtilsTest, splitPath) {
 	EXPECT_EQ(theSplitPath, expectedSplit);
 }
 
+TEST(UtilsTest, encodeURL) {
+	string urlToDecode = "the+%23hello%20world%21";
+	string expected = "the #hello world!";
+
+	EXPECT_EQ(StringUtils::unescapeString(urlToDecode), expected);
+}
+
+TEST(UtilsTest, decodeURL) {
+	string urlToEncode = "#hello world!";
+	string expected  = "%23hello%20world%21";
+
+	EXPECT_EQ(StringUtils::urlEncode(urlToEncode), expected);
+}
+
 TEST(UtilsTest, splitPathIgnoreEmpty) {
 	string path = "hello//world/hi/";
 	vector<string> theSplitPath = StringUtils::splitString(path,"/");
