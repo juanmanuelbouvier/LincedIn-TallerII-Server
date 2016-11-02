@@ -27,6 +27,14 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 			Json::Value user;
 			user["name"] = path["user_id"];
 			user["email"] =  path["user_id"] + "@lincedin.com";
+			user["profile_picture"] = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
+
+			Json::Value current_job;
+			current_job["from"] = "12-12-2012";
+			current_job["to"] = "actualidad";
+			current_job["company"] = "FIUBA";
+			current_job["position"] = "Buscando ser el director del depto de computación.";
+			user["current_job"] = current_job;
 
 			Json::Value skills(Json::arrayValue);
 			user["skills"] = skills;
@@ -43,6 +51,24 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
 			user["skills"].append(skill1);
 			user["skills"].append(skill2);
+
+			Json::Value past_jobs(Json::arrayValue);
+			user["past_jobs"] = past_jobs;
+
+			Json::Value job;
+			job["from"] = "12-12-2014";
+			job["to"] = "10-08-2015";
+			job["company"] = "Totos";
+			job["position"] = "Gerente comercial.";
+
+			Json::Value job2;
+			job2["from"] = "12-12-2015";
+			job2["to"] = "10-08-2016";
+			job2["company"] = "FIUBA";
+			job2["position"] = "Profe.";
+
+			user["past_jobs"].append(job);
+			user["past_jobs"].append(job2);
 
 			Json::FastWriter writer;
 			writer.omitEndingLineFeed();
