@@ -22,7 +22,6 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	//Defaults
 	DefaultHandler* defaultHandler = new DefaultHandler();
 	addHandler("/"		,defaultHandler);
-	//addHandler("/index"	,defaultHandler);
 
 	//Shared
 	SharedServerHandler* sharedHandler = new SharedServerHandler();
@@ -31,13 +30,17 @@ HTTPRequestHandler::HTTPRequestHandler() {
 		addHandler(url, sharedHandler);
 	}
 
-	addHandler("/:user_id", new UserHandler());
 
-	addHandler("/chat/:user_id", new ChatHandler() );
+	ChatHandler* chatHandler = new ChatHandler();
+	addHandler("/chat", chatHandler );
+	addHandler("/chat/online", chatHandler );
+	addHandler("/chat/:user_id", chatHandler );
+
 
 	//addHandler("/search",);
 	//addHandler("/friends/:action/:destination_user_id",);
-	//addHandler("/chat",);
+
+	addHandler("/user/:user_id", new UserHandler());
 }
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
