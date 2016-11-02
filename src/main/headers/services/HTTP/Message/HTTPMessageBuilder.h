@@ -45,6 +45,7 @@ public:
 
 	HTTPRequest* build();
 
+
 	virtual ~RequestBuilder();
 };
 
@@ -56,10 +57,13 @@ private:
 public:
 	ResponseBuilder();
 
-	ResponseBuilder* setCode(int code);
-	ResponseBuilder* setCodeAndPhrase(int code,string thePhrase);
+	ResponseBuilder* setCode(string code);
+	ResponseBuilder* setCodeAndPhrase(string code,string thePhrase);
 
 	HTTPResponse* build();
+
+	static HTTPResponse* createJsonResponse(int code, string body);
+	static HTTPResponse* createErrorResponse(int code, string error);
 
 	virtual ~ResponseBuilder();
 };

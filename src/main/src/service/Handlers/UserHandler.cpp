@@ -11,7 +11,6 @@ UserHandler::UserHandler() {
 }
 
 //private methods
-HTTPResponse* _response(int code,string conten_type, string body);
 Json::Value _createJob(string from,string to, string company, string position);
 Json::Value _createSkill(string name,string category, string description);
 Json::Value _createEducation(string start,string end, string school, string degree);
@@ -58,7 +57,7 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 			writer.omitEndingLineFeed();
 			string toReturn = writer.write(user);
 
-			return _response(200,"application/json", toReturn);
+			return ResponseBuilder::createJsonResponse(200,toReturn);
 		}
 		//no hay usuario
 		else {
@@ -68,28 +67,20 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 			writer.omitEndingLineFeed();
 			string toReturn = writer.write(error);
 
-			return _response(400,"application/json", toReturn);
+			return ResponseBuilder::createJsonResponse(400, toReturn);
 		}
 
 	} else if (method == "PUT"){
 
-		return _response(500,"", "BAD REQUEST");
+		return ResponseBuilder::createErrorResponse(500,"BAD REQUEST");
 
 	} else if (method == "DELETE"){
 
-		return _response(500,"", "BAD REQUEST");
+		return ResponseBuilder::createErrorResponse(500, "BAD REQUEST");
 
 	} else {
-		return _response(500,"", "BAD REQUEST");
+		return ResponseBuilder::createErrorResponse(500, "BAD REQUEST");
 	}
-}
-
-HTTPResponse* _response(int code,string conten_type, string body){
-	ResponseBuilder* builder = new ResponseBuilder();
-	builder = (ResponseBuilder*)builder->appendHeader("Content-type",conten_type);
-	builder = (ResponseBuilder*)builder->setBody(body);
-	builder = (ResponseBuilder*)builder->setCode(code);
-	return builder->build();
 }
 
 Json::Value _createJob(string from,string to, string company, string position){

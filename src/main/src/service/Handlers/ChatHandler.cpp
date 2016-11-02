@@ -32,8 +32,6 @@ Json::Value _createSummaryChat(string id, string name, string last_message, int 
 	return m;
 }
 
-HTTPResponse* _response(int code, string body);
-
 HTTPResponse* _chatWithUser(string method,string user_id);
 HTTPResponse* _online(string method);
 HTTPResponse* _chats();
@@ -82,10 +80,10 @@ HTTPResponse* _chatWithUser(string method,string user_id){
 		writer.omitEndingLineFeed();
 		chat = writer.write(general);
 
-		return _response(200,chat);
+		return ResponseBuilder::createJsonResponse(200,chat);
 	}
 
-	return _response(500,"BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
 }
 
 HTTPResponse* _online(string method){
@@ -114,9 +112,9 @@ HTTPResponse* _online(string method){
 		Json::FastWriter writer;
 		writer.omitEndingLineFeed();
 
-		return _response(200,writer.write(general));
+		return ResponseBuilder::createJsonResponse(200,writer.write(general));
 	}
-	return _response(500,"BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
 }
 
 
@@ -141,14 +139,7 @@ HTTPResponse* _chats(){
 	Json::FastWriter writer;
 	writer.omitEndingLineFeed();
 
-	return _response(200,writer.write(general));
+	return ResponseBuilder::createJsonResponse(200,writer.write(general));
 
-}
-
-HTTPResponse* _response(int code, string body){
-	ResponseBuilder* builder = new ResponseBuilder();
-	builder = (ResponseBuilder*)builder->appendHeader("Content-type","application/json")->setBody(body);
-	builder = (ResponseBuilder*)builder->setCode(code);
-	return builder->build();
 }
 

@@ -49,6 +49,7 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/SharedServerHandler.cpp
     ${APP_SOURCE}/service/Handlers/UserHandler.cpp
     ${APP_SOURCE}/service/Handlers/ChatHandler.cpp
+    ${APP_SOURCE}/service/Handlers/FriendHandler.cpp
     
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
     

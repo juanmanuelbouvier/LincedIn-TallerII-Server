@@ -3,6 +3,7 @@
 #include <services/Handlers/DefaultHandler.h>
 #include <services/Handlers/SharedServerHandler.h>
 #include <services/Handlers/UserHandler.h>
+#include <services/Handlers/FriendHandler.h>
 #include <services/Handlers/ChatHandler.h>
 #include <services/Logger/Logger.h>
 #include <utils/PathUtils.h>
@@ -38,7 +39,11 @@ HTTPRequestHandler::HTTPRequestHandler() {
 
 
 	//addHandler("/search",);
-	//addHandler("/friends/:action/:destination_user_id",);
+
+	FriendHandler* friendHandler = new FriendHandler();
+	addHandler("/friends",friendHandler);
+	addHandler("/friends/:destination_user_id",friendHandler);
+
 
 	addHandler("/user/:user_id", new UserHandler());
 }

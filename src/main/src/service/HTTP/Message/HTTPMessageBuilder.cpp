@@ -93,12 +93,12 @@ ResponseBuilder::ResponseBuilder() : MessageBuilder() {
 	phrase 	= "OK";
 }
 
-ResponseBuilder* ResponseBuilder::setCode(int theCode){
+ResponseBuilder* ResponseBuilder::setCode(string theCode){
 	code = theCode;
 	return this;
 }
 
-ResponseBuilder* ResponseBuilder::setCodeAndPhrase(int theCode,string thePhrase){
+ResponseBuilder* ResponseBuilder::setCodeAndPhrase(string theCode,string thePhrase){
 	setCode(theCode);
 	phrase = thePhrase;
 	return this;
@@ -107,6 +107,20 @@ ResponseBuilder* ResponseBuilder::setCodeAndPhrase(int theCode,string thePhrase)
 HTTPResponse* ResponseBuilder::build(){
 	HTTPResponse* theResponse = new HTTPResponse(code, phrase, body, headers);
 	return theResponse;
+}
+
+HTTPResponse* ResponseBuilder::createJsonResponse(int code, string body){
+	ResponseBuilder* builder = new ResponseBuilder();
+	builder = (ResponseBuilder*)builder->appendHeader("Content-type","application/json")->setBody(body);
+	builder = (ResponseBuilder*)builder->setCode(std::to_string(code));
+	return builder->build();
+}
+
+HTTPResponse* ResponseBuilder::createErrorResponse(int code, string error){
+	ResponseBuilder* builder = new ResponseBuilder();
+	builder = (ResponseBuilder*)builder->appendHeader("Content-type","text/html")->setBody(error);
+	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),"ERROR");
+	return builder->build();
 }
 
 ResponseBuilder::~ResponseBuilder(){
