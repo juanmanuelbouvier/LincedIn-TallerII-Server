@@ -33,20 +33,27 @@ El ejecutable se creará en el directorio _config/build/bin_<br />
 
 #### Correr
 Para ejecutar el proyecto con parametros default hay que ejecutar el comando `make run`<br />
-El servidor estará escuchando en: [localhost:8080](http://localhost:8080).<br/>
+El servidor estará escuchando en: [localhost:8081](http://localhost:8081).<br/>
 `El log se guardar en la carpeta logs y también funciona por stdout.`<br/><br/>
 
 Para ver ayuda y versión `./config/build/bin/LincedInAppServer -h`<br/>
 Parametros:<br/>
-`LincedInAppServer -l [LOG_LEVEL] -w [LOG_PATH] -o [BOOL] -p [LISTEN_PORT]`<br/>
-- **LOG_LEVEL** (Default 3). Nivel de logger.<br/>
-  - 0 = ERROR.<br/>
-  - 1 = WARNING. (incluye ERROR)<br/>
-  - 2 = INFO. (incluye WARNING,ERROR)<br/>
-  - 3 = DEBUG. (incluye INFO,WARNING y ERROR)<br/>
-- **LOG_PATH** (Default: _log.log_). Setear archivo de log.<br/>
-- **BOOL**	(Default 1). Si es distinto a 0 se logea, ademas del archivo, en stdout.<br/>
-- **LISTEN_PORT** (Default: 8080). Puerto donde escucha el server. <br/>
+`$./LincedInAppServer -s [SETTINGS FILE] `<br/>
+- **SETTINGS:** Path to setting file (json)	Default: "settings/setting.json"<br/>
+
+##### Setting JSON structure
+```javascript
+{
+	"logger": {
+		"level": type number 		Sets log level. ERROR(0), WARNING(1), INFO(2), DEBUG(3). Default: 3
+		"file": type string		Set Path to write log. Default: "LincedInAppServer.log"
+		"show_in_stdout": type boolean	If true the logs also be displayed in stdout. Default: true
+	}
+	"port": type int	Sets port for incomming connections. Default: 8081
+	"shared_server_url": type string	 Url to shared server client. Format "(URL|IP):PORT". Default: "lincedin.herokuapp.com:80"
+}
+
+```
 
 
 
