@@ -32,6 +32,8 @@ public:
 
 	int getServerPort();
 
+	string getDBFolder();
+
 	string getSharedServerURL();
 
 	void initLogger();

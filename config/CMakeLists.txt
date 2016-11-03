@@ -35,6 +35,8 @@ include_directories("${APP_HEADERS}")
 set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
     
+    ${APP_SOURCE}/service/DB/DBManager.cpp
+    
     ${APP_SOURCE}/service/Server/Server.cpp
     ${APP_SOURCE}/service/Server/ServerClient.cpp
     
@@ -56,6 +58,7 @@ set (SOURCES
     ${APP_SOURCE}/utils/PathUtils.cpp
     ${APP_SOURCE}/utils/StringUtils.cpp
     ${APP_SOURCE}/utils/VectorUtils.cpp
+    ${APP_SOURCE}/utils/JSONUtils.cpp
     
     ${APP_SOURCE}/settings/SettingManager.cpp
     )
@@ -126,7 +129,7 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/mainTests.cpp
 	${TEST_SOURCE}/UtilsTest.cpp
 	${TEST_SOURCE}/SettingManagerTest.cpp
-	${TEST_SOURCE}/HTTPHandlerTests.cpp
+	${TEST_SOURCE}/DBTest.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)

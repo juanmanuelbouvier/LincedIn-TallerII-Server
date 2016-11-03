@@ -28,6 +28,7 @@ valgrind-test:
 coverage-test:
 	@mkdir -p config/build/src && mkdir -p config/build/.temp-test/logs && mkdir -p config/build/.temp-test/settings && cp settings/setting.json config/build/.temp-test/settings/setting.json
 	@cd config && cd build && make run_coverage && cd ../..
+	@rm -rf config/build/.temp-test config/build/*.log config/build/db
 
 clean:
 	@echo -n "Limpiando.."

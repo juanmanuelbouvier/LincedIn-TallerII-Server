@@ -6,6 +6,7 @@ RUN easy_install3 pip
 
 WORKDIR /root/LincedIn/LincedIn-TallerII-Server
 COPY . .
+RUN make clean
 RUN make build
 RUN make test
 

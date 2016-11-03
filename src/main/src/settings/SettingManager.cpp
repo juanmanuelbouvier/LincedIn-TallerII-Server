@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -12,6 +13,7 @@ using namespace std;
 #define DEFAULT_LOG_STDOUT		true
 #define DEFAULT_LOG_FILE		"LincedInAppServer.log"
 #define DEFAULT_SHARED_URL 		"lincedin.herokuapp.com:80"
+#define DEFAULT_DB_FOLDER		"db"
 
 SettingManager* SettingManager::settingsInstance = NULL;
 
@@ -61,6 +63,18 @@ string SettingManager::getDirectValue( string tag ) {
 		return setting[tag].asString();
 	}
 	return "";
+}
+
+string SettingManager::getDBFolder() {
+	string dbFolder = getDirectValue("db_folder");
+	if ( dbFolder.length() > 0) {
+		if (PathUtils::isValidPath(dbFolder)) {
+			return dbFolder;
+		}
+	}
+	cout << "Invalid DB folder. Check if exist. Using default" << endl;
+	mkdir(DEFAULT_DB_FOLDER, ACCESSPERMS);
+	return DEFAULT_DB_FOLDER;
 }
 
 bool SettingManager::areLoggerSettings(){

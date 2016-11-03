@@ -51,18 +51,19 @@ Parametros:<br/>
 	},
 	"port": type int			//Sets port for incomming connections. Default: 8081
 	"shared_server_url": type string	//Url to shared server client. Format "(URL|IP):PORT". Default: "lincedin.herokuapp.com:80"
+	"db_folder": type string //Folder designed to store the databases
 }
 
 ```
-
-
-
 
 #### Sólo Documentación
 Para generar documentación del proyecto hay que ejecutar el comando `make doc`<br />
 Se genera documentación con dos herramientas distintas: **Sphinx** y **Doxygen**. Se recomienda consultar la documentación de Doxygen pues la de Sphinx podría estar desactualizada al no ser una herramienta de tipo autodoc.<br />
 La documentación HTML de Doxygen se encontrará en el archivo _docs/build/doxymentation/html/index.html_<br />
 La documentación HTML de Sphinx se encontrará en el archivo _docs/build/sphinx/html/index.html_<br />
+
+#### Estructura de Base de datos.
+Ver estructura de la base de datos [aquí](docs/database/README.md)
 
 #### Limpiar archivos generados por CMake
 Para limpiar los archivos generados por CMake hay que ejecutar el comando `make clean`<br />
