@@ -24,6 +24,7 @@ public:
 
 	// API Rest
 	HTTPResponse* getSkills();
+	HTTPResponse* getSkill(string name);
 	HTTPResponse* doGet( string uri );
 
 	vector<string> getsURL();

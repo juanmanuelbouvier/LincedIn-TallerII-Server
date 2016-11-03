@@ -53,6 +53,11 @@ HTTPResponse* SharedServerAPI::doGet( string uri ){
 	return client->sendRequest(theRequest);
 }
 
+HTTPResponse* SharedServerAPI::getSkill(string name){
+	return doGet("/skills");
+	//TODO buscar la categoria por nombre
+}
+
 HTTPResponse* SharedServerAPI::getSkills(){
 	return doGet("/skills");
 }
