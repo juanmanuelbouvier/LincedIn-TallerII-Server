@@ -24,7 +24,8 @@ void SetUpDefaultFile(string name) {
 					"\"show_in_stout\":false"
 				"},"
 				"\"port\":9191,"
-				"\"shared_server_url\":\"jaja:1234\""
+				"\"shared_server_url\":\"jaja:1234\","
+				"\"db_folder\":\".temp-test/folderToDB\""
 			"}";
 	SetUpSettingFile(fileSetting,name);
 }
@@ -64,7 +65,7 @@ TEST(SettingManagerTest, DummyTestLogFromSetting){
 
 	EXPECT_FALSE(settings->readFile("fakefile"));
 
-	string text = Log("Not inizializ");
+	string text = Log("Not inizialize",INFO);
 	EXPECT_EQ(text,"ERROR: Logger must be initialized with `LoggerInit(level,log_console,path)`");
 
 	settings->initDefaultLogger();
@@ -175,4 +176,25 @@ TEST(SettingManagerTest, WrongJSONFormat) {
 
 	cout.clear();
 	SettingManager::deleteInstance();
+}
+
+
+TEST(SettingManagerTest, DBFolder) {
+	cout.setstate(std::ios_base::failbit);
+	fclose(stderr);
+
+	string jsonSetting = ".temp-test/example.json";
+	SetUpDefaultFile(jsonSetting);
+
+	SettingManager::deleteInstance();
+	SettingManager* settings = SettingManager::getInstance();
+	settings->readFile(jsonSetting);
+
+	EXPECT_EQ(settings->getDBFolder(),"db");
+
+	mkdir(".temp-test/folderToDB", ACCESSPERMS);
+	settings->readFile(jsonSetting);
+	EXPECT_EQ(settings->getDBFolder(),".temp-test/folderToDB");
+
+	cout.clear();
 }

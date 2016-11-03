@@ -4,7 +4,7 @@
 
 #include <UtilsTest.h>
 #include <SettingManagerTest.h>
-#include "../headers/HTTPHandlerTests.h"
+#include <DBTest.h>
 
 int main(int argc, char **argv) {
   printf("Running main() from %s\n", __FILE__);

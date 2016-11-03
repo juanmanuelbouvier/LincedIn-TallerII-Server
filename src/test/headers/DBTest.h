@@ -1,17 +1,18 @@
-#ifndef SRC_TEST_SRC_HTTPHANDLERTESTS_H_
-#define SRC_TEST_SRC_HTTPHANDLERTESTS_H_
+#ifndef SRC_TEST_DBTEST_H_
+#define SRC_TEST_DBTEST_H_
 
 #include <gtest/gtest.h>
 
-class HTTPHandlerTests: public ::testing::Test {
+
+class DBTest : public ::testing::Test {
 
 protected:
 
     // You can do set-up work for each test here.
-	HTTPHandlerTests();
+	DBTest();
 
     // You can do clean-up work that doesn't throw exceptions here.
-	virtual ~HTTPHandlerTests();
+	virtual ~DBTest();
 
     // If the constructor and destructor are not enough for setting up
     // and cleaning up each test, you can define the following methods:
@@ -26,4 +27,4 @@ protected:
 
 };
 
-#endif /* SRC_TEST_SRC_HTTPHANDLERTESTS_H_ */
+#endif /* SRC_TEST_DBTEST_H_ */

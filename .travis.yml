@@ -1,9 +1,7 @@
 sudo: required
+dist: trusty
 
 language: cpp
-
-os:
-  - linux
 
 services:
   - docker
@@ -13,6 +11,7 @@ before_install:
   - sudo easy_install3 pip
   - docker build -t lincedin-appserver .
   - docker run -d -P lincedin-appserver sh -c /root/LincedIn/LincedIn-TallerII-Server/config/build/bin/RunUnitTests
+  - make clean
   
 script: 
   - make build
