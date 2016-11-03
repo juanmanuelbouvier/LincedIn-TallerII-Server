@@ -15,7 +15,9 @@ Json::Value _createJob(string from,string to, string company, string position);
 Json::Value _createSkill(string name,string category, string description);
 Json::Value _createEducation(string start,string end, string school, string degree);
 Json::Value _createRecomendation(string recommender, string text);
+Json::Value _createUser(string user_id);
 
+bool _userExist(string id);
 
 HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
@@ -26,41 +28,26 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
 	if (method == "GET"){
 
-		//si pidió un usuario que está en la base de datos
-		if (true){
-
-			Json::Value user;
-			user["full_name"] = path["user_id"];
-			user["first_name"] = "Carlos";
-			user["last_name"] = "Fontela";
-			user["email"] =  path["user_id"] + "@lincedin.com";
-			user["date_of_birth‎"] = "1964-04-12 16:22:00";
-			user["profile_picture"] = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
-			user["current_job"] = _createJob("2016-10-25 17:22:00","","FIUBA","Buscando ser el director del depto de computación.");
-
-			user["skills"] = Json::arrayValue;
-			user["skills"].append(_createSkill("Java","Lenguaje de programacion", "programacion champagne en java."));
-			user["skills"].append(_createSkill("Patterns","Software design","programacion champagne con patrones que luego nadie puede usar."));
-
-			user["past_jobs"] = Json::arrayValue;
-			user["past_jobs"].append(_createJob("2010-10-25 16:22:00","2011-10-25 16:22:00","Totos","Gerente comercial"));
-			user["past_jobs"].append(_createJob("2012-10-25 16:22:00","2016-10-25 16:22:00","FIUBA","Profesor"));
-
-			user["education"] = Json::arrayValue;
-			user["education"].append(_createEducation("1981-03-12 16:22:00","1990-12-12 23:22:00","FIUBA","Ingeniero en casi todo"));
-
-			Json::Value recommendations_received(Json::arrayValue);
-			user["recommendations_received"] = Json::arrayValue;
-			user["recommendations_received"].append(_createRecomendation("Nico Paez", "Éste es un crack, se auto cita en las diapos."));
+		//pidió su perfil
+		if (path["user_id"] == "me"){
 
 			Json::FastWriter writer;
 			writer.omitEndingLineFeed();
-			string toReturn = writer.write(user);
+			string toReturn = writer.write(_createUser("Tu usuario"));
 
 			return ResponseBuilder::createJsonResponse(200,toReturn);
-		}
-		//no hay usuario
-		else {
+
+		} else if (_userExist(path["user_id"])){
+			//si pidió un usuario que está en la base de datos
+
+			Json::FastWriter writer;
+			writer.omitEndingLineFeed();
+			string toReturn = writer.write(_createUser(path["user_id"]));
+
+			return ResponseBuilder::createJsonResponse(200,toReturn);
+		} else {
+			//no hay usuario
+
 			Json::Value error;
 			error["Error"] = "Usuario inexistente";
 			Json::FastWriter writer;
@@ -126,6 +113,39 @@ Json::Value _createRecomendation(string recommender, string text){
 	rec["text"] = text;
 
 	return rec;
+}
+
+Json::Value _createUser(string user_id) {
+	Json::Value user;
+	user["full_name"] = user_id;
+	user["first_name"] = "Carlos";
+	user["last_name"] = "Fontela";
+	user["description"] = "El capo de la FIUBA";
+	user["email"] =  user_id + "@lincedin.com";
+	user["date_of_birth‎"] = "1964-04-12 16:22:00";
+	user["profile_picture"] = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
+	user["current_job"] = _createJob("2016-10-25 17:22:00","","FIUBA","Buscando ser el director del depto de computación.");
+
+	user["skills"] = Json::arrayValue;
+	user["skills"].append(_createSkill("Java","Lenguaje de programacion", "programacion champagne en java."));
+	user["skills"].append(_createSkill("Patterns","Software design","programacion champagne con patrones que luego nadie puede usar."));
+
+	user["past_jobs"] = Json::arrayValue;
+	user["past_jobs"].append(_createJob("2010-10-25 16:22:00","2011-10-25 16:22:00","Totos","Gerente comercial"));
+	user["past_jobs"].append(_createJob("2012-10-25 16:22:00","2016-10-25 16:22:00","FIUBA","Profesor"));
+
+	user["education"] = Json::arrayValue;
+	user["education"].append(_createEducation("1981-03-12 16:22:00","1990-12-12 23:22:00","FIUBA","Ingeniero en casi todo"));
+
+	Json::Value recommendations_received(Json::arrayValue);
+	user["recommendations_received"] = Json::arrayValue;
+	user["recommendations_received"].append(_createRecomendation("Nico Paez", "Éste es un crack, se auto cita en las diapos."));
+
+	return user;
+}
+
+bool _userExist(string id){
+	return true;
 }
 
 UserHandler::~UserHandler(){
