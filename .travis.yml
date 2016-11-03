@@ -22,16 +22,8 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
-      env: COMPILER=g++-4.9
-    - compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
             - g++-5
-      env: COMPILER=g++-5
+            - gcc-5
 
 services:
   - docker
@@ -44,6 +36,8 @@ before_install:
   - make clean
   
 script: 
+  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
+  - gcc --version
   - make build
 
 after_success:
