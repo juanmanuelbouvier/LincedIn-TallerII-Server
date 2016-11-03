@@ -1,4 +1,4 @@
-#include <services/Objects/Skill.h>
+#include <model/Skill.h>
 
 namespace std {
 
