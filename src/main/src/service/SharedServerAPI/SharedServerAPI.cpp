@@ -53,15 +53,40 @@ HTTPResponse* SharedServerAPI::doGet( string uri ){
 	return client->sendRequest(theRequest);
 }
 
-HTTPResponse* SharedServerAPI::getSkill(string name){
-	return doGet("/skills");
-	//TODO buscar la categoria por nombre
+HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
+	if (!client->connectToUrl(sharedURL)){
+		return NULL;
+	}
+	RequestBuilder* builder = RequestBuilder().POST()->setUri(uri)->setBody(body);
+	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
+	HTTPRequest* theRequest = builder->build();
+	return client->sendRequest(theRequest);
 }
 
 HTTPResponse* SharedServerAPI::getSkills(){
 	return doGet("/skills");
 }
 
+Json::Value SharedServerAPI::getSkill(string name){
+	HTTPResponse* response = doGet("/skills");
+	Json::Value body = response->getBody();
+	Json::Value skills = body["skills"];
+
+	for( Json::ValueIterator itr = skills.begin() ; itr != skills.end() ; itr++ ) {
+		Json::Value skill = itr.key();
+		if (skill["name"].toStyledString() == name) {
+			return skill;
+		}
+	}
+	Json::Value val;
+	return val;
+}
+
+HTTPResponse* SharedServerAPI::setSkill(string name,string description, string category){
+	string body = "{ \"description\":"+ description +", \"name\":"+ name +" }";
+	return doPost("/skills/categories/"+category,body);
+
+}
 
 SharedServerAPI::~SharedServerAPI() {
 	delete client;

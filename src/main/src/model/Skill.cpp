@@ -3,14 +3,22 @@
 namespace std {
 
 Skill::Skill(string name) {
-	sharedServerAPI = new SharedServerAPI();
-
-	// TODO find
+	Json::Value skill = SharedServerAPI::getInstance()->getSkill(name);
+	this->name = skill["name"];
+	this->category = skill["category"];
+	this->description = skill["description"];
 }
 
-bool Skill::create(map<string,string> data){
-	//TODO create in shared server
-	return false;
+Skill* Skill::create(Json::Value data){
+
+	Json::FastWriter fastWriter;
+
+	HTTPResponse* response = SharedServerAPI::getInstance()->setSkill(fastWriter.write(data["name"]),fastWriter.write(data["description"]),fastWriter.write(data["category"]));
+
+	if (response->getCode() == 200){
+		return Skill(data["name"]);
+	}
+	return nullptr;
 }
 string Skill::getName(){
 	return name;

@@ -5,11 +5,10 @@ namespace std {
 
 class Skill {
 private:
-	SharedServerAPI* sharedServerAPI;
 	string name,category,description;
 public:
 	Skill(string skill_name);
-	bool create(map<string,string> data);
+	static Skill* create(Json::Value data);
 	string getName();
 	string getDescription();
 	string getCategory();

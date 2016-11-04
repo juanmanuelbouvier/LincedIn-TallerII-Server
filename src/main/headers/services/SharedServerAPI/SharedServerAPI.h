@@ -4,6 +4,7 @@
 #include <services/HTTP/Message/HTTPResponse.h>
 #include <services/Server/ServerClient.h>
 #include <vector>
+#include <extern/json.h>
 
 using namespace std;
 
@@ -24,8 +25,12 @@ public:
 
 	// API Rest
 	HTTPResponse* getSkills();
-	HTTPResponse* getSkill(string name);
+	Json::Value getSkill(string name);
+	HTTPResponse* setSkill(string name,string description, string category);
 	HTTPResponse* doGet( string uri );
+	HTTPResponse* doPost(string uri, string body);
+	HTTPResponse* doPut(string uri, string body);
+	HTTPResponse* doDelete(string uri);
 
 	vector<string> getsURL();
 

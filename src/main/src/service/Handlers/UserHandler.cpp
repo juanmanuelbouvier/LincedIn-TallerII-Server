@@ -73,12 +73,16 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 Json::Value _createJob(string from,string to, string company, string position){
 
 	Json::Value job;
-	job["from"] = from;
+	job["since"] = from;
 	if (to != "") {
 		job["to"] = to;
 	}
 	job["company"] = company;
-	job["position"] = position;
+	Json::Value pos;
+	pos["name"] = position;
+	pos["description"] = "description";
+	pos["category"] = "category";
+	job["position"] = pos;
 
 	return job;
 }
@@ -124,15 +128,15 @@ Json::Value _createUser(string user_id) {
 	user["email"] =  user_id + "@lincedin.com";
 	user["date_of_birth‎"] = "1964-04-12 16:22:00";
 	user["profile_picture"] = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
-	user["current_job"] = _createJob("2016-10-25 17:22:00","","FIUBA","Buscando ser el director del depto de computación.");
 
 	user["skills"] = Json::arrayValue;
 	user["skills"].append(_createSkill("Java","Lenguaje de programacion", "programacion champagne en java."));
 	user["skills"].append(_createSkill("Patterns","Software design","programacion champagne con patrones que luego nadie puede usar."));
 
-	user["past_jobs"] = Json::arrayValue;
-	user["past_jobs"].append(_createJob("2010-10-25 16:22:00","2011-10-25 16:22:00","Totos","Gerente comercial"));
-	user["past_jobs"].append(_createJob("2012-10-25 16:22:00","2016-10-25 16:22:00","FIUBA","Profesor"));
+	user["jobs"] = Json::arrayValue;
+	user["jobs"].append(_createJob("2010-10-25 16:22:00","2011-10-25 16:22:00","Totos","Gerente comercial"));
+	user["jobs"].append(_createJob("2012-10-25 16:22:00","2016-10-25 16:22:00","FIUBA","Profesor"));
+	user["jobs"].append(_createJob("2016-10-25 17:22:00","","FIUBA","Buscando ser el director del depto de computación."));
 
 	user["education"] = Json::arrayValue;
 	user["education"].append(_createEducation("1981-03-12 16:22:00","1990-12-12 23:22:00","FIUBA","Ingeniero en casi todo"));

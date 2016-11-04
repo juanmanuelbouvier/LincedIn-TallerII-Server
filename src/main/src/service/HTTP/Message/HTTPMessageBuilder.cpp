@@ -45,6 +45,11 @@ RequestBuilder* RequestBuilder::setMethod(string aMethod){
 	return this;
 }
 
+RequestBuilder* RequestBuilder::setBody(string theBody){
+	body = theBody;
+	return this;
+}
+
 RequestBuilder* RequestBuilder::GET(){
 	setMethod("GET");
 	return this;

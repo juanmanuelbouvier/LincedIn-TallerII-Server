@@ -42,6 +42,7 @@ public:
 	RequestBuilder* setMethod(string method);
 	RequestBuilder* setUri(string uri);
 	RequestBuilder* setQuery(string theQuery);
+	RequestBuilder* setBody(string theBody);
 
 	HTTPRequest* build();
 

@@ -5,21 +5,10 @@ namespace std {
 
 class Job {
 private:
-	string date_from,date_to,company,position;
+	string date_since,date_to,company;
+	JobPosition* position;
 public:
-	Job(string job_id);
-	bool create(map<string,string> data);
-
-	string getDateFrom();
-	string getDateTo();
-	string getCompany();
-	string getPosition();
-
-	void setDateFrom(string date);
-	void setDateTo(string date);
-	void setCompany(string company);
-	void setPosition(string position);
-
+	Job();
 	virtual ~Job();
 };
 
