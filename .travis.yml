@@ -32,7 +32,7 @@ before_install:
   - sudo apt-get install -y g++ make cmake doxygen graphviz python3-setuptools libsnappy-dev libleveldb-dev lcov
   - sudo easy_install3 pip
   - docker build -t lincedin-appserver .
-  - docker run -d -P lincedin-appserver sh -c "cd /root/LincedIn/LincedIn-TallerII-Server/; make test"
+  - docker run -P lincedin-appserver sh -c "cd /root/LincedIn/LincedIn-TallerII-Server/; make test"
   - make clean
   
 script: 
