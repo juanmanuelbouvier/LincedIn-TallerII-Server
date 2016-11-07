@@ -1,4 +1,5 @@
 #include <model/Skill.h>
+#include <list>
 
 namespace std {
 
@@ -13,13 +14,41 @@ Skill* Skill::create(Json::Value data){
 
 	Json::FastWriter fastWriter;
 
-	HTTPResponse* response = SharedServerAPI::getInstance()->setSkill(fastWriter.write(data["name"]),fastWriter.write(data["description"]),fastWriter.write(data["category"]));
+	//TODO: Abstraer el response de esta clase. (deberia devolver un booleano o la Skill en JSON que creo)
+	//TODO: Estaria bueno que no devuelva un puntero sino el objeto (borrar * en el metodo)
+
+	//	Metodos Utiles de JSON:
+	//		asString() convierte los valores "convertibles" (booleanos, string, enteros, flotantes) a string
+	//		toStyledString() convierte el Json::Value en un string como si fuera el archivo
+	//		isString() Verifica que el sea un string (tambien esta para cualquer tipo)
+	HTTPResponse* response = SharedServerAPI::getInstance()->setSkill(
+			fastWriter.write(data["name"]),
+			fastWriter.write(data["description"]),
+			fastWriter.write(data["category"])
+			);
 
 	if (response->getCode() == 200){
 		return Skill(data["name"]);
 	}
 	return nullptr;
 }
+
+map<string,string> Skill::check( Json::Value data ) {
+	map<string,string> errors;
+	list<string> dataExpected = {"name","description","category"};
+	for (int i = 0; i < dataExpected.size(); i++) {
+		string expected = dataExpected[i];
+		if ( data[expected] ) {
+			if (!data[expected].isString()) {
+				errors[expected] = "Invalid value of " + expected;
+			}
+		} else {
+			errors[expected] = expected + " not found in data";
+		}
+	}
+	return errors;
+}
+
 string Skill::getName(){
 	return name;
 }

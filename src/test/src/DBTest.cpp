@@ -73,11 +73,14 @@ TEST(DBTest, wrongUseOfDB) {
 	setting->readFile(filename);
 
 	//Invalid name
-	DBManager db("////klzx\0nf/");
+	DBManager db("someDB");
 
 	//Before open
 	EXPECT_FALSE(db.store("key","value"));
 	EXPECT_EQ(db.get("key") ,"");
+
+	EXPECT_TRUE(db.open());
+	EXPECT_FALSE(db.open());
 
 	SettingManager::deleteInstance();
 

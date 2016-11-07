@@ -8,6 +8,7 @@
 #include <ctime>
 
 #include <string>
+#include <list>
 
 using namespace std;
 
@@ -93,6 +94,7 @@ TEST(UtilsTest, joinVectorOfStrings) {
 	EXPECT_EQ("", VectorUtils::joinVector(emptyVector));
 
 }
+
 
 TEST(UtilsTest, variableSubPath) {
 	string variable_path = ":path";

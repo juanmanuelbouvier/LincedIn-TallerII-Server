@@ -1,14 +1,15 @@
 #include <model/Job.h>
 
-namespace std {
+using namespace std;
 
 Job::Job(){
-	// TODO Auto-generated constructor stub
+	date_since = "",
+	date_to,company = "";
+	position = new JobPosition("id");
 
 }
 
 Job::~Job() {
-	// TODO Auto-generated destructor stub
+	delete position;
 }
 
-} /* namespace std */

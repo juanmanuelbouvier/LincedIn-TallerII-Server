@@ -14,3 +14,4 @@ string VectorUtils::joinVector(vector<string> theVector, string separator) {
 	}
 	return ss.str();
 }
+

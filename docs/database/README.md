@@ -46,27 +46,28 @@
 			…,
 			user_idn
 		],
-		“messages”: [
-			{
-				“user_id” : string,
-				“user_name”: string, 
-				“message” : string,
-				“timestamp” : int,	
-			},
-			{
-				“user_id” : string,
-				“user_name”: string, 
-				“message” : string,
-				“timestamp” : int,
-			},
-			...
-			{
-				“user_id” : string,
-				“user_name”: string, 
-				“message” : string,
-				“timestamp” : int,
-			}
-		],
+		“messages”: {,
+			"user_id1" : [
+				{
+					“message” : string,
+					“timestamp” : int,	
+				},
+				{
+					“message” : string,
+					“timestamp” : int,
+				},
+			],
+			"user_id2" : [
+				{
+					“message” : string,
+					“timestamp” : int,	
+				},
+				{
+					“message” : string,
+					“timestamp” : int,
+				},
+			]
+		},
 		“total”: n
 	}
 ```
