@@ -8,3 +8,15 @@ string JSONUtils::JSONToString( Json::Value json ) {
 
 	return writer.write(json);
 }
+
+Json::Value JSONUtils::stringToJSON(string json){
+	Json::Value val;
+	Json::Reader reader;
+	bool parsedSuccess = reader.parse(json,val,false);
+
+	if (not parsedSuccess){
+		val["error"] = "error on parse string";
+	}
+
+	return val;
+}

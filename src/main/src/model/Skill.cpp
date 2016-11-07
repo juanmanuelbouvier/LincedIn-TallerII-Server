@@ -5,30 +5,26 @@ namespace std {
 
 Skill::Skill(string name) {
 	Json::Value skill = SharedServerAPI::getInstance()->getSkill(name);
+	if (skill["error"]){
+		return;
+	}
 	this->name = skill["name"];
 	this->category = skill["category"];
 	this->description = skill["description"];
 }
 
-Skill* Skill::create(Json::Value data){
+Skill Skill::create(Json::Value data){
 
-	Json::FastWriter fastWriter;
+	//check(data);
 
-	//TODO: Abstraer el response de esta clase. (deberia devolver un booleano o la Skill en JSON que creo)
-	//TODO: Estaria bueno que no devuelva un puntero sino el objeto (borrar * en el metodo)
-
-	//	Metodos Utiles de JSON:
-	//		asString() convierte los valores "convertibles" (booleanos, string, enteros, flotantes) a string
-	//		toStyledString() convierte el Json::Value en un string como si fuera el archivo
-	//		isString() Verifica que el sea un string (tambien esta para cualquer tipo)
-	HTTPResponse* response = SharedServerAPI::getInstance()->setSkill(
-			fastWriter.write(data["name"]),
-			fastWriter.write(data["description"]),
-			fastWriter.write(data["category"])
+	Json::Value res = SharedServerAPI::getInstance()->setSkill(
+			data["name"].asString(),
+			data["description"].asString(),
+			data["category"].asString()
 			);
 
-	if (response->getCode() == 200){
-		return Skill(data["name"]);
+	if (!res["error"]){
+		return Skill(data["name"].asString());
 	}
 	return nullptr;
 }
@@ -61,18 +57,35 @@ string Skill::getCategory(){
 	return category;
 }
 
-void Skill::setName(string new_name){
-	//TODO update in sharedServer
-	name = new_name;
-}
-void Skill::setDescription(string new_description){
-	//TODO update in sharedServer
-	description = new_description;
+bool Skill::setName(string new_name){
+	Json::Value res = SharedServerAPI::getInstance()->updateSkill(new_name,description,category);
+	if (! res["error"]){
+		name = new_name;
+		return true;
+	}
+
+	return false;
 }
 
-void Skill::setCategory(string new_category){
-	//TODO update in sharedServer
-	category = new_category;
+bool Skill::setDescription(string new_description){
+	Json::Value res = SharedServerAPI::getInstance()->updateSkill(name,new_description,category);
+	if (! res["error"]){
+		description = new_description;
+		return true;
+	}
+
+	return false;
+}
+
+bool Skill::setCategory(string new_category){
+
+	Json::Value res = SharedServerAPI::getInstance()->updateSkill(name,description,new_category);
+	if (! res["error"]){
+		category = new_category;
+		return true;
+	}
+
+	return false;
 }
 
 Skill::~Skill() {

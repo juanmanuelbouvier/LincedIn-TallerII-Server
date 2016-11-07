@@ -5,6 +5,7 @@
 #include <services/HTTP/Message/HTTPRequest.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <settings/SettingManager.h>
+#include <utils/JSONUtils.h>
 
 using namespace std;
 
@@ -63,8 +64,20 @@ HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
 	return client->sendRequest(theRequest);
 }
 
-HTTPResponse* SharedServerAPI::getSkills(){
-	return doGet("/skills");
+HTTPResponse* SharedServerAPI::doPut(string uri, string body){
+	if (!client->connectToUrl(sharedURL)){
+		return NULL;
+	}
+	RequestBuilder* builder = RequestBuilder().PUT()->setUri(uri)->setBody(body);
+	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
+	HTTPRequest* theRequest = builder->build();
+	return client->sendRequest(theRequest);
+}
+
+Json::Value SharedServerAPI::getSkills(){
+	HTTPResponse* response = doGet("/skills");
+	Json::Value res = JSONUtils::stringToJSON(response->getBody());
+	return res["skills"];
 }
 
 Json::Value SharedServerAPI::getSkill(string name){
@@ -78,14 +91,41 @@ Json::Value SharedServerAPI::getSkill(string name){
 			return skill;
 		}
 	}
-	Json::Value val;
-	return val;
+	Json::Value error;
+	error["error"] = "skill inexistente.";
+	return error;
 }
 
-HTTPResponse* SharedServerAPI::setSkill(string name,string description, string category){
-	string body = "{ \"description\":"+ description +", \"name\":"+ name +" }";
-	return doPost("/skills/categories/"+category,body);
+Json::Value SharedServerAPI::setSkill(string name,string description, string category){
+	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\" }";
+	HTTPResponse* response = doPost("/skills/categories/"+category,body);
 
+	Json::Value res;
+
+	if (response->getCode() == 200){
+		res["ok"] = name;
+	}
+	else {
+		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
+	}
+
+	return res;
+}
+
+Json::Value SharedServerAPI::updateSkill(string name,string description, string category){
+	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\", \"category\":\""+category +"\" }";
+	HTTPResponse* response = doPut("/skills/categories/"+category+"/"+name , body);
+
+	Json::Value res;
+
+	if (response->getCode() == 200){
+		res["ok"] = name;
+	}
+	else {
+		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
+	}
+
+	return res;
 }
 
 SharedServerAPI::~SharedServerAPI() {

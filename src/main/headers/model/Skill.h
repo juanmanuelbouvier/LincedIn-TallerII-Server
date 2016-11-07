@@ -14,15 +14,15 @@ public:
 	Skill(string skill_name);
 
 	static map<string,string> check( Json::Value data );
-	static Skill* create(Json::Value data);
+	static Skill create(Json::Value data);
 
 	string getName();
 	string getDescription();
 	string getCategory();
 
-	void setName(string new_name);
-	void setDescription(string new_description);
-	void setCategory(string new_category);
+	bool setName(string new_name);
+	bool setDescription(string new_description);
+	bool setCategory(string new_category);
 
 	virtual ~Skill();
 };

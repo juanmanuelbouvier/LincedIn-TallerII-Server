@@ -24,9 +24,10 @@ public:
 	static void deleteInstance();
 
 	// API Rest
-	HTTPResponse* getSkills();
+	Json::Value getSkills();
 	Json::Value getSkill(string name);
-	HTTPResponse* setSkill(string name,string description, string category);
+	Json::Value setSkill(string name,string description, string category);
+	Json::Value updateSkill(string name,string description, string category);
 	HTTPResponse* doGet( string uri );
 	HTTPResponse* doPost(string uri, string body);
 	HTTPResponse* doPut(string uri, string body);

@@ -9,6 +9,7 @@ using namespace std;
 class JSONUtils {
 public:
 	static string JSONToString( Json::Value json );
+	static Json::Value stringToJSON(string json);
 
 };
 
