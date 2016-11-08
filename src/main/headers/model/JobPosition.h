@@ -7,8 +7,8 @@ class JobPosition {
 private:
 	string name,category,description;
 public:
-	JobPosition(string job_id);
-	JobPosition* create(Json::Value data);
+	JobPosition(string name);
+	JobPosition create(Json::Value data);
 	string getName();
 	string getCategory();
 	string getDescription();

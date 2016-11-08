@@ -2,16 +2,28 @@
 
 namespace std {
 
-JobPosition::JobPosition(string job_id) {
-	// TODO Find job by id in DB and create
-	//Json::Value job = SharedServerAPI::getInstance()->getJobPosition(job_id);
-	//this->position = job["name"];
-	//this->date_to = job["category"];
-	//this->date_since = job["description"];
+JobPosition::JobPosition(string name) {
+	Json::Value job = SharedServerAPI::getInstance()->getJobPosition(name);
+	if (job["error"]){
+		return;
+	}
+	this->name = job["name"];
+	this->category = job["category"];
+	this->description = job["description"];
 }
-JobPosition* JobPosition::create(Json::Value data){
-	//TODO Create job in DB by data
-	return false;
+
+JobPosition JobPosition::create(Json::Value data){
+	//check(data);
+	Json::Value res = SharedServerAPI::getInstance()->setJobPosition(
+			data["name"].asString(),
+			data["description"].asString(),
+			data["category"].asString()
+			);
+
+	if (!res["error"]){
+		return JobPosition(data["name"].asString());
+	}
+	return nullptr;
 }
 string JobPosition::getName(){
 	return name;

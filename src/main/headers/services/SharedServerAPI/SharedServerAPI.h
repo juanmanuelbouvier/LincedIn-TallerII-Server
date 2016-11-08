@@ -14,6 +14,8 @@ private:
 	string sharedURL;
 
 	SharedServerAPI();
+	Json::Value setObject(string url,string body);
+	Json::Value updateObject(string url,string body);
 
 	static SharedServerAPI* instaceAPI;
 
@@ -24,10 +26,17 @@ public:
 	static void deleteInstance();
 
 	// API Rest
+
 	Json::Value getSkills();
 	Json::Value getSkill(string name);
 	Json::Value setSkill(string name,string description, string category);
 	Json::Value updateSkill(string name,string description, string category);
+
+	Json::Value getJobPositions();
+	Json::Value getJobPosition(string name);
+	Json::Value setJobPosition(string name,string description, string category);
+	Json::Value updateJobPosition(string name,string description, string category);
+
 	HTTPResponse* doGet( string uri );
 	HTTPResponse* doPost(string uri, string body);
 	HTTPResponse* doPut(string uri, string body);

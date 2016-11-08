@@ -74,6 +74,38 @@ HTTPResponse* SharedServerAPI::doPut(string uri, string body){
 	return client->sendRequest(theRequest);
 }
 
+Json::Value SharedServerAPI::setObject(string url,string body){
+
+	HTTPResponse* response = doPost(url,body);
+
+	Json::Value res;
+
+	if (response->getCode() == 200){
+		res["ok"] = "OK";
+	}
+	else {
+		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
+	}
+
+	return res;
+}
+
+Json::Value SharedServerAPI::updateObject(string url,string body){
+	HTTPResponse* response = doPut(url , body);
+
+	Json::Value res;
+
+	if (response->getCode() == 200){
+		res["ok"] = "OK";
+	}
+	else {
+		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
+	}
+
+	return res;
+}
+
+//skills
 Json::Value SharedServerAPI::getSkills(){
 	HTTPResponse* response = doGet("/skills");
 	Json::Value res = JSONUtils::stringToJSON(response->getBody());
@@ -82,51 +114,72 @@ Json::Value SharedServerAPI::getSkills(){
 
 Json::Value SharedServerAPI::getSkill(string name){
 	HTTPResponse* response = doGet("/skills");
-	Json::Value body = response->getBody();
+	Json::Value body = JSONUtils::stringToJSON(response->getBody());
 	Json::Value skills = body["skills"];
 
-	for( Json::ValueIterator itr = skills.begin() ; itr != skills.end() ; itr++ ) {
-		Json::Value skill = itr.key();
-		if (skill["name"].toStyledString() == name) {
-			return skill;
-		}
+	Json::Value skill = JSONUtils::findValue(skills,"name",name);
+
+	if (skill == nullptr){
+		Json::Value error;
+		error["error"] = "skill inexistente.";
+		return error;
 	}
-	Json::Value error;
-	error["error"] = "skill inexistente.";
-	return error;
+
+	return skill;
 }
 
 Json::Value SharedServerAPI::setSkill(string name,string description, string category){
+
 	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\" }";
-	HTTPResponse* response = doPost("/skills/categories/"+category,body);
-
-	Json::Value res;
-
-	if (response->getCode() == 200){
-		res["ok"] = name;
-	}
-	else {
-		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
-	}
-
-	return res;
+	string url = "/skills/categories/"+category;
+	return setObject(url,body);
 }
 
 Json::Value SharedServerAPI::updateSkill(string name,string description, string category){
 	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\", \"category\":\""+category +"\" }";
-	HTTPResponse* response = doPut("/skills/categories/"+category+"/"+name , body);
+	string url = "/skills/categories/"+category+"/"+name;
 
-	Json::Value res;
-
-	if (response->getCode() == 200){
-		res["ok"] = name;
-	}
-	else {
-		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
-	}
-
-	return res;
+	return updateObject(url,body);
 }
+
+//Job positions
+Json::Value SharedServerAPI::getJobPositions(){
+	HTTPResponse* response = doGet("/job_position");
+	Json::Value body = JSONUtils::stringToJSON(response->getBody());
+	return body["job_positions"];
+}
+
+Json::Value SharedServerAPI::getJobPosition(string name){
+	HTTPResponse* response = doGet("/job_positions");
+	Json::Value body = JSONUtils::stringToJSON(response->getBody());
+	Json::Value positions = body["job_positions"];
+
+	Json::Value pos = JSONUtils::findValue(positions,"name",name);
+
+	if (pos == nullptr){
+		Json::Value error;
+		error["error"] = "job position inexistente.";
+		return error;
+	}
+
+	return pos;
+}
+
+Json::Value SharedServerAPI::setJobPosition(string name,string description, string category){
+	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\" }";
+	string url = "/job_positions/categories/"+category;
+
+	return setObject(url,body);
+}
+
+
+Json::Value SharedServerAPI::updateJobPosition(string name,string description,string category){
+	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\", \"category\":\""+category +"\" }";
+	string url = "/job_positions/categories/"+category+"/"+name;
+
+	return updateObject(url,body);
+}
+
 
 SharedServerAPI::~SharedServerAPI() {
 	delete client;

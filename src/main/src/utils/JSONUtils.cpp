@@ -20,3 +20,16 @@ Json::Value JSONUtils::stringToJSON(string json){
 
 	return val;
 }
+
+Json::Value JSONUtils::findValue(Json::Value values, string key,string goal){
+
+	for( Json::ValueIterator itr = values.begin() ; itr != values.end() ; itr++ ) {
+		Json::Value val = itr.key();
+		if (val[key].asString() == goal) {
+			return val;
+		}
+	}
+
+	return nullptr;
+
+}

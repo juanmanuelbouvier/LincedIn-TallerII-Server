@@ -10,6 +10,8 @@ class JSONUtils {
 public:
 	static string JSONToString( Json::Value json );
 	static Json::Value stringToJSON(string json);
+	//find Value in values, if not find the "value" return nullptr
+	static Json::Value findValue(Json::Value values, string key,string goal);
 
 };
 
