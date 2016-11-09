@@ -126,7 +126,7 @@ Json::Value _createUser(string user_id) {
 	user["last_name"] = "Fontela";
 	user["description"] = "El capo de la FIUBA";
 	user["email"] =  user_id + "@lincedin.com";
-	user["date_of_birth‎"] = "1964-04-12 16:22:00";
+	user["date_of_birth"] = "1964-04-12 16:22:00";
 	user["profile_picture"] = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
 
 	user["skills"] = Json::arrayValue;

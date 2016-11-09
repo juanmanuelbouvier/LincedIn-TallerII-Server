@@ -19,11 +19,9 @@ User::User(string user_id) {
 	email = userDB["email"];
 	profile_picture = userDB["profile_picture"];
 
-	current_job = new Job( userDB["job_id"] );
 }
 
 User::~User() {
-	delete current_job;
 }
 
 } /* namespace std */

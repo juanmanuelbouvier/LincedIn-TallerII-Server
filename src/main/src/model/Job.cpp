@@ -12,14 +12,12 @@ Job::Job(string date_since, string date_to, string company, string name_position
 
 Job Job::create(string date_since, string date_to, string company, string name_position){
 
-	//chequear que existe la jobposition, si no se crea?
 	JobPosition position = new JobPosition(name_position);
 	if (position == nullptr){
-		return nullptr;// o crear
+		return nullptr;
 	}
 
 	//save in db
-
 
 	return new Job(date_since,date_to,company,name_position);
 }

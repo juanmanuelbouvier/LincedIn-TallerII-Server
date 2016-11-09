@@ -12,9 +12,9 @@ public:
 	string getName();
 	string getCategory();
 	string getDescription();
-	void setName(string name);
-	void setCategory(string category);
-	void setDescription(string description);
+	bool setName(string name);
+	bool setCategory(string category);
+	bool setDescription(string description);
 	virtual ~JobPosition();
 };
 

@@ -35,17 +35,35 @@ string JobPosition::getCategory(){
 	return category;
 }
 
-void JobPosition::setName(string name){
-	this->name = name;
-	//TODO update in DB
+bool JobPosition::setName(string new_name){
+	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(new_name,description,category);
+	if (! res["error"]){
+		name = new_name;
+		return true;
+	}
+
+	return false;
 }
-void JobPosition::setDescription(string description){
-	this->description = description;
-	//TODO update in DB
+
+bool JobPosition::setDescription(string new_description){
+	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(new_description,description,category);
+	if (! res["error"]){
+		description = new_description;
+		return true;
+	}
+
+	return false;
 }
-void JobPosition::setCategory(string category){
-	this->category = category;
-	//TODO update in DB
+
+bool JobPosition::setCategory(string new_category){
+
+	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(description,description,new_category);
+	if (! res["error"]){
+		category = new_category;
+		return true;
+	}
+
+	return false;
 }
 
 JobPosition::~JobPosition() {
