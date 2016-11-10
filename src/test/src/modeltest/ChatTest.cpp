@@ -65,7 +65,7 @@ TEST(ChatTest, TestChatSendMessage) {
 
 
 TEST(ChatTest, TestChatGetMessage) {
-	//Depend on last Test.
+	//Depends on the above test
 	settinUpDBFolderForModel();
 	Chat chat("p1_p2");
 	Json::Value messages = chat.getMessages();
