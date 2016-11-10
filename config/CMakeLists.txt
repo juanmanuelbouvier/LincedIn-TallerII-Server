@@ -53,6 +53,8 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/ChatHandler.cpp
     ${APP_SOURCE}/service/Handlers/FriendHandler.cpp
     
+    ${APP_SOURCE}/exception/ChatException.cpp
+    
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
     
     ${APP_SOURCE}/utils/DateUtils.cpp
@@ -62,6 +64,8 @@ set (SOURCES
     ${APP_SOURCE}/utils/JSONUtils.cpp
     
     ${APP_SOURCE}/settings/SettingManager.cpp
+    
+    ${APP_SOURCE}/model/Chat.cpp
     )
     
 set (MAIN_CPP
@@ -131,6 +135,8 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/UtilsTest.cpp
 	${TEST_SOURCE}/SettingManagerTest.cpp
 	${TEST_SOURCE}/DBTest.cpp
+	
+	${TEST_SOURCE}/modeltest/ChatTest.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)

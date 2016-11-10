@@ -11,7 +11,10 @@ run:
 
 test:
 	@mkdir -p .temp-test/
-	./config/build/bin/RunUnitTests
+	-./config/build/bin/RunUnitTests 2> /dev/null
+	@rm -rf .temp-test/ *.log
+	
+clean-test:
 	@rm -rf .temp-test/ *.log
 
 doc:
@@ -33,6 +36,7 @@ coverage-test:
 clean:
 	@echo -n "Limpiando.."
 	@rm -rf config/build/ docs/build/
+	@rm -rf .temp-test/ *.log
 	@echo "OK"
 
 .SILENT:

@@ -33,3 +33,26 @@ Json::Value JSONUtils::findValue(Json::Value values, string key,string goal){
 	return nullptr;
 
 }
+
+int JSONUtils::isValueInArray( Json::Value toFind, Json::Value array ) {
+	if (!array.isArray()) {
+		return -1;
+	}
+	int i = 0;
+    for (const Json::Value& element : array) {
+        if ( element == toFind ) {
+        	return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
+
+Json::Value JSONUtils::listToArrayValue(list<string> theList) {
+	Json::Value array(Json::arrayValue);
+	for ( const string& element : theList ) {
+		array.append(element);
+	}
+	return array;
+}

@@ -2,18 +2,23 @@
 #define SRC_MAIN_SRC_EXCEPTION_INVALIDCHATPARTICIPANTS_H_
 
 #include <exception>
+#include <string>
 
-class InvalidChatParticipants : public std::runtime_error {
+using namespace std;
+
+class ChatException : public exception {
+
 private:
-	std::string message;
+	string message;
+
 public:
 	virtual const char* what() const throw() {
 		return message.c_str();
 	};
 
-	InvalidChatParticipants( std::string message  );
+	ChatException( string message );
 
-	virtual ~InvalidChatParticipants(){};
+	virtual ~ChatException(){};
 };
 
 #endif /* SRC_MAIN_SRC_EXCEPTION_INVALIDCHATPARTICIPANTS_H_ */

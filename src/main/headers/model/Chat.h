@@ -3,23 +3,38 @@
 
 #include <string>
 #include <list>
+#include <extern/json.h>
+#include <services/DB/DBManager.h>
 
 using namespace std;
 
+
 class Chat {
+	static DBManager* chatDB;
+	static DBManager* getDB();
+
 
 	string chatID;
-	list<string> participants_sorted;
+	Json::Value participants;
+	Json::Value messages;
 
 	static string generateID( list<string> participants );
 
 public:
 	Chat( string id );
 
-	static Chat check( list<string> participants_id );
+	static bool check( list<string> participants_id );
 	static Chat create( list<string> participants_id );
 
+	bool update(  );
+
+	bool isMember(string user_id);
+
 	bool addMessage( string user_id, string message );
+
+	string getId();
+	Json::Value getMessages();
+	Json::Value getParticipants();
 
 	virtual ~Chat();
 };
