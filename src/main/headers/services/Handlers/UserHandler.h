@@ -2,8 +2,11 @@
 #define SRC_MAIN_SERVICE_HANDLERS_USERHANDLER_H_
 
 #include "Handler.h"
+#include <extern/json.h>
 
 class UserHandler : public Handler {
+private:
+	Json::Value _createUser(string user_id);
 public:
 	UserHandler();
 

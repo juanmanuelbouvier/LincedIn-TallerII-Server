@@ -1,15 +1,16 @@
 #include <model/JobPosition.h>
+#include <services/SharedServerAPI/SharedServerAPI.h>
 
 namespace std {
 
 JobPosition::JobPosition(string name) {
 	Json::Value job = SharedServerAPI::getInstance()->getJobPosition(name);
-	if (job["error"]){
+	if ( job.isObject()  && job.isMember("error") ){
 		return;
 	}
-	this->name = job["name"];
-	this->category = job["category"];
-	this->description = job["description"];
+	this->name = job["name"].asString();
+	this->category = job["category"].asString();
+	this->description = job["description"].asString();
 }
 
 JobPosition JobPosition::create(Json::Value data){
@@ -20,10 +21,10 @@ JobPosition JobPosition::create(Json::Value data){
 			data["category"].asString()
 			);
 
-	if (!res["error"]){
+	if (not (res.isObject()  && res.isMember("error"))){
 		return JobPosition(data["name"].asString());
 	}
-	return nullptr;
+	return JobPosition(data["name"].asString());//return nullptr;
 }
 string JobPosition::getName(){
 	return name;
@@ -37,7 +38,7 @@ string JobPosition::getCategory(){
 
 bool JobPosition::setName(string new_name){
 	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(new_name,description,category);
-	if (! res["error"]){
+	if (not (res.isObject()  && res.isMember("error"))){
 		name = new_name;
 		return true;
 	}
@@ -47,7 +48,7 @@ bool JobPosition::setName(string new_name){
 
 bool JobPosition::setDescription(string new_description){
 	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(new_description,description,category);
-	if (! res["error"]){
+	if (not (res.isObject()  && res.isMember("error"))){
 		description = new_description;
 		return true;
 	}
@@ -58,12 +59,22 @@ bool JobPosition::setDescription(string new_description){
 bool JobPosition::setCategory(string new_category){
 
 	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(description,description,new_category);
-	if (! res["error"]){
+	if (not (res.isObject()  && res.isMember("error"))){
 		category = new_category;
 		return true;
 	}
 
 	return false;
+}
+
+
+Json::Value JobPosition::asJSON(){
+	Json::Value job_position;
+	job_position["name"] = name;
+	job_position["description"] = description;
+	job_position["category"] = category;
+
+	return job_position;
 }
 
 JobPosition::~JobPosition() {

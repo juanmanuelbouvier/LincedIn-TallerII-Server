@@ -19,7 +19,6 @@ public:
 	static int isValueInArray( Json::Value toFind, Json::Value array );
 
 	static Json::Value listToArrayValue(list<string> theList);
-
 };
 
 #endif /* SRC_MAIN_SRC_UTILS_JSONUTILS_H_ */

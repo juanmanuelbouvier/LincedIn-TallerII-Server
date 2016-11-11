@@ -1,23 +1,13 @@
 #include <services/Handlers/UserHandler.h>
-#include <extern/json.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <utils/PathUtils.h>
-
+#include <model/User.h>
 #include <string>
 
 using namespace std;
 
 UserHandler::UserHandler() {
 }
-
-//private methods
-Json::Value _createJob(string from,string to, string company, string position);
-Json::Value _createSkill(string name,string category, string description);
-Json::Value _createEducation(string start,string end, string school, string degree);
-Json::Value _createRecomendation(string recommender, string text);
-Json::Value _createUser(string user_id);
-
-bool _userExist(string id);
 
 HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
@@ -27,9 +17,10 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 	map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/user/:user_id");
 
 	if (method == "GET"){
+		string user_id = path["user_id"];
 
 		//pidió su perfil
-		if (path["user_id"] == "me"){
+		if (user_id == "me"){
 
 			Json::FastWriter writer;
 			writer.omitEndingLineFeed();
@@ -37,7 +28,7 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
 			return ResponseBuilder::createJsonResponse(200,toReturn);
 
-		} else if (_userExist(path["user_id"])){
+		} else if (User::exist(user_id)){
 			//si pidió un usuario que está en la base de datos
 
 			Json::FastWriter writer;
@@ -70,6 +61,7 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 	}
 }
 
+/*
 Json::Value _createJob(string from,string to, string company, string position){
 
 	Json::Value job;
@@ -118,38 +110,13 @@ Json::Value _createRecomendation(string recommender, string text){
 
 	return rec;
 }
+*/
 
-Json::Value _createUser(string user_id) {
-	Json::Value user;
-	user["full_name"] = user_id;
-	user["first_name"] = "Carlos";
-	user["last_name"] = "Fontela";
-	user["description"] = "El capo de la FIUBA";
-	user["email"] =  user_id + "@lincedin.com";
-	user["date_of_birth"] = "1964-04-12 16:22:00";
-	user["profile_picture"] = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
+Json::Value UserHandler::_createUser(string user_id) {
 
-	user["skills"] = Json::arrayValue;
-	user["skills"].append(_createSkill("Java","Lenguaje de programacion", "programacion champagne en java."));
-	user["skills"].append(_createSkill("Patterns","Software design","programacion champagne con patrones que luego nadie puede usar."));
+	User user = User(user_id);
 
-	user["jobs"] = Json::arrayValue;
-	user["jobs"].append(_createJob("2010-10-25 16:22:00","2011-10-25 16:22:00","Totos","Gerente comercial"));
-	user["jobs"].append(_createJob("2012-10-25 16:22:00","2016-10-25 16:22:00","FIUBA","Profesor"));
-	user["jobs"].append(_createJob("2016-10-25 17:22:00","","FIUBA","Buscando ser el director del depto de computación."));
-
-	user["education"] = Json::arrayValue;
-	user["education"].append(_createEducation("1981-03-12 16:22:00","1990-12-12 23:22:00","FIUBA","Ingeniero en casi todo"));
-
-	Json::Value recommendations_received(Json::arrayValue);
-	user["recommendations_received"] = Json::arrayValue;
-	user["recommendations_received"].append(_createRecomendation("Nico Paez", "Éste es un crack, se auto cita en las diapos."));
-
-	return user;
-}
-
-bool _userExist(string id){
-	return true;
+	return user.asJSON();
 }
 
 UserHandler::~UserHandler(){
