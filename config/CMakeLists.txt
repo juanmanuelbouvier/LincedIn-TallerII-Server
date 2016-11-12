@@ -56,6 +56,8 @@ set (SOURCES
     ${APP_SOURCE}/service/Access/AccessToken.cpp
     
     ${APP_SOURCE}/exception/ChatException.cpp
+    ${APP_SOURCE}/exception/JobException.cpp
+    ${APP_SOURCE}/exception/SkillException.cpp
     
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
     
@@ -68,6 +70,12 @@ set (SOURCES
     ${APP_SOURCE}/settings/SettingManager.cpp
     
     ${APP_SOURCE}/model/Chat.cpp
+    ${APP_SOURCE}/model/Education.cpp
+    ${APP_SOURCE}/model/JobPosition.cpp
+    ${APP_SOURCE}/model/Job.cpp
+    ${APP_SOURCE}/model/Recommendation.cpp
+    ${APP_SOURCE}/model/Skill.cpp
+    ${APP_SOURCE}/model/User.cpp
     )
     
 set (MAIN_CPP

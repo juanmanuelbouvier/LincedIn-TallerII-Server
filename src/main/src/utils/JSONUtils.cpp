@@ -1,4 +1,5 @@
 #include <utils/JSONUtils.h>
+#include <iostream>
 
 
 string JSONUtils::JSONToString( Json::Value json ) {
@@ -12,7 +13,7 @@ string JSONUtils::JSONToString( Json::Value json ) {
 Json::Value JSONUtils::stringToJSON(string json){
 	Json::Value val;
 	Json::Reader reader;
-	bool parsedSuccess = reader.parse(json,val,false);
+	bool parsedSuccess = reader.parse(json.c_str(),val);
 
 	if (not parsedSuccess){
 		val["error"] = "error on parse string";
@@ -22,15 +23,16 @@ Json::Value JSONUtils::stringToJSON(string json){
 }
 
 Json::Value JSONUtils::findValue(Json::Value values, string key,string goal){
-
 	for( Json::ValueIterator itr = values.begin() ; itr != values.end() ; itr++ ) {
-		Json::Value val = itr.key();
-		if (val[key].asString() == goal) {
+		Json::Value val = values[itr.index()];
+		if (goal.compare(val[key].asString())) {
 			return val;
 		}
 	}
 
-	return nullptr;
+	Json::Value error;
+	error["error"] = "not find key in values.";
+	return error;
 
 }
 
@@ -56,3 +58,5 @@ Json::Value JSONUtils::listToArrayValue(list<string> theList) {
 	}
 	return array;
 }
+
+

@@ -1,16 +1,21 @@
 #include <model/Skill.h>
 #include <list>
+#include <services/SharedServerAPI/SharedServerAPI.h>
+#include <exception/SkillException.h>
+#include <services/Logger/Logger.h>
+#include <iostream>
 
 namespace std {
 
 Skill::Skill(string name) {
 	Json::Value skill = SharedServerAPI::getInstance()->getSkill(name);
-	if (skill["error"]){
-		return;
+	if (skill.isObject()  && skill.isMember("error")){
+		cout << Log("Skill.cpp::" + to_string(__LINE__) + ". Error on find skill en Shared Server " + skill["error"].asString() ,WARNING) << endl;
+		throw new SkillException("Error on create Skill");
 	}
-	this->name = skill["name"];
-	this->category = skill["category"];
-	this->description = skill["description"];
+	this->name = skill["name"].asString();
+	this->category = skill["category"].asString();
+	this->description = skill["description"].asString();
 }
 
 Skill Skill::create(Json::Value data){
@@ -23,18 +28,18 @@ Skill Skill::create(Json::Value data){
 			data["category"].asString()
 			);
 
-	if (!res["error"]){
-		return Skill(data["name"].asString());
+	if (res.isObject()  && res.isMember("error")){
+		cout << Log("Skill.cpp::" + to_string(__LINE__) + ". Error on create skill in Shared Server " + res["error"].asString() ,WARNING) << endl;
+		throw new SkillException("Error on create Skill");
 	}
-	return nullptr;
+	return Skill(data["name"].asString());
 }
 
 map<string,string> Skill::check( Json::Value data ) {
 	map<string,string> errors;
 	list<string> dataExpected = {"name","description","category"};
-	for (int i = 0; i < dataExpected.size(); i++) {
-		string expected = dataExpected[i];
-		if ( data[expected] ) {
+	for (string& expected : dataExpected) {
+		if ( data.isMember(expected)) {
 			if (!data[expected].isString()) {
 				errors[expected] = "Invalid value of " + expected;
 			}
@@ -59,12 +64,12 @@ string Skill::getCategory(){
 
 bool Skill::setName(string new_name){
 	Json::Value res = SharedServerAPI::getInstance()->updateSkill(new_name,description,category);
-	if (! res["error"]){
-		name = new_name;
-		return true;
-	}
+	if (res.isObject()  && res.isMember("error")){
 
-	return false;
+		return false;
+	}
+	name = new_name;
+	return true;
 }
 
 bool Skill::setDescription(string new_description){
@@ -86,6 +91,24 @@ bool Skill::setCategory(string new_category){
 	}
 
 	return false;
+}
+
+Json::Value Skill::asJSON(){
+	Json::Value skill;
+	skill["name"] = name;
+	skill["description"] = description;
+	skill["category"] = category;
+
+	return skill;
+}
+
+Json::Value Skill::listToArray(list<Skill> skills){
+	Json::Value array = Json::Value(Json::arrayValue);
+	for (Skill& obj : skills){
+		array.append(obj.asJSON());
+	}
+
+	return array;
 }
 
 Skill::~Skill() {

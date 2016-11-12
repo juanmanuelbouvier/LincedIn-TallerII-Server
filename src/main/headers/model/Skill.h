@@ -4,10 +4,11 @@
 #include <extern/json.h>
 #include <string>
 #include <map>
+#include <list>
 
 namespace std {
 
-class Skill {
+class Skill{
 private:
 	string name,category,description;
 public:
@@ -23,6 +24,10 @@ public:
 	bool setName(string new_name);
 	bool setDescription(string new_description);
 	bool setCategory(string new_category);
+
+	Json::Value asJSON();
+
+	static Json::Value listToArray(list<Skill> skills);
 
 	virtual ~Skill();
 };

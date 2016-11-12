@@ -6,6 +6,7 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <settings/SettingManager.h>
 #include <utils/JSONUtils.h>
+#include <iostream>
 
 using namespace std;
 
@@ -115,11 +116,18 @@ Json::Value SharedServerAPI::getSkills(){
 Json::Value SharedServerAPI::getSkill(string name){
 	HTTPResponse* response = doGet("/skills");
 	Json::Value body = JSONUtils::stringToJSON(response->getBody());
+
+	if (body.isMember("error") || !body.isMember("skills")){
+		Json::Value error;
+		error["error"] = "error on list skills";
+		return error;
+	}
+
 	Json::Value skills = body["skills"];
 
 	Json::Value skill = JSONUtils::findValue(skills,"name",name);
 
-	if (skill == nullptr){
+	if (skill.isMember("error")){
 		Json::Value error;
 		error["error"] = "skill inexistente.";
 		return error;
