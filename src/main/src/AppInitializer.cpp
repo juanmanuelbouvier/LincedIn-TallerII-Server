@@ -56,7 +56,6 @@ int main(int argc, char **argv) {
 	setting->readFile(setting_file);
 	setting->initLogger();
 
-
 	Server* server = new Server( setting->getServerPort() );
 
 	//TODO: Correr en otro hilo
