@@ -2,6 +2,9 @@
 #include <extern/json.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <utils/PathUtils.h>
+#include <model/Chat.h>
+//#include <model/User.h>
+#include <utils/JSONUtils.h>
 
 Json::Value _createChat(string id, string name, string message, int time) {
 	Json::Value m;
@@ -32,30 +35,33 @@ Json::Value _createSummaryChat(string id, string name, string last_message, int 
 	return m;
 }
 
-HTTPResponse* _chatWithUser(string method,string user_id);
-HTTPResponse* _online(string method);
+HTTPResponse* _chatWithUser(HTTPRequest* request);
+HTTPResponse* _online();
 HTTPResponse* _chats();
 
 HTTPResponse* ChatHandler::handle(HTTPRequest* http_request) {
-
-
-	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat")){
+	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat") && http_request->isGET()){
 		return _chats();
 
-	} else if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/online")) {
-		return _online(http_request->getMethod());
-	} else {
+	}
 
-		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/chat/:user_id");
-		return _chatWithUser(http_request->getMethod(),path["user_id"]);
+	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/online") && http_request->isGET()) {
+		return _online();
 
 	}
+
+	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/:user_id")) {
+		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/chat/:user_id");
+		return _chatWithUser(http_request);
+	}
+
+	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
 }
 
-HTTPResponse* _chatWithUser(string method,string user_id){
-	if (method == "GET") {
+HTTPResponse* _chatWithUser(HTTPRequest* request){
+	if (request->isGET()) {
 		string chat = "";
-		string user_destination = user_id;
+		string user_destination = "recept";
 
 		Json::Value messages(Json::arrayValue);
 
@@ -81,40 +87,39 @@ HTTPResponse* _chatWithUser(string method,string user_id){
 		chat = writer.write(general);
 
 		return ResponseBuilder::createJsonResponse(200,chat);
+	} else if ( request->isPOST() ) {
+		//TODO: Implement
+	} else if ( request->isDELETE() ){
+		//TODO: Implement
 	}
-
 	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
 }
 
-HTTPResponse* _online(string method){
+HTTPResponse* _online(){
+	string user = "Tu usuario";
 
-	if (method == "GET") {
+	Json::Value online(Json::arrayValue);
 
-		string user = "Tu usuario";
-
-		Json::Value online(Json::arrayValue);
-
-		online.append( _createOnlineUser("cfontela","Carlos Fontela") );
-		online.append( _createOnlineUser("tbert","Tomas Bert") );
-		online.append( _createOnlineUser("fetchachu","Facundo Etchanchú") );
-		online.append( _createOnlineUser("jbouvier","Juanma Bouvier") );
+	online.append( _createOnlineUser("cfontela","Carlos Fontela") );
+	online.append( _createOnlineUser("tbert","Tomas Bert") );
+	online.append( _createOnlineUser("fetchachu","Facundo Etchanchú") );
+	online.append( _createOnlineUser("jbouvier","Juanma Bouvier") );
 
 
-		Json::Value metadata;
-		metadata["version"] = "0.1";
-		metadata["total"] = 4;
-		metadata["count"] = 4;
+	Json::Value metadata;
+	metadata["version"] = "0.1";
+	metadata["total"] = 4;
+	metadata["count"] = 4;
 
-		Json::Value general;
-		general["metadata"] = metadata;
-		general["online"] = online;
+	Json::Value general;
+	general["metadata"] = metadata;
+	general["online"] = online;
 
-		Json::FastWriter writer;
-		writer.omitEndingLineFeed();
+	Json::FastWriter writer;
+	writer.omitEndingLineFeed();
 
-		return ResponseBuilder::createJsonResponse(200,writer.write(general));
-	}
-	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
+	return ResponseBuilder::createJsonResponse(200,writer.write(general));
+
 }
 
 
@@ -122,6 +127,28 @@ HTTPResponse* _chats(){
 	string user = "Tu usuario";
 
 	Json::Value chats(Json::arrayValue);
+
+	/*
+	 *
+	 * User user( #obtener_usuario_del_token );
+	 * list<Chat> chatsList = user.getChats()
+	 *
+	 * Json::Value chats(Json::arrayValue);
+	 *
+	 * for ( const Chat& chat : chatsList ) {
+	 * 		Json::Value JsonChat;
+	 * 		JsonChat["participants"] = chat.getParticipants();
+	 * 		JsonChat["message"] = chat.getLastMessage()["message"];
+	 * 		JsonChat["timestamp"] = chat.getLastMessage()["timestamp"];
+	 * 		chats.append( JsonChat );
+	 * }
+	 *
+	 * Json::Value metadata;
+	 * metadata["version"] = "0.1";
+	 * metadata["total"] = chatsList.size();
+	 * metadata["count"] = chatsList.size();
+	 *
+	 */
 
 	chats.append( _createSummaryChat("cfontela","Carlos Fontela","chau che, nos vemos! CF.",1476852631) );
 	chats.append( _createSummaryChat("fetchanchu","Facundo Etchanchú","Pagame lo que me debés!",1476854631) );
@@ -136,10 +163,9 @@ HTTPResponse* _chats(){
 	general["metadata"] = metadata;
 	general["chats"] = chats;
 
-	Json::FastWriter writer;
-	writer.omitEndingLineFeed();
+	string body = JSONUtils::JSONToString(general);
 
-	return ResponseBuilder::createJsonResponse(200,writer.write(general));
+	return ResponseBuilder::createJsonResponse(200,body);
 
 }
 

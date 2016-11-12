@@ -34,6 +34,7 @@ public:
 
 	string getId();
 	Json::Value getMessages();
+	Json::Value getLastMessage();
 	Json::Value getParticipants();
 
 	virtual ~Chat();

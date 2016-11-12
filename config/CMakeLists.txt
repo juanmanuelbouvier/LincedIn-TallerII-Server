@@ -53,6 +53,8 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/ChatHandler.cpp
     ${APP_SOURCE}/service/Handlers/FriendHandler.cpp
     
+    ${APP_SOURCE}/service/Access/AccessToken.cpp
+    
     ${APP_SOURCE}/exception/ChatException.cpp
     
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
@@ -116,6 +118,12 @@ target_link_libraries (LincedInAppServer mongoose json pthread)
 #LevelDB is installed from apt-get install libsnappy-dev libleveldb-dev
 target_link_libraries (LincedInAppServer snappy leveldb)
 
+
+# JWT for C ( require sudo apt-get install libjansson-dev)
+ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/extern_libraries/jwt)
+include_directories(${PROJECT_SOURCE_DIR}/extern_libraries/jwt/include)
+target_link_libraries (LincedInAppServer jwt)
+
 ### TESTING ###
 
 ################################
@@ -135,6 +143,7 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/UtilsTest.cpp
 	${TEST_SOURCE}/SettingManagerTest.cpp
 	${TEST_SOURCE}/DBTest.cpp
+	${TEST_SOURCE}/AccessTokenTest.cpp
 	
 	${TEST_SOURCE}/modeltest/ChatTest.cpp
 )
@@ -145,7 +154,7 @@ target_link_libraries(RunUnitTests gtest gtest_main)
 target_link_libraries (RunUnitTests lincedinapp)
 
 #External libraries
-target_link_libraries (RunUnitTests mongoose json pthread snappy leveldb)
+target_link_libraries (RunUnitTests mongoose json pthread snappy leveldb jwt)
 
 add_test(
 	NAME RunUnitTests

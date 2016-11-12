@@ -34,6 +34,7 @@ void LoggerInit(int level, bool log_console, string path){
     _LoggerInitLogMessage();
 }
 
+
 /*
  * Log a message in Logger.<BR>
  *  typeOfLog: ERROR, WARNING, INFO, DEBUG.
@@ -59,6 +60,15 @@ string Log(string message, LogLevel typeOfLog){
         }
     }
 	return full_msg;
+}
+
+/*
+ * Log a INFO message in Logger.<BR>
+ *  return string was logged.
+ *
+ */
+string Log(string message) {
+	return Log(message,INFO);
 }
 
 bool validLogLevel(int log_level){

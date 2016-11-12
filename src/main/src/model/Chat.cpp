@@ -99,6 +99,13 @@ Json::Value Chat::getMessages() {
 	return messages;
 }
 
+Json::Value Chat::getLastMessage() {
+	if (messages.size() > 0) {
+		return messages[ messages.size() - 1 ];
+	}
+	return Json::Value(Json::nullValue);
+}
+
 Json::Value Chat::getParticipants() {
 	return participants;
 }

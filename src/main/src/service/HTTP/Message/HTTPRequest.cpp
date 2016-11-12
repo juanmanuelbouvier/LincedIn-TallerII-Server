@@ -67,6 +67,23 @@ void HTTPRequest::generateRawMessage(){
 string HTTPRequest::getMethod(){
 	return method;
 }
+
+bool HTTPRequest::isGET(){
+	return method == "GET";
+}
+
+bool HTTPRequest::isPOST(){
+	return method == "POST";
+}
+
+bool HTTPRequest::isDELETE() {
+	return method == "DELETE";
+}
+
+bool HTTPRequest::isPATCH() {
+	return method == "PATCH";
+}
+
 string HTTPRequest::getURI(){
 	return StringUtils::unescapeString(uri);
 }

@@ -33,6 +33,11 @@ public:
 	string getBody();
 	string getFromHeader(string key);
 
+	bool isGET();
+	bool isPOST();
+	bool isDELETE();
+	bool isPATCH();
+
 	string toString();
 
 	virtual ~HTTPRequest();
