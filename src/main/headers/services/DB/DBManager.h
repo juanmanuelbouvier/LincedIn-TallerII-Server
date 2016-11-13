@@ -1,32 +1,28 @@
 #ifndef SRC_MAIN_SRC_SERVICE_DB_DBMANAGER_H_
 #define SRC_MAIN_SRC_SERVICE_DB_DBMANAGER_H_
 
-#include <extern/json.h>
+#include <map>
 #include <string>
-#include <leveldb/db.h>
+#include <services/DB/DB.h>
 
 using namespace std;
 
 class DBManager {
+protected:
+	map<string,DB*> databases;
 private:
-	string nameOfDB;
-	string pathToDB;
-
-	leveldb::DB* db;
-	leveldb::Options options;
-
-	bool opened;
+	static DBManager* managerInstance;
 
 public:
-	DBManager( string DBName );
+	DBManager(){};
 
-	bool open();
+	static DBManager* getInstance();
+	static void setInstance( DBManager* manager );
+	static void deleteInstance();
 
-	bool store( string key, string value);
-	bool storeJSON( string key, Json::Value json);
-
-	string get( string key );
-	Json::Value getJSON( string key );
+	bool addDB( string DBName );
+	bool exist( string name );
+	static DB* getDB( string DBName );
 
 	virtual ~DBManager();
 };

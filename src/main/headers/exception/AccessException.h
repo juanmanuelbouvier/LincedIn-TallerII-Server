@@ -1,19 +1,13 @@
 #ifndef SRC_MAIN_SRC_EXCEPTION_ACCESSEXCEPTION_H_
 #define SRC_MAIN_SRC_EXCEPTION_ACCESSEXCEPTION_H_
 
-#include <exception>
+#include <exception/AppServerException.h>
 
 using namespace std;
 
-
-class AccessException : public exception {
-private:
-	string message;
+class AccessException : public AppServerException {
 public:
-	AccessException(string msg){message = msg;};
-	virtual const char* what() const throw() {
-		return message.c_str();
-	}
+	AccessException(string msg) : AppServerException(msg){};
 	virtual ~AccessException(){};
 };
 

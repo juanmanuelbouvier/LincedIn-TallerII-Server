@@ -11,7 +11,7 @@ run:
 
 test:
 	@mkdir -p .temp-test/
-	-./config/build/bin/RunUnitTests 2> /dev/null
+	-./config/build/bin/RunUnitTests
 	@rm -rf .temp-test/ *.log
 	
 clean-test:
@@ -25,7 +25,7 @@ valgrind:
 
 valgrind-test:
 	@mkdir -p .temp-test/
-	valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all config/build/bin/RunUnitTests
+	-valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all config/build/bin/RunUnitTests
 	@rm -rf .temp-test/ *.log
 
 coverage-test:

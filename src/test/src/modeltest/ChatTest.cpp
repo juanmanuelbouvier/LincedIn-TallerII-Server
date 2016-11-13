@@ -47,6 +47,7 @@ TEST(ChatTest, TestCreateChat) {
 	expectedParticipants.append("cfk");
 
 	EXPECT_EQ( chat.getParticipants(), expectedParticipants);
+	DBManager::deleteInstance();
 }
 
 TEST(ChatTest, TestChatSendMessage) {
@@ -54,13 +55,14 @@ TEST(ChatTest, TestChatSendMessage) {
 	list<string> participants = { "p1", "p2" };
 
 	Chat chat = Chat::create(participants);
-
 	ASSERT_FALSE(chat.addMessage("p8","Hi, p2"));
 
 	EXPECT_TRUE(chat.addMessage("p1","Hi, p2"));
 	EXPECT_TRUE(chat.addMessage("p2","Hi.."));
 
 	EXPECT_EQ(chat.getMessages().size(), 2);
+
+	DBManager::deleteInstance();
 }
 
 
@@ -73,5 +75,7 @@ TEST(ChatTest, TestChatGetMessage) {
 	EXPECT_TRUE(messages.isArray());
 	EXPECT_EQ(messages[0]["message"].asString(),"Hi, p2");
 	EXPECT_EQ(messages[1]["message"].asString(),"Hi..");
+
+	DBManager::deleteInstance();
 
 }

@@ -34,7 +34,7 @@ User::User(string user_id) {
 	  }
 	  catch (SkillException& e)
 	  {
-	    cout << "An exception occurred. " << e.getMenssage() << '\n';
+	    cout << "An exception occurred. " << e.what() << '\n';
 	  }
 
 

@@ -3,9 +3,9 @@
 #include <string>
 #include <fstream>
 
-#include <services/DB/DBManager.h>
 #include <settings/SettingManager.h>
 #include <gtest/gtest.h>
+#include <services/DB/DB.h>
 
 using namespace std;
 
@@ -24,7 +24,7 @@ TEST(DBTest, storeValue) {
 	SettingManager* setting = SettingManager::getInstance();
 	setting->readFile(filename);
 
-	DBManager db("test");
+	DB db("test");
 	EXPECT_TRUE(db.open());
 	EXPECT_TRUE(db.store("hello","world"));
 
@@ -44,7 +44,7 @@ TEST(DBTest, storeJson) {
 	SettingManager* setting = SettingManager::getInstance();
 	setting->readFile(filename);
 
-	DBManager db("test");
+	DB db("test");
 	EXPECT_TRUE(db.open());
 
 	Json::Value json;
@@ -73,7 +73,7 @@ TEST(DBTest, wrongUseOfDB) {
 	setting->readFile(filename);
 
 	//Invalid name
-	DBManager db("someDB");
+	DB db("someDB");
 
 	//Before open
 	EXPECT_FALSE(db.store("key","value"));

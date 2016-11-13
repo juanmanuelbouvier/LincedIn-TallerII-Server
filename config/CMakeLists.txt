@@ -36,6 +36,7 @@ set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
     
     ${APP_SOURCE}/service/DB/DBManager.cpp
+    ${APP_SOURCE}/service/DB/DB.cpp
     
     ${APP_SOURCE}/service/Server/Server.cpp
     ${APP_SOURCE}/service/Server/ServerClient.cpp
@@ -54,10 +55,6 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/FriendHandler.cpp
     
     ${APP_SOURCE}/service/Access/AccessToken.cpp
-    
-    ${APP_SOURCE}/exception/ChatException.cpp
-    ${APP_SOURCE}/exception/JobException.cpp
-    ${APP_SOURCE}/exception/SkillException.cpp
     
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
     

@@ -1,7 +1,7 @@
 FROM ubuntu
 
 RUN apt-get -y update
-RUN apt-get install -y git curl g++ make cmake valgrind doxygen graphviz python3-setuptools libsnappy-dev libleveldb-dev lcov libssl-dev libjansson-dev
+RUN apt-get install -y git curl g++ make cmake valgrind doxygen graphviz python3-setuptools libsnappy-dev libleveldb-dev lcov openssl libssl-dev libjansson-dev
 RUN easy_install3 pip
 
 WORKDIR /root/LincedIn/LincedIn-TallerII-Server

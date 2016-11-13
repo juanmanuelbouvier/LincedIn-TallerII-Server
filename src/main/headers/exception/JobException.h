@@ -1,24 +1,14 @@
 #ifndef SRC_MAIN_HEADERS_EXCEPTION_JOBEXCEPTION_H_
 #define SRC_MAIN_HEADERS_EXCEPTION_JOBEXCEPTION_H_
 
-#include <exception>
-#include <string>
+#include <exception/AppServerException.h>
 
-namespace std {
+using namespace std;
 
-class JobException : public exception {
-private:
-	string message;
+class JobException : public AppServerException {
 public:
-	JobException(string message);
-
-	virtual const char* what() const throw() {
-		return message.c_str();
-	};
-
+	JobException(string msg) : AppServerException(msg){};
 	virtual ~JobException(){};
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_HEADERS_EXCEPTION_JOBEXCEPTION_H_ */

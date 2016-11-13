@@ -1,23 +1,13 @@
 #ifndef SRC_MAIN_SRC_EXCEPTION_INVALIDCHATPARTICIPANTS_H_
 #define SRC_MAIN_SRC_EXCEPTION_INVALIDCHATPARTICIPANTS_H_
 
-#include <exception>
-#include <string>
+#include <exception/AppServerException.h>
 
 using namespace std;
 
-class ChatException : public exception {
-
-private:
-	string message;
-
+class ChatException : public AppServerException {
 public:
-	virtual const char* what() const throw() {
-		return message.c_str();
-	};
-
-	ChatException( string message );
-
+	ChatException(string msg) : AppServerException(msg){};
 	virtual ~ChatException(){};
 };
 

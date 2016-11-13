@@ -25,10 +25,10 @@ TEST(UtilsTest, fakePathIsInvalid) {
 
 TEST(UtilsTest, createdPathIsValid) {
 	//This work if the test are run with make in basedir project
-	bool truePath = PathUtils::isValidPath("src/");
+	bool truePath = PathUtils::isValidPath(".temp-test/");
 	EXPECT_TRUE(truePath);
 
-	bool truePathNotEnd = PathUtils::isValidPath("src");
+	bool truePathNotEnd = PathUtils::isValidPath(".temp-test");
 	EXPECT_TRUE(truePathNotEnd);
 }
 

@@ -10,9 +10,7 @@ using namespace std;
 
 
 class Chat {
-	static DBManager* chatDB;
-	static DBManager* getDB();
-
+	static DB* getDB();
 
 	string chatID;
 	Json::Value participants;

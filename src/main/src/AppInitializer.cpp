@@ -1,6 +1,8 @@
 #include "LincedInServerConfig.h"
 #include <services/Server/Server.h>
 #include <settings/SettingManager.h>
+#include <services/DB/DBManager.h>
+#include <services/SharedServerAPI/SharedServerAPI.h>
 
 #include <iostream>
 #include <string>
@@ -62,6 +64,9 @@ int main(int argc, char **argv) {
 	server->start();
 
 	delete server;
+	delete setting;
+	DBManager::deleteInstance();
+	SharedServerAPI::deleteInstance();
 
 	return 0;
 }

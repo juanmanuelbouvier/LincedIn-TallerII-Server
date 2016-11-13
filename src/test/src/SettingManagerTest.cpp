@@ -196,5 +196,6 @@ TEST(SettingManagerTest, DBFolder) {
 	settings->readFile(jsonSetting);
 	EXPECT_EQ(settings->getDBFolder(),".temp-test/folderToDB");
 
+	SettingManager::deleteInstance();
 	cout.clear();
 }

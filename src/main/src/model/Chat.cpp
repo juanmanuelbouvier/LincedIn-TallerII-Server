@@ -10,29 +10,18 @@
 #define ID_SEPARATOR "_"
 #define CHAT_DB "Chat"
 
-DBManager* Chat::chatDB = NULL;
-
-DBManager* Chat::getDB(){
-	if (!chatDB) {
-		chatDB = new DBManager(CHAT_DB);
-		if (chatDB->open()){
-			return chatDB;
-		} else {
-			cout << Log("Chat.cpp::" + to_string(__LINE__) + ". Can't open " + string(CHAT_DB) + " DB",WARNING) << endl;
-			throw new ChatException("Can't open Chat DB");
-		}
-	}
-	return chatDB;
+DB* Chat::getDB(){
+	return DBManager::getDB(CHAT_DB);
 }
 
 Chat::Chat( string chat_id ) {
 	Json::Value chat = getDB()->getJSON(chat_id);
-	if ( !chat.isNull() ) {
-		chatID = chat_id;
-		messages = chat["messages"];
-		participants = chat["participants"];
+	if ( chat.isNull() ) {
+		throw new ChatException ( Log("Chat.cpp::"+ to_string(__LINE__) +". Chat (" + chat_id + ") Can not be created because it doesn't exist in the database",ERROR) );
 	}
-	//DONT EXIST
+	chatID = chat_id;
+	messages = chat["messages"];
+	participants = chat["participants"];
 }
 
 Chat Chat::create( list<string> participants_id ) {
@@ -128,6 +117,5 @@ bool Chat::addMessage(string user_id, string message) {
 }
 
 Chat::~Chat() {
-	// TODO Auto-generated destructor stub
 }
 

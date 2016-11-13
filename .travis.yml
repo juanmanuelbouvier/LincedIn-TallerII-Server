@@ -29,7 +29,7 @@ services:
   - docker
 
 before_install:
-  - sudo apt-get install -y g++ make cmake doxygen graphviz python3-setuptools libsnappy-dev libleveldb-dev lcov libssl-dev libjansson-dev
+  - sudo apt-get install -y g++ make cmake doxygen graphviz python3-setuptools libsnappy-dev libleveldb-dev lcov openssl libssl-dev libjansson-dev
   - sudo easy_install3 pip
   - docker build -t lincedin-appserver .
   - docker run -P lincedin-appserver sh -c "cd /root/LincedIn/LincedIn-TallerII-Server/; make test"

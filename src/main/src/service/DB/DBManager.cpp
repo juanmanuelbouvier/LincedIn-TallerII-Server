@@ -1,75 +1,67 @@
 #include <services/DB/DBManager.h>
-#include <leveldb/db.h>
-#include <settings/SettingManager.h>
+#include <exception/DBManagerException.h>
 #include <services/Logger/Logger.h>
-#include <utils/JSONUtils.h>
 
-DBManager::DBManager( string DBName ) {
-	nameOfDB = DBName;
-	pathToDB = SettingManager::getInstance()->getDBFolder() + nameOfDB;
-	options.create_if_missing = true;
-	db = NULL;
-	opened = false;
-}
+DBManager* DBManager::managerInstance = NULL;
 
-bool DBManager::open() {
-	leveldb::Status status = leveldb::DB::Open(options, "./" + pathToDB, &db);
-	if ( !status.ok() ) {
-		Log("Unable to open/create database '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),ERROR);
-		return false;
+DBManager* DBManager::getInstance(){
+	if (!managerInstance) {
+		managerInstance = new DBManager();
 	}
-	Log("Succefully opened database '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),INFO);
-	opened = true;
-	return true;
+	return managerInstance;
 }
 
-bool DBManager::storeJSON( string key, Json::Value json) {
-	return store(key, JSONUtils::JSONToString(json));
-}
-
-bool DBManager::store( string key, string value) {
-	if (!opened) {
-		return false;
+void DBManager::setInstance(DBManager* dbManager){
+	if (managerInstance) {
+		delete managerInstance;
 	}
+	managerInstance = dbManager;
+}
 
-	leveldb::WriteOptions writeOptions;
-	leveldb::Status status = db->Put(writeOptions, key, value);
-	if ( !status.ok() ) {
-		Log("Cannot store key: " + key + " in '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),WARNING);
+void DBManager::deleteInstance(){
+	if (managerInstance) {
+		delete managerInstance;
+		managerInstance = NULL;
+	}
+}
+
+bool DBManager::exist( string DBName ) {
+	if ( databases.find(DBName) == databases.end() ) {
 		return false;
 	}
 	return true;
 }
 
-string DBManager::get( string key ){
-	string returnValue = "";
-	if (!opened){
-		return "";
+bool DBManager::addDB( string DBName ) {
+	if ( exist(DBName) ) {
+		return false;
 	}
-	leveldb::ReadOptions readOptions;
-	leveldb::Status status = db->Get(readOptions, key, &returnValue);
-	if ( status.ok() ){
-		return returnValue;
+	DB* db = new DB(DBName);
+	if ( db->open() ) {
+		databases[DBName] = db;
+		return true;
 	}
-	return "";
+	return false;
 }
 
-Json::Value DBManager::getJSON( string key ){
-	string returnJSON = get(key);
+DB* DBManager::getDB( string DBName ) {
+	DBManager* manager = getInstance();
+	if ( !manager->exist(DBName) ) {
+		Log("Database " + DBName + " dont exist. Attemp to create", WARNING);
+		if ( !manager->addDB(DBName) ) {
+			Log("Cannot create Database: " + DBName,ERROR);
+			return NULL;
+		}
+		Log("Database " + DBName + " created", INFO);
 
-	Json::Value root;
-	Json::Reader reader;
-	bool parsingSuccessful = reader.parse( returnJSON.c_str(), root );
-
-	return root;
+	}
+	return manager->databases[DBName];
 }
 
 DBManager::~DBManager() {
-	delete db;
+	for(std::map<string,DB*>::iterator iter = databases.begin(); iter != databases.end(); ++iter) {
+		DB* toDelete = iter->second;
+		delete toDelete;
+	}
 }
-
-
-
-
-
 
