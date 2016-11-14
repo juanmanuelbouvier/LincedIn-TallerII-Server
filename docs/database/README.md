@@ -82,31 +82,39 @@
 - value:
 ```javascript
 	{	
-		“name” : string,
-		“surname” : string,
+		“first_name” : string,
+		“last_name” : string,
+		"description" : string,
 		“password” : string | encrypt
 		“register_timestamp” : integer,
 		“last_edit_timestamp” : integer,
-		“mail” : string,
+		“email” : string,
 		“date_of_birth”: string,
-		“current_job” : {
-			“from_year” : string,
-			“company” : string,
-			“position” : string,
-		},
-		“past_jobs” : [
+		“skills_names” : [
+			name of skill : string,
+			name of other skill : string
+		],
+		“jobs” : [
 			{
-				“from_year” : string,
+				“date_since” : string,
+				“date_to” : string (not required),
 				“company” : string,
-				“position” : string,
+				“name_position” : string,
 			}
 		],
 		“education” : [
 			{
 				“start_date” : string,
-				“end_date” : string,
+				“end_date” : string (not required),
 				“school_name” : string,
 				“degree” : string,
+			}
+		],
+		“recommendations_received” : [
+			{
+				“recommender” : string,
+				“text” : string,
+				“timestamp” : integer 
 			}
 		]
 	}

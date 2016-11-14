@@ -2,15 +2,17 @@
 
 namespace std {
 
-Recommendation::Recommendation(string recommender, string text){
+Recommendation::Recommendation(string recommender, string text, int timestamp){
 	this->recommender = recommender;
 	this->text = text;
+	this->timestamp = timestamp;
 }
 
 Json::Value Recommendation::asJSON(){
 	Json::Value rec;
 	rec["recommender"] = recommender; // proximamente un objeto del usuario
 	rec["text"] = text;
+	rec["timestamp"] = timestamp;
 
 	return rec;
 }

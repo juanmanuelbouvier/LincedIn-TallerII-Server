@@ -26,6 +26,16 @@ JobPosition JobPosition::create(Json::Value data){
 	}
 	return JobPosition(data["name"].asString());//return nullptr;
 }
+
+bool JobPosition::exist(string name_position){
+	Json::Value position = SharedServerAPI::getInstance()->getJobPosition(name_position);
+	if (position.isObject()  && position.isMember("error")){
+		return false;
+	}
+	return true;
+}
+
+
 string JobPosition::getName(){
 	return name;
 }

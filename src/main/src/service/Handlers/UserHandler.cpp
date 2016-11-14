@@ -2,6 +2,7 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <utils/PathUtils.h>
 #include <model/User.h>
+#include <exception/UserException.h>
 #include <string>
 
 using namespace std;
@@ -114,9 +115,14 @@ Json::Value _createRecomendation(string recommender, string text){
 
 Json::Value UserHandler::_createUser(string user_id) {
 
-	User user = User(user_id);
-
-	return user.asJSON();
+	try {
+		User user = User(user_id);
+		return user.asJSON();
+	}catch (UserException& e){
+		Json::Value error;
+		error["Error"] = e.what();
+		return error;
+	}
 }
 
 UserHandler::~UserHandler(){

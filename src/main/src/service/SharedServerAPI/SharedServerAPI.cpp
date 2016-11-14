@@ -129,7 +129,7 @@ Json::Value SharedServerAPI::getSkill(string name){
 
 	if (skill.isMember("error")){
 		Json::Value error;
-		error["error"] = "skill inexistente.";
+		error["error"] = "skill does not exist.";
 		return error;
 	}
 
@@ -164,9 +164,9 @@ Json::Value SharedServerAPI::getJobPosition(string name){
 
 	Json::Value pos = JSONUtils::findValue(positions,"name",name);
 
-	if (pos == nullptr){
+	if (pos.isMember("error")){
 		Json::Value error;
-		error["error"] = "job position inexistente.";
+		error["error"] = "job position does not exist.";
 		return error;
 	}
 

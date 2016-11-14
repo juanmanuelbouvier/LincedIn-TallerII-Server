@@ -4,6 +4,7 @@
 #include <utils/StringUtils.h>
 #include <utils/VectorUtils.h>
 #include <utils/DateUtils.h>
+#include <utils/ErrorMessage.h>
 
 #include <ctime>
 
@@ -175,6 +176,43 @@ TEST(UtilsTest, integratedUsingRouteParse) {
 	EXPECT_EQ(resultWithQuery["_query"],"film=elZorro");
 
 }
+
+TEST(UtilsTest, ErrorMessageNotEmpty) {
+	ErrorMessage error;
+	string errorkey1 = "key1";
+	string error1 = "error 1";
+	error.addError(errorkey1,error1);
+
+	string errorkey2 = "key2";
+	string error2 = "error 2";
+	error.addError(errorkey2,error2);
+
+	string errorkey3 = "key3";
+	string error3 = "error 3";
+	error.addError(errorkey3,error3);
+
+	EXPECT_FALSE(error.empty());
+
+}
+
+TEST(UtilsTest, ErrorMessageGetError) {
+	ErrorMessage error;
+	string errorkey1 = "key1";
+	string error1 = "error 1";
+	error.addError(errorkey1,error1);
+
+	string errorkey2 = "key2";
+	string error2 = "error 2";
+	error.addError(errorkey2,error2);
+
+	string errorkey3 = "key3";
+	string error3 = "error 3";
+	error.addError(errorkey3,error3);
+
+	EXPECT_EQ(error.getError(errorkey2),error2);
+
+}
+
 
 TEST(UtilsTest, DuummyGetTime) {
 	string date = DateUtils::getTimeWithFormat("Rand0m[%Y]Rand0m");

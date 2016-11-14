@@ -4,6 +4,7 @@
 #include <extern/json.h>
 #include <model/JobPosition.h>
 #include <list>
+#include <utils/ErrorMessage.h>
 
 namespace std {
 
@@ -14,6 +15,7 @@ private:
 public:
 	Job(string date_since, string date_to, string company, string name_position);
 	static Job create(string date_since, string date_to, string company, string name_position);
+	static ErrorMessage check(Json::Value job);
 	Json::Value asJSON();
 
 	static Json::Value listToArray(list<Job> jobs);

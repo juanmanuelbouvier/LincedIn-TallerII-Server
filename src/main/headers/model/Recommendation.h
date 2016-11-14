@@ -9,11 +9,13 @@ namespace std {
 class Recommendation{
 private:
 	string recommender,text;
+	int timestamp;
 public:
-	Recommendation(string recommender, string text);
+	Recommendation(string recommender, string text,int timestamp);
 	Json::Value asJSON();
 	string getRecommender();
 	string getText();
+	string getTimestamp();
 	static Json::Value listToArray(list<Recommendation> recommendations);
 	virtual ~Recommendation();
 };
