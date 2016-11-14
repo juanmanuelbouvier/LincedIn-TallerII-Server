@@ -11,6 +11,7 @@ private:
 public:
 	JobPosition(string name);
 	static JobPosition create(Json::Value data);
+	static bool exist(string name_position);
 	string getName();
 	string getCategory();
 	string getDescription();

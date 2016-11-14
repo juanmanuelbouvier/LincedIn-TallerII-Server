@@ -6,6 +6,8 @@
 #include <model/Skill.h>
 #include <model/Education.h>
 #include <model/Recommendation.h>
+#include <services/DB/DBManager.h>
+#include <utils/ErrorMessage.h>
 
 namespace std {
 
@@ -13,18 +15,22 @@ class User{
 private:
 	string id,full_name,first_name,last_name,description,date_of_birth,email,profile_picture;
 	list<Job> jobs;
-
 	list<Skill> skills;
 	list<Education> education;
 	list<Recommendation> recommendations_received;
-
+	int register_timestamp,last_edit_timestamp;
+	static DB* getDB();
 public:
 	User(string user_id);
 
 	static User create( Json::Value data );
 	Json::Value asJSON();
+	Json::Value getRecommendationAsJSON();
 	static bool exist(string user_id);
-	static map<string,string> check(Json::Value data);
+	static ErrorMessage check(Json::Value data);
+	static string getIdByEmail(string email );
+	static string generateSessionToken( string user_id );
+	static bool checkPassword( string user_id,string password );
 
 	virtual ~User();
 };

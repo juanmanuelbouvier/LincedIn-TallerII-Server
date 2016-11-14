@@ -23,6 +23,30 @@ Job Job::create(string date_since, string date_to, string company, string name_p
 	return Job(date_since,date_to,company,name_position);
 }
 
+ErrorMessage Job::check(Json::Value job){
+	ErrorMessage error;
+	//date_since
+	if (job.isMember("date_since")){
+		//TODO check correct format
+	} else {
+		error.addError("date_since","not defined date_since");
+	}
+
+	//date_to
+	if (job.isMember("date_to")){
+		//TODO check correct format
+	}
+
+	//JobPosition
+	if (job.isMember("name_position")){
+		if (!JobPosition::exist(job["name_position"].toStyledString())){
+			error.addError("name_position", "Position does not exist.");
+		}
+	}
+
+	return error;
+}
+
 Json::Value Job::asJSON(){
 	Json::Value job;
 

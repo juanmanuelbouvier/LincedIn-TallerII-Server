@@ -55,11 +55,17 @@ string DB::get( string key ){
 
 Json::Value DB::getJSON( string key ){
 	string returnJSON = get(key);
-
 	Json::Value root;
-	Json::Reader* reader = new Json::Reader();
-	bool parsingSuccessful = reader->parse( returnJSON.c_str(), root );
-	delete reader;
+	if (returnJSON.compare("")){
+		root["error"] = "not find key in DB";
+	} else {
+		Json::Reader* reader = new Json::Reader();
+		bool parsingSuccessful = reader->parse( returnJSON.c_str(), root );
+		if (!parsingSuccessful){
+			root["error"] = "error on parse value of key.";
+		}
+		delete reader;
+	}
 	return root;
 }
 

@@ -3,7 +3,7 @@
 
 #include <extern/json.h>
 #include <string>
-#include <map>
+#include <utils/ErrorMessage.h>
 #include <list>
 
 namespace std {
@@ -14,8 +14,9 @@ private:
 public:
 	Skill(string skill_name);
 
-	static map<string,string> check( Json::Value data );
+	static ErrorMessage check( Json::Value data );
 	static Skill create(Json::Value data);
+	static bool exist(string skill_id);
 
 	string getName();
 	string getDescription();

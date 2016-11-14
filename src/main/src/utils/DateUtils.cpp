@@ -15,3 +15,9 @@ const string DateUtils::getTimeWithFormat(string format) {
     strftime(buf, sizeof(buf), format_to_strf, &tstruct);
     return buf;
 }
+
+
+int DateUtils::timestamp(){
+    string now = DateUtils::getTimeWithFormat("%s");
+    return atoi(now.c_str());
+}

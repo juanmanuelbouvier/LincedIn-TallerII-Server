@@ -35,20 +35,29 @@ Skill Skill::create(Json::Value data){
 	return Skill(data["name"].asString());
 }
 
-map<string,string> Skill::check( Json::Value data ) {
-	map<string,string> errors;
+ErrorMessage Skill::check( Json::Value data ) {
+	ErrorMessage errors;
 	list<string> dataExpected = {"name","description","category"};
 	for (string& expected : dataExpected) {
 		if ( data.isMember(expected)) {
 			if (!data[expected].isString()) {
-				errors[expected] = "Invalid value of " + expected;
+				errors.addError(expected,"Invalid value of " + expected);
 			}
 		} else {
-			errors[expected] = expected + " not found in data";
+			errors.addError(expected,expected + " not found in data");
 		}
 	}
 	return errors;
 }
+
+bool Skill::exist(string skill_id){
+	Json::Value skill = SharedServerAPI::getInstance()->getSkill(skill_id);
+	if (skill.isObject()  && skill.isMember("error")){
+		return false;
+	}
+	return true;
+}
+
 
 string Skill::getName(){
 	return name;

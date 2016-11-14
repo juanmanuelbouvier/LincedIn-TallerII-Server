@@ -123,3 +123,10 @@ string StringUtils::urlEncode(const string &toEncode) {
 
 	return out.str();
 }
+
+string StringUtils::passwordEncrypt(string password){
+	return password;
+}
+string StringUtils::passwordDecrypt(string password){
+	return password;
+}

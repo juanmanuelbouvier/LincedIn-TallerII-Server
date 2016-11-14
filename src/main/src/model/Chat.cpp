@@ -1,5 +1,6 @@
 #include <exception/ChatException.h>
 #include <model/Chat.h>
+#include <model/User.h>
 #include <utils/VectorUtils.h>
 #include <services/Logger/Logger.h>
 #include <utils/JSONUtils.h>
@@ -47,14 +48,12 @@ bool Chat::check( list<string> participants ) {
 		return false;
 	}
 
-	/*
 	for ( const string& user_id : participants ) {
 		if (!User::exist(user_id)) {
-			Log("Chat" + " (" + __LINE__ + "). User id: " + user_id + " does not exist",ERROR);
-			errors["user" + user_id] = "User id: " + user_id + " does not exist";
+			Log("Chat.cpp::" + to_string(__LINE__) + ". User id: " + user_id + " does not exist",ERROR);
+			//errors["user" + user_id] = "User id: " + user_id + " does not exist";
 		}
 	}
-	*/
 	return true;
 
 }

@@ -66,6 +66,7 @@ set (SOURCES
     ${APP_SOURCE}/utils/StringUtils.cpp
     ${APP_SOURCE}/utils/VectorUtils.cpp
     ${APP_SOURCE}/utils/JSONUtils.cpp
+    ${APP_SOURCE}/utils/ErrorMessage.cpp
     
     ${APP_SOURCE}/settings/SettingManager.cpp
     
