@@ -24,6 +24,8 @@ public:
 	User(string user_id);
 
 	static User create( Json::Value data );
+	static bool deleteUser( string user_id);
+
 	Json::Value asJSON();
 	Json::Value getRecommendationAsJSON();
 	static bool exist(string user_id);

@@ -49,6 +49,14 @@ User User::create( Json::Value data ) {
 	throw new UserException("Error on store user in DB");
 }
 
+bool User::deleteUser( string user_id){
+	ErrorMessage error;
+
+	//getDB()->delete(user_id);
+
+	return false;
+}
+
 User::User(string user_id) {
 
 	//MOCK
@@ -172,7 +180,7 @@ ErrorMessage User::check(Json::Value data){
 	ErrorMessage error;
 
 	if (data.isMember("id")){
-		//buscar si el id está en la base de datos
+		//Json::Value userInDB = getDB()->getJSON(data["id"].toStyledString());
 	}else {
 		error.addError("id","Id not specified");
 	}

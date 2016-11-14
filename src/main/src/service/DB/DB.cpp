@@ -4,6 +4,7 @@
 #include <services/Logger/Logger.h>
 #include <utils/JSONUtils.h>
 
+
 DB::DB( string DBName ) {
 	nameOfDB = DBName;
 	pathToDB = SettingManager::getInstance()->getDBFolder() + "/" + nameOfDB;
@@ -56,7 +57,7 @@ string DB::get( string key ){
 Json::Value DB::getJSON( string key ){
 	string returnJSON = get(key);
 	Json::Value root;
-	if (returnJSON.compare("")){
+	if (returnJSON.empty()){
 		root["error"] = "not find key in DB";
 	} else {
 		Json::Reader* reader = new Json::Reader();
@@ -66,6 +67,7 @@ Json::Value DB::getJSON( string key ){
 		}
 		delete reader;
 	}
+
 	return root;
 }
 

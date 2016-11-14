@@ -55,63 +55,16 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
 	} else if (method == "DELETE"){
 
-		return ResponseBuilder::createErrorResponse(500, "BAD REQUEST");
+		if (User::deleteUser( path["user_id"])){
+			return ResponseBuilder::createErrorResponse(200, "Perfil eliminado");
+		}
+
+		return ResponseBuilder::createErrorResponse(500, "Unexpected error");
 
 	} else {
 		return ResponseBuilder::createErrorResponse(500, "BAD REQUEST");
 	}
 }
-
-/*
-Json::Value _createJob(string from,string to, string company, string position){
-
-	Json::Value job;
-	job["since"] = from;
-	if (to != "") {
-		job["to"] = to;
-	}
-	job["company"] = company;
-	Json::Value pos;
-	pos["name"] = position;
-	pos["description"] = "description";
-	pos["category"] = "category";
-	job["position"] = pos;
-
-	return job;
-}
-
-Json::Value _createSkill(string name,string category, string description){
-
-	Json::Value skill;
-	skill["name"] = name;
-	skill["category"] = category;
-	skill["description"] = description;
-
-	return skill;
-}
-
-Json::Value _createEducation(string start,string end, string school, string degree){
-
-	Json::Value education;
-	education["start_date"] = start;
-	if (end != ""){
-		education["end_date"] = end;
-	}
-	education["school_name"] = school;
-	education["degree"] = degree;
-
-	return education;
-}
-
-Json::Value _createRecomendation(string recommender, string text){
-
-	Json::Value rec;
-	rec["recommender"] = recommender; // proximamente un objeto del usuario
-	rec["text"] = text;
-
-	return rec;
-}
-*/
 
 Json::Value UserHandler::_createUser(string user_id) {
 

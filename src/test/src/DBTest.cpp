@@ -57,7 +57,7 @@ TEST(DBTest, storeJson) {
 	EXPECT_EQ(result["hello2"],"world2");
 
 	Json::Value expectedEmpty;
-	EXPECT_EQ(db.getJSON("b"),expectedEmpty);
+	EXPECT_TRUE(db.getJSON("b").isMember("error"));
 
 	SettingManager::deleteInstance();
 
