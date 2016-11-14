@@ -1,4 +1,5 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
+#include <utils/JSONUtils.h>
 
 using namespace std;
 
@@ -112,6 +113,10 @@ ResponseBuilder* ResponseBuilder::setCodeAndPhrase(string theCode,string thePhra
 HTTPResponse* ResponseBuilder::build(){
 	HTTPResponse* theResponse = new HTTPResponse(code, phrase, body, headers);
 	return theResponse;
+}
+
+HTTPResponse* ResponseBuilder::createJsonResponse(int code, Json::Value body) {
+	return createJsonResponse(code, JSONUtils::JSONToString(body) );
 }
 
 HTTPResponse* ResponseBuilder::createJsonResponse(int code, string body){

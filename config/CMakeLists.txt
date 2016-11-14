@@ -53,6 +53,9 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/UserHandler.cpp
     ${APP_SOURCE}/service/Handlers/ChatHandler.cpp
     ${APP_SOURCE}/service/Handlers/FriendHandler.cpp
+    ${APP_SOURCE}/service/Handlers/LoginHandler.cpp
+    
+    ${APP_SOURCE}/service/ExternLogin/FacebookAPI.cpp
     
     ${APP_SOURCE}/service/Access/AccessToken.cpp
     
@@ -107,6 +110,7 @@ set (MONGOOSE_SOURCES
     )
 
 add_definitions(-DMG_ENABLE_THREADS)    
+add_definitions(-DMG_ENABLE_SSL)
 
 add_library (mongoose ${MONGOOSE_SOURCES})
 

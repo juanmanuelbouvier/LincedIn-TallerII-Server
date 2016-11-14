@@ -5,6 +5,7 @@
 #include <services/Handlers/UserHandler.h>
 #include <services/Handlers/FriendHandler.h>
 #include <services/Handlers/ChatHandler.h>
+#include <services/Handlers/LoginHandler.h>
 #include <services/Logger/Logger.h>
 #include <utils/PathUtils.h>
 
@@ -46,6 +47,8 @@ HTTPRequestHandler::HTTPRequestHandler() {
 
 
 	addHandler("/user/:user_id", new UserHandler());
+
+	addHandler("/login", new LoginHandler());
 }
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){

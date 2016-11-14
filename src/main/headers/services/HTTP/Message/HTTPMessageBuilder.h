@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <extern/json.h>
 #include "HTTPRequest.h"
 #include "HTTPResponse.h"
 
@@ -63,6 +64,7 @@ public:
 
 	HTTPResponse* build();
 
+	static HTTPResponse* createJsonResponse(int code, Json::Value body);
 	static HTTPResponse* createJsonResponse(int code, string body);
 	static HTTPResponse* createErrorResponse(int code, string error);
 

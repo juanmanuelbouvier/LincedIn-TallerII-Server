@@ -45,12 +45,12 @@ HTTPRequest::HTTPRequest(string _method, string _uri, string _query, string _bod
 
 void HTTPRequest::generateRawMessage(){
 	//A Request-line
-	httpMessage = method + " " + uri + query + " " + HTTP_VERSION;
+	httpMessage = method + " " + uri + "?" + query + " " + HTTP_VERSION;
 	httpMessage += HTTP_CRLF;
 
 	//Zero or more header
 	for (map<string,string>::iterator it = headers.begin(); it != headers.end(); ++it) {
-		httpMessage += it->first + ":" + it->second + HTTP_CRLF;
+		httpMessage += it->first + ": " + it->second + HTTP_CRLF;
 	}
 
 	//Optionally a message-body
@@ -60,7 +60,6 @@ void HTTPRequest::generateRawMessage(){
 		httpMessage += HTTP_CRLF;
 		httpMessage +=  body;
 	}
-
 	httpMessage += HTTP_CRLF;
 }
 

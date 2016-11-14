@@ -39,7 +39,7 @@ void ServerClient::eventHandler(mg_connection* connection, int event_code, void*
 }
 
 bool ServerClient::connectToUrl(string url){
-	mongooseClientConnection = mg_connect(&eventClientManager, url.c_str(), this->eventHandler);
+	mongooseClientConnection = mg_connect_http(&eventClientManager, this->eventHandler, url.c_str(),NULL,NULL);
 	if (mongooseClientConnection == NULL) {
 		return false;
 	}

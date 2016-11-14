@@ -7362,13 +7362,13 @@ struct mg_connection *mg_connect_http_opt(struct mg_mgr *mgr,
     return NULL;
   }
 
-  mg_printf(nc, "%s %s HTTP/1.1\r\nHost: %s\r\nContent-Length: %" SIZE_T_FMT
+  /*mg_printf(nc, "%s %s HTTP/1.1\r\nHost: %s\r\nContent-Length: %" SIZE_T_FMT
                 "\r\n%s\r\n%s",
             post_data == NULL ? "GET" : "POST", path, addr,
             post_data == NULL ? 0 : strlen(post_data),
             extra_headers == NULL ? "" : extra_headers,
             post_data == NULL ? "" : post_data);
-
+	*/
   MG_FREE(addr);
   return nc;
 }

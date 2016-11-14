@@ -5,8 +5,6 @@
 #include <utils/JSONUtils.h>
 #include <utils/DateUtils.h>
 
-#include <iostream>
-
 #define ID_SEPARATOR "_"
 #define CHAT_DB "Chat"
 
