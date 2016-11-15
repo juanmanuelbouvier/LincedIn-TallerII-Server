@@ -156,6 +156,9 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/AccessTokenTest.cpp
 	
 	${TEST_SOURCE}/modeltest/ChatTest.cpp
+	${TEST_SOURCE}/modeltest/EducationTest.cpp
+	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
+	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)

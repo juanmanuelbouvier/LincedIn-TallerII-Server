@@ -10,7 +10,7 @@
 #include <exception/JobException.h>
 
 #define USER_DB "User"
-#define TOKEN_VALID_DAYS 10
+#define TOKEN_VALID_SECONDS 10*24*60 // 10 days
 
 namespace std {
 
@@ -49,12 +49,34 @@ User User::create( Json::Value data ) {
 	throw new UserException("Error on store user in DB");
 }
 
-bool User::deleteUser( string user_id){
-	ErrorMessage error;
-
+bool User::delet( string user_id){
 	//getDB()->delete(user_id);
 
 	return false;
+}
+
+ErrorMessage User::update(string user_id,Json::Value data){
+	ErrorMessage error;
+	Json::Value userDB = getDB()->getJSON(user_id);
+
+	if (userDB.isMember("error")){
+		error.addError("user_id","Not find user id in DB");
+		return error;
+	}
+
+	ErrorMessage checkMessage = User::check(data);
+	if (!checkMessage.empty()) return checkMessage;
+
+	//no public information
+	data["register_timestamp"] = userDB["register_timestamp"].asInt();
+	data["last_edit_timestamp"] = DateUtils::timestamp();
+	data["password"] = userDB["password"];
+
+	if (!getDB()->storeJSON(user_id,data)){
+		error.addError(user_id,"Error on store data in DB");
+	}
+
+	return error;
 }
 
 User::User(string user_id) {
@@ -242,6 +264,27 @@ string User::generateSessionToken( string user_id ){
 	token["timestamp"] = DateUtils::timestamp();
 
 	return AccessToken::encode(token);
+}
+
+bool User::validToken(string token){
+	Json::Value decodeToken = AccessToken::decode(token);
+	int now = DateUtils::timestamp();
+	int token_timestamp = decodeToken["timestamp"].asInt();
+
+	if (now - token_timestamp <= TOKEN_VALID_SECONDS ){
+		return true;
+	}
+	return false;
+}
+
+string User::userIdByToken( string token ){
+
+	if (!validToken(token)){
+		return "";
+	}
+
+	Json::Value decodeToken = AccessToken::decode(token);
+	return decodeToken["user_id"].asString();
 }
 
 bool User::checkPassword( string user_id,string password ){

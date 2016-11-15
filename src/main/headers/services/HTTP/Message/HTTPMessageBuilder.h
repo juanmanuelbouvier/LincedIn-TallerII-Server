@@ -66,6 +66,7 @@ public:
 
 	static HTTPResponse* createJsonResponse(int code, Json::Value body);
 	static HTTPResponse* createJsonResponse(int code, string body);
+	static HTTPResponse* createOKResponse(int code, string message);
 	static HTTPResponse* createErrorResponse(int code, string error);
 
 	virtual ~ResponseBuilder();

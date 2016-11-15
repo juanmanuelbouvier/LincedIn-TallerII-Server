@@ -115,6 +115,13 @@ HTTPResponse* ResponseBuilder::build(){
 	return theResponse;
 }
 
+HTTPResponse* ResponseBuilder::createOKResponse(int code, string message){
+	ResponseBuilder* builder = new ResponseBuilder();
+	builder = (ResponseBuilder*)builder->appendHeader("Content-type","text/html")->setBody(message);
+	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),"OK");
+	return builder->build();
+}
+
 HTTPResponse* ResponseBuilder::createJsonResponse(int code, Json::Value body) {
 	return createJsonResponse(code, JSONUtils::JSONToString(body) );
 }

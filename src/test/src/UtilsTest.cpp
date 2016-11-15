@@ -4,9 +4,11 @@
 #include <utils/StringUtils.h>
 #include <utils/VectorUtils.h>
 #include <utils/DateUtils.h>
+#include <utils/JSONUtils.h>
 #include <utils/ErrorMessage.h>
 
 #include <ctime>
+#include <extern/json.h>
 
 #include <string>
 #include <list>
@@ -54,6 +56,16 @@ TEST(UtilsTest, decodeURL) {
 	string expected  = "%23hello%20world%21";
 
 	EXPECT_EQ(StringUtils::urlEncode(urlToEncode), expected);
+}
+
+TEST(UtilsTest, ecryptPassword) {
+	string password = "123";
+	string passEncrypted = StringUtils::passwordEncrypt(password);
+
+	string passDecrypted = StringUtils::passwordDecrypt(passEncrypted);
+
+	//EXPECT_NE(password, passEncrypted);
+	EXPECT_EQ(password, passDecrypted);
 }
 
 TEST(UtilsTest, splitPathIgnoreEmpty) {
@@ -192,6 +204,7 @@ TEST(UtilsTest, ErrorMessageNotEmpty) {
 	error.addError(errorkey3,error3);
 
 	EXPECT_FALSE(error.empty());
+	EXPECT_FALSE(error.summary().empty());
 
 }
 
@@ -225,3 +238,50 @@ TEST(UtilsTest, DuummyGetTime) {
 
 }
 
+TEST(UtilsTest, timestamp) {
+	string timestamp_string = DateUtils::getTimeWithFormat("%s");
+	int timestamp = DateUtils::timestamp();
+
+	EXPECT_GE(timestamp,atoi(timestamp_string.c_str()));
+
+}
+
+
+TEST(UtilsTest, JSONfindValueInValues) {
+	Json::Value values = Json::Value(Json::arrayValue);
+
+	Json::Value val;
+	val["name"] = "Pep";
+	val["position"] = "MC";
+	values.append(val);
+
+	Json::Value val2;
+	val2["name"] = "Mou";
+	val2["position"] = "DC";
+	values.append(val2);
+
+	Json::Value val3;
+	val3["name"] = "FME";
+	val3["position"] = "LI";
+	values.append(val3);
+
+	Json::Value res = JSONUtils::findValue(values,"name","Pep");
+
+	EXPECT_EQ(val,res);
+
+	Json::Value res2 = JSONUtils::findValue(values,"name","FAS");
+
+	EXPECT_TRUE(res2.isMember("error"));
+}
+
+
+TEST(UtilsTest, stringToJSON) {
+	Json::Value val;
+	val["name"] = "Pep";
+	val["position"] = "MC";
+	val["other"] = "rugbier";
+
+	Json::Value res = JSONUtils::stringToJSON(val.toStyledString());
+
+	EXPECT_EQ(val,res);
+}

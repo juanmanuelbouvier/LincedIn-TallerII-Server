@@ -16,6 +16,7 @@ private:
 	SharedServerAPI();
 	Json::Value setObject(string url,string body);
 	Json::Value updateObject(string url,string body);
+	Json::Value deleteObject(string url);
 
 	static SharedServerAPI* instaceAPI;
 
@@ -36,6 +37,7 @@ public:
 	Json::Value getJobPosition(string name);
 	Json::Value setJobPosition(string name,string description, string category);
 	Json::Value updateJobPosition(string name,string description, string category);
+	Json::Value deleteJobPosition(string name,string category);
 
 	HTTPResponse* doGet( string uri );
 	HTTPResponse* doPost(string uri, string body);

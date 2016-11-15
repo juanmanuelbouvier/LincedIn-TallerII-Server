@@ -15,7 +15,7 @@ public:
 	Json::Value asJSON();
 	string getRecommender();
 	string getText();
-	string getTimestamp();
+	int getTimestamp();
 	static Json::Value listToArray(list<Recommendation> recommendations);
 	virtual ~Recommendation();
 };

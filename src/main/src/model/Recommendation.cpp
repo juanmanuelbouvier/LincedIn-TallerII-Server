@@ -25,6 +25,10 @@ string Recommendation::getText(){
 	return text;
 }
 
+int Recommendation::getTimestamp(){
+	return timestamp;
+}
+
 Json::Value Recommendation::listToArray(list<Recommendation> recommendations){
 	Json::Value array = Json::Value(Json::arrayValue);
 	for (Recommendation& obj : recommendations){

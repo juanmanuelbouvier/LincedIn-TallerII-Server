@@ -75,6 +75,16 @@ HTTPResponse* SharedServerAPI::doPut(string uri, string body){
 	return client->sendRequest(theRequest);
 }
 
+HTTPResponse* SharedServerAPI::doDelete(string uri){
+	if (!client->connectToUrl(sharedURL)){
+		return NULL;
+	}
+	RequestBuilder* builder = RequestBuilder().DELETE()->setUri(uri);
+	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
+	HTTPRequest* theRequest = builder->build();
+	return client->sendRequest(theRequest);
+}
+
 Json::Value SharedServerAPI::setObject(string url,string body){
 
 	HTTPResponse* response = doPost(url,body);
@@ -97,6 +107,21 @@ Json::Value SharedServerAPI::updateObject(string url,string body){
 	Json::Value res;
 
 	if (response->getCode() == 200){
+		res["ok"] = "OK";
+	}
+	else {
+		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
+	}
+
+	return res;
+}
+
+Json::Value SharedServerAPI::deleteObject(string url){
+	HTTPResponse* response = doDelete(url);
+
+	Json::Value res;
+
+	if (response->getCode() == 204){
 		res["ok"] = "OK";
 	}
 	else {
@@ -186,6 +211,11 @@ Json::Value SharedServerAPI::updateJobPosition(string name,string description,st
 	string url = "/job_positions/categories/"+category+"/"+name;
 
 	return updateObject(url,body);
+}
+
+Json::Value SharedServerAPI::deleteJobPosition(string name,string category){
+	string url = "/job_positions/categories/"+category+"/"+name;
+	return deleteObject(url);
 }
 
 

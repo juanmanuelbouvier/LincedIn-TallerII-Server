@@ -24,7 +24,8 @@ public:
 	User(string user_id);
 
 	static User create( Json::Value data );
-	static bool deleteUser( string user_id);
+	static bool delet( string user_id);
+	static ErrorMessage update(string user_id, Json::Value data);
 
 	Json::Value asJSON();
 	Json::Value getRecommendationAsJSON();
@@ -32,6 +33,8 @@ public:
 	static ErrorMessage check(Json::Value data);
 	static string getIdByEmail(string email );
 	static string generateSessionToken( string user_id );
+	static string userIdByToken( string token );
+	static bool validToken(string token);
 	static bool checkPassword( string user_id,string password );
 
 	virtual ~User();

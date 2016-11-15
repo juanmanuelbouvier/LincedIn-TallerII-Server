@@ -14,22 +14,20 @@ JobPosition::JobPosition(string name) {
 }
 
 JobPosition JobPosition::create(Json::Value data){
-	//check(data);
 	Json::Value res = SharedServerAPI::getInstance()->setJobPosition(
 			data["name"].asString(),
 			data["description"].asString(),
 			data["category"].asString()
 			);
-
 	if (not (res.isObject()  && res.isMember("error"))){
 		return JobPosition(data["name"].asString());
 	}
-	return JobPosition(data["name"].asString());//return nullptr;
+	return JobPosition(data["name"].asString());
 }
 
 bool JobPosition::exist(string name_position){
 	Json::Value position = SharedServerAPI::getInstance()->getJobPosition(name_position);
-	if (position.isObject()  && position.isMember("error")){
+	if (position.isObject() && position.isMember("error")){
 		return false;
 	}
 	return true;
@@ -74,6 +72,13 @@ bool JobPosition::setCategory(string new_category){
 		return true;
 	}
 
+	return false;
+}
+
+bool JobPosition::delet(){
+	Json::Value res = SharedServerAPI::getInstance()->deleteJobPosition(name,category);
+	if (res.isMember("ok"))
+		return true;
 	return false;
 }
 

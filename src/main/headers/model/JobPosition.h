@@ -18,6 +18,7 @@ public:
 	bool setName(string name);
 	bool setCategory(string category);
 	bool setDescription(string description);
+	bool delet();
 	Json::Value asJSON();
 	virtual ~JobPosition();
 };

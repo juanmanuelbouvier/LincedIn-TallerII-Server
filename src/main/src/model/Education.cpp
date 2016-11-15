@@ -12,7 +12,7 @@ Education::Education(string start, string end, string school, string degree) {
 Json::Value Education::asJSON(){
 	Json::Value education;
 	education["start_date"] = start_date;
-	if (end_date != "" and end_date.empty()){
+	if (end_date != "" and !end_date.empty()){
 		education["end_date"] = end_date;
 	}
 	education["school_name"] = school_name;
