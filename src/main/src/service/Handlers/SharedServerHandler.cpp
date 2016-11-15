@@ -10,7 +10,8 @@ SharedServerHandler::SharedServerHandler() {
 }
 
 vector<string> SharedServerHandler::getKnowURLs(){
-	vector<string> gets = SharedServerAPI::getInstance()->getsURL();
+	SharedServerAPI shared;
+	vector<string> gets = shared.getsURL();
 	for (int i = 0; i < gets.size(); i++ ) {
 		gets[i] = string(PREFIX) + gets[i];
 	}
@@ -21,7 +22,8 @@ HTTPResponse* SharedServerHandler::handle(HTTPRequest* http_request){
 	string uri = http_request->getURI();
 	uri = uri.substr( string(PREFIX).size(),uri.size() );
 	Log("SharedServerHandler: call shared with uri: " + uri,INFO);
-	return SharedServerAPI::getInstance()->doGet(uri);
+	SharedServerAPI shared;
+	return shared.doGet(uri);
 }
 
 SharedServerHandler::~SharedServerHandler(){

@@ -8,7 +8,8 @@
 namespace std {
 
 Skill::Skill(string name) {
-	Json::Value skill = SharedServerAPI::getInstance()->getSkill(name);
+	SharedServerAPI shared;
+	Json::Value skill = shared.getSkill(name);
 	if (skill.isObject()  && skill.isMember("error")){
 		cout << Log("Skill.cpp::" + to_string(__LINE__) + ". Error on find skill en Shared Server " + skill["error"].asString() ,WARNING) << endl;
 		throw new SkillException("Error on create Skill");
@@ -21,8 +22,8 @@ Skill::Skill(string name) {
 Skill Skill::create(Json::Value data){
 
 	//check(data);
-
-	Json::Value res = SharedServerAPI::getInstance()->setSkill(
+	SharedServerAPI shared;
+	Json::Value res = shared.setSkill(
 			data["name"].asString(),
 			data["description"].asString(),
 			data["category"].asString()
@@ -51,7 +52,8 @@ ErrorMessage Skill::check( Json::Value data ) {
 }
 
 bool Skill::exist(string skill_id){
-	Json::Value skill = SharedServerAPI::getInstance()->getSkill(skill_id);
+	SharedServerAPI shared;
+	Json::Value skill = shared.getSkill(skill_id);
 	if (skill.isObject()  && skill.isMember("error")){
 		return false;
 	}
@@ -72,7 +74,8 @@ string Skill::getCategory(){
 }
 
 bool Skill::setName(string new_name){
-	Json::Value res = SharedServerAPI::getInstance()->updateSkill(new_name,description,category);
+	SharedServerAPI shared;
+	Json::Value res = shared.updateSkill(new_name,description,category);
 	if (res.isObject()  && res.isMember("error")){
 
 		return false;
@@ -82,7 +85,8 @@ bool Skill::setName(string new_name){
 }
 
 bool Skill::setDescription(string new_description){
-	Json::Value res = SharedServerAPI::getInstance()->updateSkill(name,new_description,category);
+	SharedServerAPI shared;
+	Json::Value res = shared.updateSkill(name,new_description,category);
 	if (! res["error"]){
 		description = new_description;
 		return true;
@@ -92,8 +96,8 @@ bool Skill::setDescription(string new_description){
 }
 
 bool Skill::setCategory(string new_category){
-
-	Json::Value res = SharedServerAPI::getInstance()->updateSkill(name,description,new_category);
+	SharedServerAPI shared;
+	Json::Value res = shared.updateSkill(name,description,new_category);
 	if (! res["error"]){
 		category = new_category;
 		return true;

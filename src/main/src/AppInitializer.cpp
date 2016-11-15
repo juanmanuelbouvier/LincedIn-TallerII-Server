@@ -66,7 +66,6 @@ int main(int argc, char **argv) {
 	delete server;
 	delete setting;
 	DBManager::deleteInstance();
-	SharedServerAPI::deleteInstance();
 
 	return 0;
 }

@@ -45,7 +45,8 @@ HTTPRequest::HTTPRequest(string _method, string _uri, string _query, string _bod
 
 void HTTPRequest::generateRawMessage(){
 	//A Request-line
-	httpMessage = method + " " + uri + "?" + query + " " + HTTP_VERSION;
+	string queryWithSimbol = (query.empty()) ? "" : "?" + query;
+	httpMessage = method + " " + uri + queryWithSimbol + " " + HTTP_VERSION;
 	httpMessage += HTTP_CRLF;
 
 	//Zero or more header

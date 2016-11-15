@@ -11,6 +11,7 @@ ServerClient::ServerClient() {
 }
 
 HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
+	//printf("SEND REQUEST TO:\n%s\n",request->toString().c_str() );
 	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
 	sendingRequest = true;
 	while (sendingRequest) {

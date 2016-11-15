@@ -10,28 +10,11 @@
 
 using namespace std;
 
-SharedServerAPI* SharedServerAPI::instaceAPI = NULL;
-
 SharedServerAPI::SharedServerAPI() {
 	client = new ServerClient();
 	sharedURL = SettingManager::getInstance()->getSharedServerURL();
-	if (!client->connectToUrl(sharedURL)) {
-		delete client;
-	}
-
 }
 
-SharedServerAPI* SharedServerAPI::getInstance(){
-	if (!instaceAPI) {
-		instaceAPI = new SharedServerAPI();
-	}
-	return instaceAPI;
-}
-
-void SharedServerAPI::deleteInstance(){
-	delete instaceAPI;
-	instaceAPI = NULL;
-}
 
 vector<string> SharedServerAPI::getsURL() {
 	vector<string> urls = {
@@ -49,40 +32,56 @@ HTTPResponse* SharedServerAPI::doGet( string uri ){
 	if (!client->connectToUrl(sharedURL)){
 		return NULL;
 	}
-	RequestBuilder* builder = RequestBuilder().GET()->setUri(uri);
+	RequestBuilder* builder = new RequestBuilder();
+	builder = (RequestBuilder*)builder->GET()->setUri(uri);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
-	return client->sendRequest(theRequest);
+	delete builder;
+	HTTPResponse* response = client->sendRequest(theRequest);
+	delete theRequest;
+	return response;
 }
 
 HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
 	if (!client->connectToUrl(sharedURL)){
-		return NULL;
+			return NULL;
 	}
-	RequestBuilder* builder = RequestBuilder().POST()->setUri(uri)->setBody(body);
+	RequestBuilder* builder = new RequestBuilder();
+	builder = (RequestBuilder*)builder->POST()->setUri(uri)->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
-	return client->sendRequest(theRequest);
+	delete builder;
+	HTTPResponse* response = client->sendRequest(theRequest);
+	delete theRequest;
+	return response;
 }
 
 HTTPResponse* SharedServerAPI::doPut(string uri, string body){
 	if (!client->connectToUrl(sharedURL)){
 		return NULL;
 	}
-	RequestBuilder* builder = RequestBuilder().PUT()->setUri(uri)->setBody(body);
+	RequestBuilder* builder = new RequestBuilder();
+	builder = (RequestBuilder*)builder->PUT()->setUri(uri)->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
-	return client->sendRequest(theRequest);
+	delete builder;
+	HTTPResponse* response = client->sendRequest(theRequest);
+	delete theRequest;
+	return response;
 }
 
 HTTPResponse* SharedServerAPI::doDelete(string uri){
 	if (!client->connectToUrl(sharedURL)){
 		return NULL;
 	}
-	RequestBuilder* builder = RequestBuilder().DELETE()->setUri(uri);
+	RequestBuilder* builder = new RequestBuilder();
+	builder = (RequestBuilder*)builder->DELETE()->setUri(uri);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
-	return client->sendRequest(theRequest);
+	delete builder;
+	HTTPResponse* response = client->sendRequest(theRequest);
+	delete theRequest;
+	return response;
 }
 
 Json::Value SharedServerAPI::setObject(string url,string body){
@@ -97,7 +96,7 @@ Json::Value SharedServerAPI::setObject(string url,string body){
 	else {
 		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
 	}
-
+	delete response;
 	return res;
 }
 
@@ -112,7 +111,7 @@ Json::Value SharedServerAPI::updateObject(string url,string body){
 	else {
 		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
 	}
-
+	delete response;
 	return res;
 }
 
@@ -127,7 +126,7 @@ Json::Value SharedServerAPI::deleteObject(string url){
 	else {
 		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
 	}
-
+	delete response;
 	return res;
 }
 
@@ -135,13 +134,14 @@ Json::Value SharedServerAPI::deleteObject(string url){
 Json::Value SharedServerAPI::getSkills(){
 	HTTPResponse* response = doGet("/skills");
 	Json::Value res = JSONUtils::stringToJSON(response->getBody());
+	delete response;
 	return res["skills"];
 }
 
 Json::Value SharedServerAPI::getSkill(string name){
 	HTTPResponse* response = doGet("/skills");
 	Json::Value body = JSONUtils::stringToJSON(response->getBody());
-
+	delete response;
 	if (body.isMember("error") || !body.isMember("skills")){
 		Json::Value error;
 		error["error"] = "error on list skills";
@@ -179,12 +179,14 @@ Json::Value SharedServerAPI::updateSkill(string name,string description, string 
 Json::Value SharedServerAPI::getJobPositions(){
 	HTTPResponse* response = doGet("/job_position");
 	Json::Value body = JSONUtils::stringToJSON(response->getBody());
+	delete response;
 	return body["job_positions"];
 }
 
 Json::Value SharedServerAPI::getJobPosition(string name){
 	HTTPResponse* response = doGet("/job_positions");
 	Json::Value body = JSONUtils::stringToJSON(response->getBody());
+	delete response;
 	Json::Value positions = body["job_positions"];
 
 	Json::Value pos = JSONUtils::findValue(positions,"name",name);

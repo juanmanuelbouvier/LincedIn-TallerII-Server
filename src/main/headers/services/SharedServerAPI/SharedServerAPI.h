@@ -13,21 +13,15 @@ private:
 	ServerClient* client;
 	string sharedURL;
 
-	SharedServerAPI();
 	Json::Value setObject(string url,string body);
 	Json::Value updateObject(string url,string body);
 	Json::Value deleteObject(string url);
 
-	static SharedServerAPI* instaceAPI;
 
 public:
-
-	//Singleton
-	static SharedServerAPI* getInstance();
-	static void deleteInstance();
+	SharedServerAPI();
 
 	// API Rest
-
 	Json::Value getSkills();
 	Json::Value getSkill(string name);
 	Json::Value setSkill(string name,string description, string category);

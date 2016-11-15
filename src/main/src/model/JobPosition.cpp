@@ -4,7 +4,8 @@
 namespace std {
 
 JobPosition::JobPosition(string name) {
-	Json::Value job = SharedServerAPI::getInstance()->getJobPosition(name);
+	SharedServerAPI shared;
+	Json::Value job = shared.getJobPosition(name);
 	if ( job.isObject()  && job.isMember("error") ){
 		return;
 	}
@@ -14,7 +15,8 @@ JobPosition::JobPosition(string name) {
 }
 
 JobPosition JobPosition::create(Json::Value data){
-	Json::Value res = SharedServerAPI::getInstance()->setJobPosition(
+	SharedServerAPI shared;
+	Json::Value res = shared.setJobPosition(
 			data["name"].asString(),
 			data["description"].asString(),
 			data["category"].asString()
@@ -26,7 +28,8 @@ JobPosition JobPosition::create(Json::Value data){
 }
 
 bool JobPosition::exist(string name_position){
-	Json::Value position = SharedServerAPI::getInstance()->getJobPosition(name_position);
+	SharedServerAPI shared;
+	Json::Value position = shared.getJobPosition(name_position);
 	if (position.isObject() && position.isMember("error")){
 		return false;
 	}
@@ -45,7 +48,8 @@ string JobPosition::getCategory(){
 }
 
 bool JobPosition::setName(string new_name){
-	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(new_name,description,category);
+	SharedServerAPI shared;
+	Json::Value res = shared.updateJobPosition(new_name,description,category);
 	if (not (res.isObject()  && res.isMember("error"))){
 		name = new_name;
 		return true;
@@ -55,7 +59,8 @@ bool JobPosition::setName(string new_name){
 }
 
 bool JobPosition::setDescription(string new_description){
-	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(new_description,description,category);
+	SharedServerAPI shared;
+	Json::Value res = shared.updateJobPosition(new_description,description,category);
 	if (not (res.isObject()  && res.isMember("error"))){
 		description = new_description;
 		return true;
@@ -65,8 +70,8 @@ bool JobPosition::setDescription(string new_description){
 }
 
 bool JobPosition::setCategory(string new_category){
-
-	Json::Value res = SharedServerAPI::getInstance()->updateJobPosition(description,description,new_category);
+	SharedServerAPI shared;
+	Json::Value res = shared.updateJobPosition(description,description,new_category);
 	if (not (res.isObject()  && res.isMember("error"))){
 		category = new_category;
 		return true;
@@ -76,7 +81,8 @@ bool JobPosition::setCategory(string new_category){
 }
 
 bool JobPosition::delet(){
-	Json::Value res = SharedServerAPI::getInstance()->deleteJobPosition(name,category);
+	SharedServerAPI shared;
+	Json::Value res = shared.deleteJobPosition(name,category);
 	if (res.isMember("ok"))
 		return true;
 	return false;
