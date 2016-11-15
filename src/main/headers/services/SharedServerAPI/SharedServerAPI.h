@@ -30,7 +30,7 @@ public:
 	Json::Value getJobPositions();
 	Json::Value getJobPosition(string name);
 	Json::Value setJobPosition(string name,string description, string category);
-	Json::Value updateJobPosition(string name,string description, string category);
+	Json::Value updateJobPosition(string name,string new_name,string description,string category,string new_category);
 	Json::Value deleteJobPosition(string name,string category);
 
 	HTTPResponse* doGet( string uri );

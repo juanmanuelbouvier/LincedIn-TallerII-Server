@@ -1,5 +1,8 @@
 #include <model/JobPosition.h>
 #include <services/SharedServerAPI/SharedServerAPI.h>
+#include <exception/JobException.h>
+
+#include <iostream>
 
 namespace std {
 
@@ -21,8 +24,8 @@ JobPosition JobPosition::create(Json::Value data){
 			data["description"].asString(),
 			data["category"].asString()
 			);
-	if (not (res.isObject()  && res.isMember("error"))){
-		return JobPosition(data["name"].asString());
+	if (res.isObject()  && res.isMember("error")){
+		throw new JobException("error on create job position");
 	}
 	return JobPosition(data["name"].asString());
 }
@@ -49,7 +52,7 @@ string JobPosition::getCategory(){
 
 bool JobPosition::setName(string new_name){
 	SharedServerAPI shared;
-	Json::Value res = shared.updateJobPosition(new_name,description,category);
+	Json::Value res = shared.updateJobPosition(name,new_name,description,category,"");
 	if (not (res.isObject()  && res.isMember("error"))){
 		name = new_name;
 		return true;
@@ -60,7 +63,7 @@ bool JobPosition::setName(string new_name){
 
 bool JobPosition::setDescription(string new_description){
 	SharedServerAPI shared;
-	Json::Value res = shared.updateJobPosition(new_description,description,category);
+	Json::Value res = shared.updateJobPosition(name,"",new_description,category,"");
 	if (not (res.isObject()  && res.isMember("error"))){
 		description = new_description;
 		return true;
@@ -71,7 +74,7 @@ bool JobPosition::setDescription(string new_description){
 
 bool JobPosition::setCategory(string new_category){
 	SharedServerAPI shared;
-	Json::Value res = shared.updateJobPosition(description,description,new_category);
+	Json::Value res = shared.updateJobPosition(name,"",description,category,new_category);
 	if (not (res.isObject()  && res.isMember("error"))){
 		category = new_category;
 		return true;

@@ -38,4 +38,3 @@ TEST(JobPositionTest, JobPositionGeneralTest){
 
 	EXPECT_TRUE(job.delet());
 }
-

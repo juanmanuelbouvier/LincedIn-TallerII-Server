@@ -56,7 +56,7 @@ void HTTPRequest::generateRawMessage(){
 
 	//Optionally a message-body
 	if (body.length() > 0) {
-		httpMessage += "Content-Length:" + body.length() + HTTP_CRLF;
+		httpMessage += "Content-Length:" + to_string(body.length()) + HTTP_CRLF;
 		//An empty line (i.e., a line with nothing preceding the CRLF) indicating the end of the header fields
 		httpMessage += HTTP_CRLF;
 		httpMessage +=  body;

@@ -34,7 +34,7 @@ User User::create( Json::Value data ) {
 	userDB["skills_names"] = data["skills_names"];
 	userDB["jobs"] = data["jobs"];
 	userDB["education"] = data["education"];
-	userDB["recommendations_received"] = data["recommendations_received"];
+	userDB["recommendations_received"] = Json::arrayValue;//data["recommendations_received"];
 
 	userDB["password"] = StringUtils::passwordEncrypt(data["password"].toStyledString());
 	int now = DateUtils::timestamp();
@@ -145,10 +145,11 @@ User::User(string user_id) {
 	date_of_birth = userDB["date_of_birth"];
 	profile_picture = userDB["profile_picture"];
 
-	if (userDB.isMember("skills_names")){
-		Json::Value skills_name = userDB["skills_names"];
+	if (userDB.isMember("skills")){
+		Json::Value skills = userDB["skills"];
 		for( Json::ValueIterator itr = skills_name.begin() ; itr != skills_name.end() ; itr++ ) {
-			string skill_name = skills_name[itr.index()].toStyledString();
+			Json::Value = skill_data = skills[itr.index()];
+			string skill_name = skill_data["name"].toStyledString();
 			try{
 				Skill skill = Skill(skill_name);
 				skills.push_back(skill);

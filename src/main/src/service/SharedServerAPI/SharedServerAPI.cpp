@@ -47,7 +47,7 @@ HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
 			return NULL;
 	}
 	RequestBuilder* builder = new RequestBuilder();
-	builder = (RequestBuilder*)builder->POST()->setUri(uri)->setBody(body);
+	builder = (RequestBuilder*)builder->POST()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
@@ -61,7 +61,7 @@ HTTPResponse* SharedServerAPI::doPut(string uri, string body){
 		return NULL;
 	}
 	RequestBuilder* builder = new RequestBuilder();
-	builder = (RequestBuilder*)builder->PUT()->setUri(uri)->setBody(body);
+	builder = (RequestBuilder*)builder->PUT()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
@@ -90,7 +90,7 @@ Json::Value SharedServerAPI::setObject(string url,string body){
 
 	Json::Value res;
 
-	if (response->getCode() == 200){
+	if (response->getCode() == 201){
 		res["ok"] = "OK";
 	}
 	else {
@@ -208,8 +208,10 @@ Json::Value SharedServerAPI::setJobPosition(string name,string description, stri
 }
 
 
-Json::Value SharedServerAPI::updateJobPosition(string name,string description,string category){
-	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\", \"category\":\""+category +"\" }";
+Json::Value SharedServerAPI::updateJobPosition(string name,string new_name,string description,string category,string new_category){
+	string n_name = new_name.empty()? name : new_name;
+	string n_category = new_category.empty()? category : new_category;
+	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ n_name +"\", \"category\":\""+n_category +"\" }";
 	string url = "/job_positions/categories/"+category+"/"+name;
 
 	return updateObject(url,body);
