@@ -3,7 +3,7 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <utils/PathUtils.h>
 #include <model/Chat.h>
-//#include <model/User.h>
+#include <model/User.h>
 #include <utils/JSONUtils.h>
 
 Json::Value _createChat(string id, string name, string message, int time) {
@@ -39,19 +39,30 @@ HTTPResponse* _chatWithUser(HTTPRequest* request);
 HTTPResponse* _online();
 HTTPResponse* _chats();
 
+
 HTTPResponse* ChatHandler::handle(HTTPRequest* http_request) {
+	/*
+	string token = http_request->getFromHeader("Access-Token");
+	if ( !AccessTokenUtil::isValidToken(token) ) {
+		return ResponseBuilder::createErrorResponse(400,"PERMISSION DENIED");
+	}
+
+	User user = AccessTokenUtil::userByToken(token);
+	*/
 	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat") && http_request->isGET()){
+		//return getChatsFrom(user);
 		return _chats();
 
 	}
 
 	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/online") && http_request->isGET()) {
+		//return getOnlineFriendsFrom(user);
 		return _online();
-
 	}
 
 	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/:user_id")) {
-		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/chat/:user_id");
+		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/chat/:chat_id");
+		//return handleChat(path["chat_id"]);
 		return _chatWithUser(http_request);
 	}
 

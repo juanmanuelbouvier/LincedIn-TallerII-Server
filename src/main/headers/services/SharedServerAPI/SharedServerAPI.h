@@ -13,6 +13,7 @@ private:
 	ServerClient* client;
 	string sharedURL;
 
+	Json::Value processResponse(HTTPResponse* response, int expectedCode);
 	Json::Value setObject(string url,string body);
 	Json::Value updateObject(string url,string body);
 	Json::Value deleteObject(string url);

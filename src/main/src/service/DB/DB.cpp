@@ -24,6 +24,24 @@ bool DB::open() {
 	return true;
 }
 
+bool DB::write(string action) {
+	leveldb::Status status = db->Write(leveldb::WriteOptions(), &batchWorker);
+	if ( !status.ok() ) {
+		Log("Cannot " + action + " in '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),WARNING);
+		return false;
+	}
+	return true;
+}
+
+bool DB::Delete(string key) {
+	if (!opened || !exist(key)) {
+		return false;
+	}
+	leveldb::WriteOptions writeOptions;
+	batchWorker.Delete(key);
+	return write("delete key: " + key);
+}
+
 bool DB::storeJSON( string key, Json::Value json) {
 	return store(key, JSONUtils::JSONToString(json));
 }
@@ -33,15 +51,15 @@ bool DB::store( string key, string value) {
 		return false;
 	}
 	leveldb::WriteOptions writeOptions;
-	leveldb::Status status = db->Put(writeOptions, key, value);
-	if ( !status.ok() ) {
-		Log("Cannot store key: " + key + " in '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),WARNING);
-		return false;
-	}
-	return true;
+	batchWorker.Put(key,value);
+	return write("store key: " + key);
 }
 
-string DB::get( string key ){
+bool DB::exist(string key) {
+	return !get(key).empty();
+}
+
+string DB::get( string key ) {
 	string returnValue = "";
 	if (!opened){
 		return "";
@@ -60,12 +78,16 @@ Json::Value DB::getJSON( string key ){
 	if (returnJSON.empty()){
 		root["error"] = "not find key in DB";
 	} else {
-		Json::Reader* reader = new Json::Reader();
+		root = JSONUtils::stringToJSON(returnJSON);
+		if ( root.isMember("error") ) {
+			root["error"] = "error on parse value of key.";
+		}
+		/*Json::Reader* reader = new Json::Reader();
 		bool parsingSuccessful = reader->parse( returnJSON.c_str(), root );
 		if (!parsingSuccessful){
 			root["error"] = "error on parse value of key.";
 		}
-		delete reader;
+		delete reader;*/
 	}
 
 	return root;

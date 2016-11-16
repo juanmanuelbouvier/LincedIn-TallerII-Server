@@ -197,7 +197,29 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  
+    post:
+      summary: Crear chat
+      description: |
+        **Crear chat con dos o mas participantes.***
+      parameters:
+        - description: participantes
+          in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              time_stamp:
+                type: integer
+      responses:
+        200:
+          description: Chat creado
+        500:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error' 
   
   /chat/online:
     parameters:
@@ -250,7 +272,7 @@ paths:
             $ref: '#/definitions/Error'
   
   
-  /chat/{destination_user_id}:
+  /chat/{chat_id}:
     parameters:
       - description: Token de acceso
         in: header

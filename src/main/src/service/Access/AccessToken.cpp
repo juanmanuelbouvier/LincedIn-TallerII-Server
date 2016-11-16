@@ -11,7 +11,9 @@ const jwt_alg_t AccessToken::ALGORITHM = JWT_ALG_HS256;
 #define TOKEN_VALUE "token_data"
 
 string jwt_get_body( jwt* JsonWebToken ){
-	string dataDecoded = string(jwt_dump_str(JsonWebToken,0));
+	char* jwt_dump_c = jwt_dump_str(JsonWebToken,0);
+	string dataDecoded = string(jwt_dump_c);
+	free(jwt_dump_c);
 	return dataDecoded.substr(dataDecoded.find("}.") + 1);
 }
 
@@ -48,8 +50,10 @@ string AccessToken::encode( Json::Value json ) {
 			writer.omitEndingLineFeed();
 			string plainJSON = writer.write(json);
 			if ( jwt_add_grants_json(JsonWebToken,plainJSON.c_str()) == 0){
-				string token = string( jwt_encode_str(JsonWebToken) );
+				char* token_c = jwt_encode_str(JsonWebToken);
+				string token = string( token_c );
 				jwt_free(JsonWebToken);
+				free(token_c);
 				return token;
 			}
 		}

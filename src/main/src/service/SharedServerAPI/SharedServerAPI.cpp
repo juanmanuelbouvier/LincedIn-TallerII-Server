@@ -84,50 +84,35 @@ HTTPResponse* SharedServerAPI::doDelete(string uri){
 	return response;
 }
 
-Json::Value SharedServerAPI::setObject(string url,string body){
-
-	HTTPResponse* response = doPost(url,body);
-
+Json::Value SharedServerAPI::processResponse(HTTPResponse* response, int expectedCode) {
 	Json::Value res;
 
-	if (response->getCode() == 201){
+	if (response->getCode() == expectedCode){
 		res["ok"] = "OK";
-	}
-	else {
+	} else {
 		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
 	}
 	delete response;
 	return res;
+}
+
+Json::Value SharedServerAPI::setObject(string url,string body){
+
+	HTTPResponse* response = doPost(url,body);
+
+	return processResponse(response,201);
 }
 
 Json::Value SharedServerAPI::updateObject(string url,string body){
 	HTTPResponse* response = doPut(url , body);
 
-	Json::Value res;
-
-	if (response->getCode() == 200){
-		res["ok"] = "OK";
-	}
-	else {
-		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
-	}
-	delete response;
-	return res;
+	return processResponse(response,200);
 }
 
 Json::Value SharedServerAPI::deleteObject(string url){
 	HTTPResponse* response = doDelete(url);
 
-	Json::Value res;
-
-	if (response->getCode() == 204){
-		res["ok"] = "OK";
-	}
-	else {
-		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
-	}
-	delete response;
-	return res;
+	return processResponse(response,204);
 }
 
 //skills

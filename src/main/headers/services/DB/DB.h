@@ -4,6 +4,7 @@
 #include <extern/json.h>
 #include <string>
 #include <leveldb/db.h>
+#include <leveldb/write_batch.h>
 
 using namespace std;
 
@@ -14,8 +15,11 @@ private:
 
 	leveldb::DB* db;
 	leveldb::Options options;
+	leveldb::WriteBatch batchWorker;
 
 	bool opened;
+
+	bool write(string action);
 
 public:
 	DB( string DBName );
@@ -25,8 +29,12 @@ public:
 	bool store( string key, string value);
 	bool storeJSON( string key, Json::Value json);
 
-	string get( string key );
-	Json::Value getJSON( string key );
+	bool Delete(string key);
+
+	string get(string key);
+	Json::Value getJSON(string key);
+
+	bool exist(string key);
 
 	virtual ~DB();
 };

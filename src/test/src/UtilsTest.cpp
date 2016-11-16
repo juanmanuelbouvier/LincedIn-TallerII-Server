@@ -284,4 +284,26 @@ TEST(UtilsTest, stringToJSON) {
 	Json::Value res = JSONUtils::stringToJSON(val.toStyledString());
 
 	EXPECT_EQ(val,res);
+
+	Json::Value fail = JSONUtils::stringToJSON("Invalid Json Value");
+	EXPECT_TRUE(fail["error"].isString());
+}
+
+TEST(UtilsTest, JSONValueInArray) {
+	Json::Value array(Json::arrayValue);
+	array.append(1);
+	array.append(2);
+	array.append(3);
+	array.append(4);
+	array.append(5);
+
+	int res = JSONUtils::isValueInArray(4,array);
+	EXPECT_EQ(res,3);
+
+	int fail = JSONUtils::isValueInArray(0,array);
+	EXPECT_EQ(fail,-1);
+
+	Json::Value object;
+	int fail_array = JSONUtils::isValueInArray("tomi",object);
+	EXPECT_EQ(fail_array,-1);
 }

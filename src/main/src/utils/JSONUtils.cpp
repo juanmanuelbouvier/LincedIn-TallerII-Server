@@ -13,12 +13,14 @@ string JSONUtils::JSONToString( Json::Value json ) {
 Json::Value JSONUtils::stringToJSON(string json){
 	Json::Value val;
 	Json::Reader reader;
-	bool parsedSuccess = reader.parse(json.c_str(),val);
-
-	if (not parsedSuccess){
-		val["error"] = "error on parse string";
+	if ( !json.empty() ) {
+		bool parsedSuccess = reader.parse(json.c_str(),val);
+		if (not parsedSuccess){
+			val["error"] = "Reader. error on parse string";
+		}
+	} else {
+		val["error"] = "Empty String. error on parse string";
 	}
-
 	return val;
 }
 

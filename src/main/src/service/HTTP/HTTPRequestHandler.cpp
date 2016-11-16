@@ -36,7 +36,7 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	ChatHandler* chatHandler = new ChatHandler();
 	addHandler("/chat", chatHandler );
 	addHandler("/chat/online", chatHandler );
-	addHandler("/chat/:user_id", chatHandler );
+	addHandler("/chat/:chat_id", chatHandler );
 
 
 	//addHandler("/search",);

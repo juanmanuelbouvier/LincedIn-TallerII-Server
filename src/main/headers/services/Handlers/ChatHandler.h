@@ -4,8 +4,12 @@
 #include "Handler.h"
 
 class ChatHandler : public Handler {
-public:
+private:
+	//HTTPResponse* getChatsFrom(User user);
+	//HTTPResponse* getOnlineFriendsFrom(User user);
+	//HTTPResponse* handleChat(User user, string chat_id);
 
+public:
 	ChatHandler(){};
 	HTTPResponse* handle(HTTPRequest* http_request);
 	virtual ~ChatHandler(){};
