@@ -9,7 +9,7 @@
 #include <services/DB/DBManager.h>
 #include <utils/ErrorMessage.h>
 
-namespace std {
+using namespace std;
 
 class User{
 private:
@@ -37,7 +37,5 @@ public:
 
 	virtual ~User();
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_SRC_MODEL_USER_H_ */

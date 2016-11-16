@@ -4,7 +4,7 @@
 #include <extern/json.h>
 #include <list>
 
-namespace std {
+using namespace std;
 
 class Education {
 
@@ -17,7 +17,5 @@ public:
 	static Json::Value listToArray(list<Education> education);
 	virtual ~Education();
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_HEADERS_MODEL_EDUCATION_H_ */

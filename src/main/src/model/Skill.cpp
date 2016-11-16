@@ -5,7 +5,7 @@
 #include <services/Logger/Logger.h>
 #include <iostream>
 
-namespace std {
+using namespace std;
 
 Skill::Skill(string name) {
 	SharedServerAPI shared;
@@ -128,4 +128,3 @@ Skill::~Skill() {
 
 }
 
-} /* namespace std */

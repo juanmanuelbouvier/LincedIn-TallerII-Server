@@ -160,6 +160,7 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/modeltest/EducationTest.cpp
 	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
 	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
+	${TEST_SOURCE}/modeltest/JobTest.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)

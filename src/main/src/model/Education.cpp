@@ -1,6 +1,6 @@
 #include <model/Education.h>
 
-namespace std {
+using namespace std;
 
 Education::Education(string start, string end, string school, string degree) {
 	this->start_date = start;
@@ -33,5 +33,3 @@ Json::Value Education::listToArray(list<Education> education){
 Education::~Education() {
 	// TODO Auto-generated destructor stub
 }
-
-} /* namespace std */

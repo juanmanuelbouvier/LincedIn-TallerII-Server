@@ -10,19 +10,6 @@ Job::Job(string date_since, string date_to, string company, string name_position
 	this->position = new JobPosition(name_position);
 }
 
-Job Job::create(string date_since, string date_to, string company, string name_position){
-
-	//buscar si existe el JobPosition
-	JobPosition* position = new JobPosition(name_position);
-	if (position == nullptr){
-		throw JobException("Error on create Job, not find JobPosition: " + name_position);
-	}
-
-	//save in db
-
-	return Job(date_since,date_to,company,name_position);
-}
-
 ErrorMessage Job::check(Json::Value job){
 	ErrorMessage error;
 	//date_since

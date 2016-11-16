@@ -6,7 +6,7 @@
 #include <utils/ErrorMessage.h>
 #include <list>
 
-namespace std {
+using namespace std;
 
 class Skill{
 private:
@@ -32,7 +32,5 @@ public:
 
 	virtual ~Skill();
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_SRC_SERVICE_OBJECTS_SKILL_H_ */

@@ -4,7 +4,7 @@
 #include <extern/json.h>
 #include <list>
 
-namespace std {
+using namespace std;
 
 class Recommendation{
 private:
@@ -19,7 +19,5 @@ public:
 	static Json::Value listToArray(list<Recommendation> recommendations);
 	virtual ~Recommendation();
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_HEADERS_MODEL_RECOMMENDATION_H_ */

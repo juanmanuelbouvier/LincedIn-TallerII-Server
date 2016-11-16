@@ -3,7 +3,7 @@
 
 #include <model/User.h>
 
-namespace std {
+using namespace std;
 
 class TokenUtils {
 public:
@@ -12,7 +12,5 @@ public:
 	static User userByToken(string token);
 	static string renovateToken(string token);
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_SRC_UTILS_TOKENUTILS_H_ */

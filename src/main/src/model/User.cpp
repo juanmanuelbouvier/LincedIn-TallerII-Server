@@ -11,7 +11,7 @@
 #define USER_DB "User"
 #define EMAIL_DB "Email"
 
-namespace std {
+using namespace std;
 
 User User::create( Json::Value data ) {
 
@@ -306,5 +306,3 @@ Json::Value User::asJSON(){
 User::~User() {
 
 }
-
-} /* namespace std */
