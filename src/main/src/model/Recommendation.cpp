@@ -1,6 +1,6 @@
 #include <model/Recommendation.h>
 
-namespace std {
+using namespace std;
 
 Recommendation::Recommendation(string recommender, string text, int timestamp){
 	this->recommender = recommender;
@@ -42,5 +42,3 @@ Json::Value Recommendation::listToArray(list<Recommendation> recommendations){
 Recommendation::~Recommendation() {
 	// TODO Auto-generated destructor stub
 }
-
-} /* namespace std */

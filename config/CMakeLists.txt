@@ -66,6 +66,7 @@ set (SOURCES
     ${APP_SOURCE}/utils/StringUtils.cpp
     ${APP_SOURCE}/utils/VectorUtils.cpp
     ${APP_SOURCE}/utils/JSONUtils.cpp
+    ${APP_SOURCE}/utils/TokenUtils.cpp
     ${APP_SOURCE}/utils/ErrorMessage.cpp
     
     ${APP_SOURCE}/settings/SettingManager.cpp
@@ -159,6 +160,7 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/modeltest/EducationTest.cpp
 	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
 	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
+	${TEST_SOURCE}/modeltest/JobTest.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)

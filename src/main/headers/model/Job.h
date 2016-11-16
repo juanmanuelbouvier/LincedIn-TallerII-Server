@@ -6,7 +6,7 @@
 #include <list>
 #include <utils/ErrorMessage.h>
 
-namespace std {
+using namespace std;
 
 class Job{
 private:
@@ -14,7 +14,6 @@ private:
 	JobPosition* position;
 public:
 	Job(string date_since, string date_to, string company, string name_position);
-	static Job create(string date_since, string date_to, string company, string name_position);
 	static ErrorMessage check(Json::Value job);
 	Json::Value asJSON();
 
@@ -22,7 +21,5 @@ public:
 
 	virtual ~Job();
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_SRC_MODEL_JOB_H_ */

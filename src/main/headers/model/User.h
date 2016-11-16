@@ -9,7 +9,7 @@
 #include <services/DB/DBManager.h>
 #include <utils/ErrorMessage.h>
 
-namespace std {
+using namespace std;
 
 class User{
 private:
@@ -20,6 +20,7 @@ private:
 	list<Recommendation> recommendations_received;
 	int register_timestamp,last_edit_timestamp;
 	static DB* getDB();
+	static DB* getEmailDB();
 public:
 	User(string user_id);
 
@@ -32,14 +33,9 @@ public:
 	static bool exist(string user_id);
 	static ErrorMessage check(Json::Value data);
 	static string getIdByEmail(string email );
-	static string generateSessionToken( string user_id );
-	static string userIdByToken( string token );
-	static bool validToken(string token);
 	static bool checkPassword( string user_id,string password );
 
 	virtual ~User();
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_SRC_MODEL_USER_H_ */
