@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
 
 	Server* server = new Server( setting->getServerPort() );
 
-	//TODO: Correr en otro hilo
 	server->start();
 
 	delete server;

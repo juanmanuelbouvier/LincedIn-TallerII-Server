@@ -7,13 +7,13 @@
 
 class SharedServerHandler : public Handler {
 public:
-	SharedServerHandler();
+	SharedServerHandler(){};
 
 	HTTPResponse* handle(HTTPRequest* http_request);
 
 	vector<string> getKnowURLs();
 
-	virtual ~SharedServerHandler();
+	virtual ~SharedServerHandler(){};
 };
 
 #endif /* SRC_MAIN_SERVICE_HANDLERS_SHAREDSERVERHANDLER_H_ */

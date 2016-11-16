@@ -8,11 +8,11 @@ class UserHandler : public Handler {
 private:
 	Json::Value _createUser(string user_id);
 public:
-	UserHandler();
+	UserHandler(){};
 
 	HTTPResponse* handle(HTTPRequest* http_request);
 
-	virtual ~UserHandler();
+	virtual ~UserHandler(){};
 };
 
 #endif /* SRC_MAIN_SERVICE_HANDLERS_USERHANDLER_H_ */

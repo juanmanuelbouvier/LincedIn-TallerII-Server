@@ -8,9 +8,6 @@
 
 using namespace std;
 
-UserHandler::UserHandler() {
-}
-
 HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
 	string method = http_request->getMethod();
@@ -79,7 +76,4 @@ Json::Value UserHandler::_createUser(string user_id) {
 		error["Error"] = e.what();
 		return error;
 	}
-}
-
-UserHandler::~UserHandler(){
 }

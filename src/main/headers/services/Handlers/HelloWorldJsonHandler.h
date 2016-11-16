@@ -5,11 +5,11 @@
 
 class HelloWorldJsonHandler : public Handler {
 public:
-	HelloWorldJsonHandler();
+	HelloWorldJsonHandler(){};
 
 	HTTPResponse* handle(HTTPRequest* http_request);
 
-	virtual ~HelloWorldJsonHandler();
+	virtual ~HelloWorldJsonHandler(){};
 };
 
 #endif /* SRC_MAIN_SERVICE_HANDLERS_HELLOWORLDJSONHANDLER_H_ */

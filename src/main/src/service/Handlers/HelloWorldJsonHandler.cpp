@@ -15,9 +15,6 @@
 
 using namespace std;
 
-HelloWorldJsonHandler::HelloWorldJsonHandler() {
-}
-
 HTTPResponse* HelloWorldJsonHandler::handle(HTTPRequest* http_request){
 	Json::Value event;
 	Json::Value vec(Json::arrayValue);
@@ -48,7 +45,4 @@ HTTPResponse* HelloWorldJsonHandler::handle(HTTPRequest* http_request){
 	builder = (ResponseBuilder*)builder->appendHeader("Content-type","application/json");
 	builder = (ResponseBuilder*)builder->setBody(toReturn);
 	return builder->build();
-}
-
-HelloWorldJsonHandler::~HelloWorldJsonHandler(){
 }

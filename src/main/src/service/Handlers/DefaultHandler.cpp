@@ -5,11 +5,6 @@
 
 using namespace std;
 
-DefaultHandler::DefaultHandler() {
-
-}
-
-
 HTTPResponse* DefaultHandler::handle(HTTPRequest* http_request){
 	string mensaje = "LincedIn App Server | 2016";
 	mensaje += "\n"
@@ -20,9 +15,5 @@ HTTPResponse* DefaultHandler::handle(HTTPRequest* http_request){
 	builder = (ResponseBuilder*)builder->appendHeader("Content-Type","text/plain");
 	builder = (ResponseBuilder*)builder->setBody(mensaje);
 	return builder->build();
-}
-
-DefaultHandler::~DefaultHandler() {
-	// TODO Auto-generated destructor stub
 }
 

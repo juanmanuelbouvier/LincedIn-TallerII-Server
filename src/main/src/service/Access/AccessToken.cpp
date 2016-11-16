@@ -3,7 +3,6 @@
 #include <services/Logger/Logger.h>
 #include <utils/JSONUtils.h>
 #include <exception/AccessException.h>
-
 #include <iostream>
 
 const char* AccessToken::KEY = "LincedInAppServer=genkidama";
@@ -32,13 +31,7 @@ Json::Value AccessToken::decode( string token ) {
 	string bodyToken = jwt_get_body(JsonWebToken);
 	jwt_free(JsonWebToken);
 
-	Json::Value dataJson;
-	stringstream jsonDecodeString_s(bodyToken);
-	jsonDecodeString_s >> dataJson;
-	return dataJson;
-
-	//TODO: When it fix, use it.
-	//return JSONUtils::stringToJSON(jsonDecodeString);
+	return JSONUtils::stringToJSON(bodyToken);
 
 }
 

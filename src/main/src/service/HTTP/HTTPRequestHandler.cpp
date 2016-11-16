@@ -64,7 +64,6 @@ HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 
 bool HTTPRequestHandler::isHandledRequest(HTTPRequest* http_request) {
 	string uri = http_request->getURI();
-	//TODO: View empty case
 	if (uri.empty() || matchPath(uri) != NOT_FOUND ){
 		return true;
 	}
@@ -99,6 +98,10 @@ bool HTTPRequestHandler::addHandler(string uri_path, Handler* handler) {
 }
 
 HTTPRequestHandler::~HTTPRequestHandler() {
+	for(map<string,Handler*>::iterator it = HTTPEndPointsHandlers.begin(); it != HTTPEndPointsHandlers.end(); it++) {
+	    Handler* handler = it->second;
+	    delete handler;
+	}
 	HTTPEndPointsHandlers.clear();
 }
 

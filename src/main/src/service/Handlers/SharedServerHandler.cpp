@@ -6,9 +6,6 @@
 
 #define PREFIX "/shared"
 
-SharedServerHandler::SharedServerHandler() {
-}
-
 vector<string> SharedServerHandler::getKnowURLs(){
 	SharedServerAPI shared;
 	vector<string> gets = shared.getsURL();
@@ -24,8 +21,4 @@ HTTPResponse* SharedServerHandler::handle(HTTPRequest* http_request){
 	Log("SharedServerHandler: call shared with uri: " + uri,INFO);
 	SharedServerAPI shared;
 	return shared.doGet(uri);
-}
-
-SharedServerHandler::~SharedServerHandler(){
-
 }

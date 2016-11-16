@@ -2,6 +2,7 @@
 #include <services/HTTP/Message/HTTPRequest.h>
 #include <services/HTTP/Message/HTTPResponse.h>
 #include <services/Logger/Logger.h>
+#include <exception/AppServerException.h>
 
 volatile static bool SERVER_RUNNING;
 
@@ -15,9 +16,7 @@ Server::Server(int connectionPort) {
 	mongooseConnection = mg_bind_opt(&eventManager, port.c_str(), this->eventHandler, bindOptions);
 
 	if (mongooseConnection == NULL){
-		//TODO: Lanzar Excepcion, no se puede continuar.
-		Log("Failed to create Server in port: " + port + " [check that it is not running]", ERROR );
-		return;
+		throw AppServerException( Log("Failed to create Server in port: " + port + " [check that it is not running]", ERROR ) );
 	} else {
 		settingUpConnection();
 	}
@@ -40,24 +39,12 @@ void Server::settingUpConnection(){
 
 	documentRoot = "resources/";
 
-	//TODO: Para que el server no sea tan responsable podria hacerse externamente y generarlo con un set o en el propio init.
 	HTTPHandler = new HTTPRequestHandler();
 
 }
 
 void Server::eventHandler(struct mg_connection* connection, int eventCode, void* eventData){
-	//Por el momento solo manejamos request del tipo http.
-
-	//TODO: Si trabajamos solo con HTTP hay que ver este link [https://docs.cesanta.com/mongoose/master/#/c-api/http_server.h/mg_register_http_endpoint.md/]
-	// REV: features/httendpoints implementa el TODO. No es util por como matchea el uri. Se implementa un algoritmo propio que resuelve los, mediante el URI, a que handler dirigirse.
 	if (eventCode == MG_EV_HTTP_REQUEST){
-		/*
-		 * TODO:
-		 * 	- Se recibe un request. Hay que transformar el request de Mongoose en un objeto propio.
-		 * 	- Un handler (no importa), procesara el request.
-		 * 	- El Handler generara un response que se enviara con mg_send_head y mg_printf
-		 * */
-
 		Server* thisServer = (Server*)connection->user_data;
 
 		HTTPRequest* theRequest = new HTTPRequest((struct http_message *)eventData);
@@ -68,9 +55,6 @@ void Server::eventHandler(struct mg_connection* connection, int eventCode, void*
 				map<string,string> emptyHeaders;
 				mensaje = new HTTPResponse("400","ERROR","",emptyHeaders);
 			}
-
-			//TODO 2: El status code y los extra headers tienen que venir desde el handler
-			//mg_send_head(connection, 200, mensaje.length(), "HTTP/1.1");
 			mg_printf(connection, "%s",mensaje->toString().c_str());
 
 		} else {

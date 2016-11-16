@@ -5,11 +5,11 @@
 
 class DefaultHandler : public Handler {
 public:
-	DefaultHandler();
+	DefaultHandler(){};
 
 	HTTPResponse* handle(HTTPRequest* http_request);
 
-	virtual ~DefaultHandler();
+	virtual ~DefaultHandler(){};
 };
 
 #endif /* SRC_MAIN_SERVICE_HANDLERS_DEFAULTHANDLER_H_ */

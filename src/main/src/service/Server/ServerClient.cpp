@@ -11,7 +11,6 @@ ServerClient::ServerClient() {
 }
 
 HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
-	//printf("SEND REQUEST TO:\n%s\n",request->toString().c_str() );
 	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
 	sendingRequest = true;
 	while (sendingRequest) {
@@ -21,8 +20,6 @@ HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 }
 
 void ServerClient::handleHTTPReply(void* data){
-	//TODO: Change with http response
-
 	struct http_message* message = (struct http_message *)data;
 	response = new HTTPResponse(message);
 	sendingRequest = false;
@@ -31,7 +28,6 @@ void ServerClient::handleHTTPReply(void* data){
 
 
 void ServerClient::eventHandler(mg_connection* connection, int event_code, void* data) {
-	// FIXME: No esta llegando el reply
 	if (event_code == MG_EV_HTTP_REPLY) {
 		ServerClient* clientConnection = (ServerClient*) connection->user_data;
 		clientConnection->handleHTTPReply(data);
