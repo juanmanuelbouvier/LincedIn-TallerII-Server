@@ -4,13 +4,12 @@
 #include <utils/StringUtils.h>
 #include <iostream>
 #include <services/Logger/Logger.h>
-#include <services/Access/AccessToken.h>
 #include <exception/SkillException.h>
 #include <exception/UserException.h>
 #include <exception/JobException.h>
 
 #define USER_DB "User"
-#define TOKEN_VALID_SECONDS 10*24*60 // 10 days
+#define EMAIL_DB "Email"
 
 namespace std {
 
@@ -29,12 +28,13 @@ User User::create( Json::Value data ) {
 	userDB["last_name"] = data["last_name"];
 	userDB["description"] = data["description"];
 	userDB["email"] = data["email"];
+	getEmailDB()->store(data["email"].asString(),user_id);
 	userDB["date_of_birth"] = data["date_of_birth"];
 	userDB["profile_picture"] = data["profile_picture"];
 	userDB["skills_names"] = data["skills_names"];
 	userDB["jobs"] = data["jobs"];
 	userDB["education"] = data["education"];
-	userDB["recommendations_received"] = Json::arrayValue;//data["recommendations_received"];
+	userDB["recommendations_received"] = Json::arrayValue;
 
 	userDB["password"] = StringUtils::passwordEncrypt(data["password"].toStyledString());
 	int now = DateUtils::timestamp();
@@ -50,7 +50,8 @@ User User::create( Json::Value data ) {
 }
 
 bool User::delet( string user_id){
-	//getDB()->delete(user_id);
+	if(getDB()->Delete(user_id))
+		return true;
 
 	return false;
 }
@@ -74,6 +75,10 @@ ErrorMessage User::update(string user_id,Json::Value data){
 
 	if (!getDB()->storeJSON(user_id,data)){
 		error.addError(user_id,"Error on store data in DB");
+	}
+	if (data["email"] != userDB["email"]){
+		getEmailDB()->Delete(userDB["email"].asString());
+		getEmailDB()->store(data["email"].asString(),user_id);
 	}
 
 	return error;
@@ -199,6 +204,12 @@ DB* User::getDB(){
 	return DBManager::getDB(USER_DB);
 }
 
+
+DB* User::getEmailDB(){
+	return DBManager::getDB(EMAIL_DB);
+}
+
+
 ErrorMessage User::check(Json::Value data){
 	ErrorMessage error;
 
@@ -255,37 +266,7 @@ bool User::exist(string user_id){
 
 
 string User::getIdByEmail(string email ){
-	return "";
-	//TODO
-}
-
-string User::generateSessionToken( string user_id ){
-	Json::Value token;
-	token["user_id"] = user_id;
-	token["timestamp"] = DateUtils::timestamp();
-
-	return AccessToken::encode(token);
-}
-
-bool User::validToken(string token){
-	Json::Value decodeToken = AccessToken::decode(token);
-	int now = DateUtils::timestamp();
-	int token_timestamp = decodeToken["timestamp"].asInt();
-
-	if (now - token_timestamp <= TOKEN_VALID_SECONDS ){
-		return true;
-	}
-	return false;
-}
-
-string User::userIdByToken( string token ){
-
-	if (!validToken(token)){
-		return "";
-	}
-
-	Json::Value decodeToken = AccessToken::decode(token);
-	return decodeToken["user_id"].asString();
+	return getEmailDB()->get(email);
 }
 
 bool User::checkPassword( string user_id,string password ){
