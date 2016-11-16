@@ -15,7 +15,7 @@ Job Job::create(string date_since, string date_to, string company, string name_p
 	//buscar si existe el JobPosition
 	JobPosition* position = new JobPosition(name_position);
 	if (position == nullptr){
-		throw new JobException("Error on create Job, not find JobPosition: " + name_position);
+		throw JobException("Error on create Job, not find JobPosition: " + name_position);
 	}
 
 	//save in db

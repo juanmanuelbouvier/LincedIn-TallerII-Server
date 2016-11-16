@@ -12,7 +12,7 @@ Skill::Skill(string name) {
 	Json::Value skill = shared.getSkill(name);
 	if (skill.isObject()  && skill.isMember("error")){
 		cout << Log("Skill.cpp::" + to_string(__LINE__) + ". Error on find skill en Shared Server " + skill["error"].asString() ,WARNING) << endl;
-		throw new SkillException("Error on create Skill");
+		throw SkillException("Error on create Skill");
 	}
 	this->name = skill["name"].asString();
 	this->category = skill["category"].asString();
@@ -31,7 +31,7 @@ Skill Skill::create(Json::Value data){
 
 	if (res.isObject()  && res.isMember("error")){
 		cout << Log("Skill.cpp::" + to_string(__LINE__) + ". Error on create skill in Shared Server " + res["error"].asString() ,WARNING) << endl;
-		throw new SkillException("Error on create Skill");
+		throw SkillException("Error on create Skill");
 	}
 	return Skill(data["name"].asString());
 }

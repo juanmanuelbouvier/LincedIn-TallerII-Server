@@ -20,7 +20,7 @@ User User::create( Json::Value data ) {
 
 	if (!error.empty()){
 		cout << Log("User.cpp::" + to_string(__LINE__) + ". Error on create skill, check data ",ERROR) << endl;
-		throw new UserException("Error on create user, check data. Summary: " + error.summary());
+		throw UserException("Error on create user, check data. Summary: " + error.summary());
 	}
 
 	string user_id = data["id"].asString();
@@ -46,7 +46,7 @@ User User::create( Json::Value data ) {
 	}
 
 	Log("Chat.cpp::" + to_string(__LINE__) + ". Cannot store user in DB",ERROR);
-	throw new UserException("Error on store user in DB");
+	throw UserException("Error on store user in DB");
 }
 
 bool User::delet( string user_id){
@@ -102,7 +102,7 @@ User::User(string user_id) {
 		skills.push_back(c);
 	} catch (SkillException& e){
 		cout << Log("User.cpp::" + to_string(__LINE__) + ". create skill " + e.what() ,ERROR) << endl;
-		throw new UserException("Error on create skill");
+		throw UserException("Error on create skill");
 	}
 
 	try {
@@ -116,7 +116,7 @@ User::User(string user_id) {
 		jobs.push_back(current);
 	} catch (JobException& je){
 		cout << Log("User.cpp::" + to_string(__LINE__) + ". Error on create job" + je.what() ,ERROR) << endl;
-		throw new UserException("Error on create Job");
+		throw UserException("Error on create Job");
 	}
 
 
@@ -133,7 +133,7 @@ User::User(string user_id) {
 	Json::Value userDB = getDB()->getJSON(user_id);
 	if (userDB.isMember("error")){
 		cout << Log("User.cpp::" + to_string(__LINE__) + ". Error on create user " + userDB["error"].toStyledString() ,ERROR) << endl;
-		throw new UserException("User invalid.");
+		throw UserException("User invalid.");
 	}
 
 	id = user_id;
@@ -155,7 +155,7 @@ User::User(string user_id) {
 				skills.push_back(skill);
 			} catch (SkillException& e){
 				cout << Log("User.cpp::" + to_string(__LINE__) + ". create skill " + skill_name + ". " + e.what() ,ERROR) << endl;
-					throw new UserException("Error on create skill " + skill_name);
+					throw UserException("Error on create skill " + skill_name);
 			}
 		}
 	}
@@ -169,7 +169,7 @@ User::User(string user_id) {
 				jobs.push_back(job);
 			} catch (JobException& e){
 				cout << Log("User.cpp::" + to_string(__LINE__) + ". create job. " + e.what() ,ERROR) << endl;
-					throw new UserException("Error on create Job");
+					throw UserException("Error on create Job");
 			}
 		}
 	}

@@ -16,7 +16,7 @@ DB* Chat::getDB(){
 Chat::Chat( string chat_id ) {
 	Json::Value chat = getDB()->getJSON(chat_id);
 	if ( chat.isNull() ) {
-		throw new ChatException ( Log("Chat.cpp::"+ to_string(__LINE__) +". Chat (" + chat_id + ") Can not be created because it doesn't exist in the database",ERROR) );
+		throw ChatException ( Log("Chat.cpp::"+ to_string(__LINE__) +". Chat (" + chat_id + ") Can not be created because it doesn't exist in the database",ERROR) );
 	}
 	chatID = chat_id;
 	messages = chat["messages"];
@@ -37,7 +37,7 @@ Chat Chat::create( list<string> participants_id ) {
 			return Chat(id);
 		}
 	}
-	throw new ChatException(message);
+	throw ChatException(message);
 }
 
 bool Chat::check( list<string> participants ) {
