@@ -3,6 +3,16 @@
 
 using namespace std;
 
+Job::Job(string date_since, string date_to, string company, Json::Value position_data) {
+	if (!JobPosition::exist(position_data))
+		throw JobException("error on create job, position invalid");
+
+	this->date_since= date_since,
+	this->date_to = date_to;
+	this->company = company;
+	this->position = new JobPosition(position_data["name"].asString());
+}
+
 Job::Job(string date_since, string date_to, string company, string name_position) {
 	this->date_since= date_since,
 	this->date_to = date_to;

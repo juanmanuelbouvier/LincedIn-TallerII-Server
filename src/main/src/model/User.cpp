@@ -1,4 +1,5 @@
 #include <model/User.h>
+#include <model/Image.h>
 #include <utils/JSONUtils.h>
 #include <utils/DateUtils.h>
 #include <utils/StringUtils.h>
@@ -31,8 +32,13 @@ User User::create( Json::Value data ) {
 	userDB["email"] = data["email"];
 	getEmailDB()->store(data["email"].asString(),user_id);
 	userDB["date_of_birth"] = data["date_of_birth"];
-	userDB["profile_picture"] = data["profile_picture"];
-	userDB["skills_names"] = data["skills_names"];
+
+	//imagen en base 64, guardar url
+	if (data.isMember("profile_picture")){
+		userDB["profile_picture"] = Image::urlByBase64(data["profile_picture"].asString());
+	}
+
+	userDB["skills"] = data["skills"];
 	userDB["jobs"] = data["jobs"];
 	userDB["education"] = data["education"];
 	userDB["recommendations_received"] = Json::arrayValue;
@@ -57,6 +63,7 @@ bool User::delet( string user_id){
 
 	if(getDB()->Delete(user_id)){
 		getEmailDB()->Delete(data["email"].asString());
+		Image::delet(data["profile_picture"].asString());
 		return true;
 	}
 
@@ -80,9 +87,16 @@ ErrorMessage User::update(string user_id,Json::Value data){
 	data["last_edit_timestamp"] = DateUtils::timestamp();
 	data["password"] = userDB["password"];
 
+	if (data.isMember("profile_picture")){
+		//booro imagen anterior
+		Image::delet(userDB["profile_picture"].asString());
+		data["profile_picture"] = Image::urlByBase64(data["profile_picture"].asString());
+	}
+
 	if (!getDB()->storeJSON(user_id,data)){
 		error.addError(user_id,"Error on store data in DB");
 	}
+
 	if (data["email"] != userDB["email"]){
 		getEmailDB()->Delete(userDB["email"].asString());
 		getEmailDB()->store(data["email"].asString(),user_id);
@@ -177,8 +191,9 @@ User::User(string user_id) {
 		Json::Value jobs_data = userDB["jobs"];
 		for( Json::ValueIterator itr = jobs_data.begin() ; itr != jobs_data.end() ; itr++ ) {
 			Json::Value job_data = jobs_data[itr.index()];
+			Json::Value job_position_data = job_data["position"];
 			try{
-				Job job = Job(job_data["date_since"].asString(),job_data.get("date_to","").asString(),job_data["company"].asString(),job_data["name_position"].asString());
+				Job job = Job(job_data["date_since"].asString(),job_data.get("date_to","").asString(),job_data["company"].asString(),job_data["position"]);
 				jobs.push_back(job);
 			} catch (JobException& e){
 				Log("User.cpp::" + to_string(__LINE__) + ". create job. " + e.what() ,ERROR);
@@ -245,27 +260,36 @@ ErrorMessage User::check(Json::Value data){
 		error.addError("email","Email not specified");
 	}
 
-	if (data.isMember("skills_names")){
-		Json::Value skills = data["skills_name"];
+	if (data.isMember("skills")){
+		Json::Value skills = data["skills"];
 		for( Json::ValueIterator itr = skills.begin() ; itr != skills.end() ; itr++ ) {
 			Json::Value val = skills[itr.index()];
-			if (! Skill::exist(val.asString()) ) {
-				error.addError("skill_"+ val.asString(),"Skill invalid (" + val.asString() + ").");
+			if (! Skill::exist(val) ) {
+				error.addError("skill","Skill invalid (" + val.toStyledString() + ").");
 			}
 		}
 	}
 
 	if (data.isMember("jobs")){
-			Json::Value jobs = data["jobs"];
-			for( Json::ValueIterator itr = jobs.begin() ; itr != jobs.end() ; itr++ ) {
-				Json::Value val = jobs[itr.index()];
-				ErrorMessage error_job = Job::check(val);
-				if (!error_job.empty()) {
-					error.addError("Job_"+val.asString(),"Job invalid (" + val.asString() + ").");
-				}
+		Json::Value jobs = data["jobs"];
+		for( Json::ValueIterator itr = jobs.begin() ; itr != jobs.end() ; itr++ ) {
+			Json::Value val = jobs[itr.index()];
+			ErrorMessage error_job = Job::check(val);
+			if (!error_job.empty()) {
+				error.addError("Job","Job invalid (" + error_job.summary() + ").");
 			}
 		}
+	}
 
+	if (data.isMember("education")){
+		Json::Value educ = data["education"];
+		for( Json::ValueIterator itr = educ.begin() ; itr != educ.end() ; itr++ ) {
+			Json::Value val = educ[itr.index()];
+			if (!Education::check(val)) {
+				error.addError("Education","Education invalid (" + val.toStyledString() + ").");
+			}
+		}
+	}
 	return error;
 }
 

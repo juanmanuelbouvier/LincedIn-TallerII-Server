@@ -13,7 +13,7 @@ private:
 public:
 	Education(string start, string end, string school, string degree);
 	Json::Value asJSON();
-
+	static bool check(Json::Value data);
 	static Json::Value listToArray(list<Education> education);
 	virtual ~Education();
 };

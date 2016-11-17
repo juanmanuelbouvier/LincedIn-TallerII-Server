@@ -14,6 +14,7 @@ private:
 	JobPosition* position;
 public:
 	Job(string date_since, string date_to, string company, string name_position);
+	Job(string date_since, string date_to, string company, Json::Value position);
 	static ErrorMessage check(Json::Value job);
 	Json::Value asJSON();
 

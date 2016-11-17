@@ -17,6 +17,7 @@ public:
 	static ErrorMessage check( Json::Value data );
 	static Skill create(Json::Value data);
 	static bool exist(string skill_id);
+	static bool exist(Json::Value data);
 
 	string getName();
 	string getDescription();

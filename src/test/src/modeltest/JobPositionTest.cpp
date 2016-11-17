@@ -5,8 +5,10 @@
 using namespace std;
 
 TEST(JobPositionTest, ExistJobPosition){
-	EXPECT_TRUE(JobPosition::exist("developer"));
-	EXPECT_FALSE(JobPosition::exist("algo que jamas exista"));
+	string name = "developer";
+	string name_invalid = "algo que jamas exista";
+	EXPECT_TRUE(JobPosition::exist(name));
+	EXPECT_FALSE(JobPosition::exist(name_invalid));
 }
 
 TEST(JobPositionTest, JobPositionGeneralTest){

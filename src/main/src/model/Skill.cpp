@@ -60,6 +60,21 @@ bool Skill::exist(string skill_id){
 	return true;
 }
 
+bool Skill::exist(Json::Value data){
+	SharedServerAPI shared;
+	if (!data.isMember("name") or !data.isMember("description") or !data.isMember("category"))
+		return false;
+
+	Json::Value skill = shared.getSkill(data["name"].asString());
+	if (skill.isObject()  && skill.isMember("error")){
+		return false;
+	}
+
+	if (skill == data)
+		return true;
+
+	return false;
+}
 
 string Skill::getName(){
 	return name;
