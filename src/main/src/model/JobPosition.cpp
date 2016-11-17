@@ -39,6 +39,23 @@ bool JobPosition::exist(string name_position){
 	return true;
 }
 
+bool JobPosition::exist(Json::Value data){
+	SharedServerAPI shared;
+	if (!data.isMember("name") or !data.isMember("description") or !data.isMember("category"))
+		return false;
+
+	Json::Value position = shared.getJobPosition(data["name"].asCString());
+	if (position.isObject() && position.isMember("error")){
+		return false;
+	}
+
+	if (position == data)
+		return true;
+
+
+	return false;
+}
+
 
 string JobPosition::getName(){
 	return name;

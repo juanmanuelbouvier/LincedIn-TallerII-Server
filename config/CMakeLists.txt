@@ -78,6 +78,7 @@ set (SOURCES
     ${APP_SOURCE}/model/Recommendation.cpp
     ${APP_SOURCE}/model/Skill.cpp
     ${APP_SOURCE}/model/User.cpp
+    ${APP_SOURCE}/model/Image.cpp
     )
     
 set (MAIN_CPP
@@ -156,11 +157,11 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/DBTest.cpp
 	${TEST_SOURCE}/AccessTokenTest.cpp
 	
-	${TEST_SOURCE}/modeltest/ChatTest.cpp
-	${TEST_SOURCE}/modeltest/EducationTest.cpp
-	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
-	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
-	${TEST_SOURCE}/modeltest/JobTest.cpp
+	#${TEST_SOURCE}/modeltest/ChatTest.cpp
+	#${TEST_SOURCE}/modeltest/EducationTest.cpp
+	#${TEST_SOURCE}/modeltest/RecommendationTest.cpp
+	#${TEST_SOURCE}/modeltest/JobPositionTest.cpp
+	#${TEST_SOURCE}/modeltest/JobTest.cpp
 	${TEST_SOURCE}/modeltest/UserTest.cpp
 )
 # Test libraries
