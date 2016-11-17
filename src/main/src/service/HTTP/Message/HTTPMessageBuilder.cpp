@@ -95,7 +95,7 @@ RequestBuilder::~RequestBuilder(){
 
 
 ResponseBuilder::ResponseBuilder() : MessageBuilder() {
-	code 	= 200;
+	code 	= "200";
 	phrase 	= "OK";
 }
 

@@ -24,7 +24,7 @@ Json::Value AccessToken::decode( string token ) {
 	int succes = jwt_decode(&JsonWebToken, token.c_str(),key_c, string(KEY).length());
 
 	if (succes != 0){
-		throw new AccessException( Log("AccessToken.cpp::" + to_string(__LINE__) + ".Cannot Decode Json Web Token Object",ERROR) );
+		throw AccessException( Log("AccessToken.cpp::" + to_string(__LINE__) + ".Cannot Decode Json Web Token Object",ERROR) );
 	}
 
 	//Separo porque viene siempre el header {"typ":"JWT","alg":"HS256"}.[NUESTRO JSON]
@@ -53,6 +53,6 @@ string AccessToken::encode( Json::Value json ) {
 
 	}
 
-	throw new AccessException( Log("AccessToken.cpp::" + to_string(__LINE__) + ".Cannot encode Json Value:\n\t" + json.toStyledString(),ERROR) );
+	throw AccessException( Log("AccessToken.cpp::" + to_string(__LINE__) + ".Cannot encode Json Value:\n\t" + json.toStyledString(),ERROR) );
 }
 

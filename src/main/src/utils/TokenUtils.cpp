@@ -17,7 +17,7 @@ bool TokenUtils::isValidToken(string token){
 	try{
 		decodeToken = AccessToken::decode(token);
 	} catch (AccessException& e){
-		Log("TokenUtils.cpp::" + to_string(__LINE__) + ".Cannot decode Token",ERROR);
+		Log("TokenUtils.cpp::" + to_string(__LINE__) + ".Token is invalid",INFO);
 		return false;
 	}
 

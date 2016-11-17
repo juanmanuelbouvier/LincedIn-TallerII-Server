@@ -34,10 +34,10 @@ void HTTPResponse::generateRawMessage(){
 
 	//Zero or more headers
 	for (map<string,string>::iterator it = headers.begin(); it != headers.end(); ++it) {
-		httpRawMessage += it->first + ":" + it->second + HTTP_CRLF;
+		httpRawMessage += it->first + ": " + it->second + HTTP_CRLF;
 	}
 	if (body.size() > 0) {
-		httpRawMessage += "Content-Length:" + body.length() + HTTP_CRLF;
+		httpRawMessage += "Content-Length: " + to_string(body.length()) + HTTP_CRLF;
 		//An Empty line indicating end of headers
 		httpRawMessage += HTTP_CRLF;
 

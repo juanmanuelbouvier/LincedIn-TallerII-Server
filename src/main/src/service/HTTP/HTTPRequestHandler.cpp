@@ -32,6 +32,8 @@ HTTPRequestHandler::HTTPRequestHandler() {
 		addHandler(url, sharedHandler);
 	}
 
+	//TODO: Delete this handler
+	addHandler("/riquelme", new HelloWorldJsonHandler() );
 
 	ChatHandler* chatHandler = new ChatHandler();
 	addHandler("/chat", chatHandler );
