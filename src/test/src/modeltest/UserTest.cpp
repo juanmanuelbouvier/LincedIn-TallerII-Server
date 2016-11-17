@@ -9,16 +9,6 @@
 #include <iostream>
 #include <fstream>
 
-void settinUpDBFolderForModel() {
-	string json = "{\"db_folder\" : \".temp-test/\"}\n";
-
-	ofstream out(".temp-test/setting-model.json");
-	out << json;
-	out.close();
-
-	SettingManager::getInstance()->readFile(".temp-test/setting-model.json");
-}
-
 TEST(UserTest, existUser){
 	EXPECT_FALSE(User::exist("invalid user"));
 }
@@ -47,6 +37,7 @@ TEST(UserTest, createBasicUser){
 	Json::Value jsonUser = user.asJSON();
 
 	EXPECT_EQ(jsonUser["id"],data["id"]);
+	EXPECT_EQ(user.getID(),id);
 	EXPECT_EQ(jsonUser["first_name"],data["first_name"]);
 	EXPECT_EQ(jsonUser["last_name"],data["last_name"]);
 	EXPECT_EQ(jsonUser["description"],data["description"]);
@@ -61,8 +52,6 @@ TEST(UserTest, createBasicUser){
 }
 
 TEST(UserTest, createCompleteUser){
-
-	settinUpDBFolderForModel();
 
 	string id = "fme";
 

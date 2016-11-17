@@ -25,7 +25,7 @@ JobPosition JobPosition::create(Json::Value data){
 			data["category"].asString()
 			);
 	if (res.isObject()  && res.isMember("error")){
-		throw JobException("error on create job position");
+		throw JobException("error on create job position " + res["error"].asString());
 	}
 	return JobPosition(data["name"].asString());
 }
@@ -40,11 +40,11 @@ bool JobPosition::exist(string name_position){
 }
 
 bool JobPosition::exist(Json::Value data){
-	SharedServerAPI shared;
 	if (!data.isMember("name") or !data.isMember("description") or !data.isMember("category"))
 		return false;
 
-	Json::Value position = shared.getJobPosition(data["name"].asCString());
+	SharedServerAPI shared;
+	Json::Value position = shared.getJobPosition(data["name"].asString());
 	if (position.isObject() && position.isMember("error")){
 		return false;
 	}

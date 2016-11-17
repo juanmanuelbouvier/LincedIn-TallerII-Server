@@ -24,7 +24,7 @@ TEST(JobTest, createJob) {
 	data2["date_since"] = "2010-10-25 16:22:00";
 	data2["date_to"] = "2011-10-25 16:22:00";
 	data2["company"] = "Totos";
-	data2["position"] = name;
+	data2["position"] = data;
 
 	EXPECT_TRUE(Job::check(data2).empty());
 
@@ -70,3 +70,19 @@ TEST(JobTest, JobToJSONList) {
 	jobPosition.delet();
 }
 
+
+
+TEST(JobTest, JobErrorTest) {
+	Json::Value invalidPosition;
+	invalidPosition["name"] = "invalid";
+	invalidPosition["position"] = "invalid position";
+
+	EXPECT_THROW(Job("asd","asd","asd",invalidPosition),JobException);
+
+	Json::Value invalidJob;
+	invalidJob["position"] = invalidPosition;
+
+	ErrorMessage error = Job::check(invalidJob);
+	EXPECT_FALSE(error.empty());
+
+}

@@ -9,6 +9,14 @@ TEST(JobPositionTest, ExistJobPosition){
 	string name_invalid = "algo que jamas exista";
 	EXPECT_TRUE(JobPosition::exist(name));
 	EXPECT_FALSE(JobPosition::exist(name_invalid));
+
+	Json::Value invalid;
+	invalid["name"] = "invalid name";
+	invalid["description"] = "invalid";
+	invalid["category"] = "invalid";
+
+	EXPECT_FALSE(JobPosition::exist(invalid));
+
 }
 
 TEST(JobPositionTest, JobPositionGeneralTest){

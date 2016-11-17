@@ -48,3 +48,8 @@ TEST(EducationTest, EducationListAsJSON){
 
 	delete ed1;
 }
+
+TEST(EducationTest, EducationErrorTest){
+	Json::Value invalid;
+	EXPECT_FALSE(Education::check(invalid));
+}

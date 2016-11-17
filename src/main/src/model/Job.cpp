@@ -35,9 +35,9 @@ ErrorMessage Job::check(Json::Value job){
 	}
 
 	//JobPosition
-	if (job.isMember("name_position")){
-		if (!JobPosition::exist(job["name_position"].toStyledString())){
-			error.addError("name_position", "Position does not exist.");
+	if (job.isMember("position")){
+		if (job["position"].isObject() and !JobPosition::exist(job["position"])){
+			error.addError("position", "Position does not exist.");
 		}
 	}
 
