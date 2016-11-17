@@ -33,7 +33,7 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	}
 
 	//TODO: Delete this handler
-	addHandler("/riquelme", new HelloWorldJsonHandler() );
+	addHandler("/riquelme.jpg", new HelloWorldJsonHandler() );
 
 	ChatHandler* chatHandler = new ChatHandler();
 	addHandler("/chat", chatHandler );

@@ -30,6 +30,7 @@ HTTPResponse* normalLogin(Json::Value data) {
 
 HTTPResponse* createUserFromData( Json::Value fb_data ) {
 	Json::Value data;
+	data["id"] = "tomi";
 	data["first_name"] = fb_data["first_name"].asString() + (fb_data.isMember("middle_name") ? " " + fb_data["middle_name"].asString() : "" );
 	data["last_name"] = fb_data["last_name"];
 	data["email"] = fb_data["email"];

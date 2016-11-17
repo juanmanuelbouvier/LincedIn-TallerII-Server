@@ -20,12 +20,13 @@ void settinUpDBFolderForModel() {
 }
 
 TEST(UserTest, existUser){
+	settinUpDBFolderForModel();
 	EXPECT_FALSE(User::exist("invalid user"));
 }
 
 
 TEST(UserTest, createBasicUser){
-
+	settinUpDBFolderForModel();
 	string id = "fme";
 
 	Json::Value data;
@@ -61,7 +62,7 @@ TEST(UserTest, createBasicUser){
 }
 
 TEST(UserTest, createCompleteUser){
-
+	settinUpDBFolderForModel();
 	settinUpDBFolderForModel();
 
 	string id = "fme";
