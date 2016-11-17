@@ -6,6 +6,9 @@
 #include <stdexcept>
 #include <iomanip>
 
+#define PASSWORD_CHARS "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+#define PASSWORD_LEN 8
+
 //! Split string by a delimiter
 //!
 //! @param the_string string to be splited.
@@ -122,6 +125,15 @@ string StringUtils::urlEncode(const string &toEncode) {
 	}
 
 	return out.str();
+}
+
+string StringUtils::generateRandomPassword() {
+	string password;
+	for (int i = 0; i < PASSWORD_LEN; i++) {
+		char c = PASSWORD_CHARS[rand() % (sizeof(PASSWORD_CHARS) - 1)];
+		password.push_back(c);
+	}
+	return password;
 }
 
 string StringUtils::passwordEncrypt(string password){

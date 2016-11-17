@@ -41,37 +41,38 @@
 ```javascript
 	{	
 		“participants” : [
-			user_id1,
-			user_id2,
+			"user_id1",
+			"user_id2",
 			…,
-			user_idn
+			"user_idn"
 		],
-		“messages”: {,
-			"user_id1" : [
-				{
-					“message” : string,
-					“timestamp” : int,	
-				},
-				{
-					“message” : string,
-					“timestamp” : int,
-				},
-			],
-			"user_id2" : [
-				{
-					“message” : string,
-					“timestamp” : int,	
-				},
-				{
-					“message” : string,
-					“timestamp” : int,
-				},
-			]
-		},
+		“messages”: [
+			{
+				"user_id" : string,
+				“message” : string,
+				“timestamp” : int,	
+			},
+			{
+				"user_id" : string,
+				“message” : string,
+				“timestamp” : int,
+			},
+			{
+				"user_id" : string,
+				“message” : string,
+				“timestamp” : int,	
+			},
+			...
+			{
+				"user_id" : string,
+				“message” : string,
+				“timestamp” : int,
+			}
+		],
 		“total”: n
 	}
 ```
-
+Note: The "messages" array is sorted by message timestamp.
 
 
 

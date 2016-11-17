@@ -46,7 +46,7 @@ string parseArguments(int argc, char** argv){
 
 }
 
-
+#include <utils/StringUtils.h>
 
 /**
 * Launchs the application server.<BR>
@@ -65,6 +65,5 @@ int main(int argc, char **argv) {
 	delete server;
 	delete setting;
 	DBManager::deleteInstance();
-
 	return 0;
 }

@@ -7,12 +7,15 @@
 #define FB_GRAPH "graph.facebook.com"
 #define FB_PORT "80"
 #define FB_PATH "/me"
-#define FB_QUERY "fields=name,email,last_name,middle_name,first_name&access_token="
+#define FB_QUERY "fields=email,last_name,middle_name,first_name&access_token="
 
-HTTPResponse* FacebookAPI::sendRequest( string query ) {
+HTTPResponse* FacebookAPI::sendRequest(string path, string query ) {
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->GET();
-	builder = (RequestBuilder*)builder->setUri(string(FB_PATH))->setQuery(query);
+	builder = (RequestBuilder*)builder->setUri(path);
+	if (!query.empty()){
+		builder = (RequestBuilder*)builder->setQuery(query);
+	}
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(FB_GRAPH))->appendHeader("Cache-Control","no-cache");
 	HTTPRequest* request = builder->build();
 	HTTPResponse* response = client->sendRequest( request );
@@ -29,6 +32,7 @@ Json::Value FacebookAPI::parseResponse( HTTPResponse* response ) {
 		body = JSONUtils::stringToJSON( response->getBody() );
 		body["response"]["code"] = response->getCode();
 		body["response"]["phrase"] = response->getPhrase();
+		body["error"] = "Graph response error";
 		delete response;
 		return body;
 	}
@@ -37,17 +41,25 @@ Json::Value FacebookAPI::parseResponse( HTTPResponse* response ) {
 	return body;
 }
 
-Json::Value FacebookAPI::getInfoFromToken( string token ) {
-	Json::Value info;
+bool FacebookAPI::connect() {
 	string url = string(SECURE) + string(FB_GRAPH);
 	if ( !client->connectToUrl( url ) ) {
 		Log("FacebookAPI.cpp::" + to_string(__LINE__) + ". Unable to Connect with " + url, WARNING);
+		return false;
+	}
+	return true;
+}
+
+Json::Value FacebookAPI::getInfoFromToken( string token ) {
+	Json::Value info;
+
+	if ( !connect() ){
 		info["error"] = "Error";
 		return info;
 	}
 
 	string query = FB_QUERY + token;
-	info = parseResponse( sendRequest(query) );
+	info = parseResponse( sendRequest(string(FB_PATH),query) );
 
 	return info;
 }

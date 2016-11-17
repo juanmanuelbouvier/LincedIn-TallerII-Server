@@ -32,6 +32,8 @@ HTTPRequestHandler::HTTPRequestHandler() {
 		addHandler(url, sharedHandler);
 	}
 
+	//TODO: Delete this handler
+	addHandler("/riquelme.jpg", new HelloWorldJsonHandler() );
 
 	ChatHandler* chatHandler = new ChatHandler();
 	addHandler("/chat", chatHandler );
@@ -98,9 +100,16 @@ bool HTTPRequestHandler::addHandler(string uri_path, Handler* handler) {
 }
 
 HTTPRequestHandler::~HTTPRequestHandler() {
+	vector<Handler*> toDelete;
 	for(map<string,Handler*>::iterator it = HTTPEndPointsHandlers.begin(); it != HTTPEndPointsHandlers.end(); it++) {
-	    Handler* handler = it->second;
-	    delete handler;
+		Handler* handler = it->second;
+		if ( find(toDelete.begin(), toDelete.end(), handler) == toDelete.end() ) {
+			toDelete.push_back(handler);
+		}
+	}
+	for ( int i = 0; i < toDelete.size(); i++ ) {
+		Handler* handler = toDelete[i];
+		delete handler;
 	}
 	HTTPEndPointsHandlers.clear();
 }

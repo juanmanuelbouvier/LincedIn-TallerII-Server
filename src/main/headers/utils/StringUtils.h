@@ -13,6 +13,7 @@ public:
 	static string urlEncode(const string &toEncode);
 	static string passwordEncrypt(string password);
 	static string passwordDecrypt(string password);
+	static string generateRandomPassword();
 };
 
 #endif /* SRC_MAIN_UTILS_STRINGUTILS_H_ */

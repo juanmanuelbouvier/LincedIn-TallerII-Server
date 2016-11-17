@@ -179,13 +179,17 @@ paths:
           examples:
             application/json:
               chats:
-                - useri_d: tomibert
-                  user_name: Tomas A. Bert
+                - participants: 
+                    - user_id1
+                    - user_id2
+                    - user_id3
                   last_message:
                     message: "Chau che"
                     time: 466236557
-                - useri_d: juanmanuelbouvier
-                  user_name: Juan Manuel Bouvier
+                - participants: 
+                    - user_id1
+                    - user_id2
+                    - user_id3
                   last_message:
                     message: "Hola, me prestas plata?"
                     time: 466262235
