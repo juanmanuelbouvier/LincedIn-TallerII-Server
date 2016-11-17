@@ -18,11 +18,12 @@ User User::create( Json::Value data ) {
 	ErrorMessage error = check(data);
 
 	if (!error.empty()){
-		cout << Log("User.cpp::" + to_string(__LINE__) + ". Error on create skill, check data ",ERROR) << endl;
+		Log("User.cpp::" + to_string(__LINE__) + ". Error on create skill, check data ",ERROR);
 		throw UserException("Error on create user, check data. Summary: " + error.summary());
 	}
 
-	string user_id = data["id"].asString();
+	string user_id = generateUserID(data["id"].asString(),data["first_name"].asString(),data["last_name"].asString());
+
 	Json::Value userDB;
 	userDB["first_name"] = data["first_name"];
 	userDB["last_name"] = data["last_name"];
@@ -36,7 +37,7 @@ User User::create( Json::Value data ) {
 	userDB["education"] = data["education"];
 	userDB["recommendations_received"] = Json::arrayValue;
 
-	userDB["password"] = StringUtils::passwordEncrypt(data["password"].toStyledString());
+	userDB["password"] = StringUtils::passwordEncrypt(data["password"].asString());
 	int now = DateUtils::timestamp();
 	userDB["register_timestamp"] = now;
 	userDB["last_edit_timestamp"] =  now;
@@ -50,8 +51,14 @@ User User::create( Json::Value data ) {
 }
 
 bool User::delet( string user_id){
-	if(getDB()->Delete(user_id))
+	Json::Value data = getDB()->getJSON(user_id);
+	if (data.isMember("error"))
+		return false;
+
+	if(getDB()->Delete(user_id)){
+		getEmailDB()->Delete(data["email"].asString());
 		return true;
+	}
 
 	return false;
 }
@@ -87,6 +94,7 @@ ErrorMessage User::update(string user_id,Json::Value data){
 User::User(string user_id) {
 
 	//MOCK
+	/*
 	id = user_id;
 	first_name = "Carlos";
 	last_name = "Fontela";
@@ -132,35 +140,35 @@ User::User(string user_id) {
 	Recommendation red = Recommendation("Nico Paez", "Éste es un crack, se auto cita en las diapos.",now);
 	recommendations_received.push_back(red);
 
+	*/
 
 	//real
-	/*
 	Json::Value userDB = getDB()->getJSON(user_id);
 	if (userDB.isMember("error")){
-		cout << Log("User.cpp::" + to_string(__LINE__) + ". Error on create user " + userDB["error"].toStyledString() ,ERROR) << endl;
+		Log("User.cpp::" + to_string(__LINE__) + ". Error on create user " + userDB["error"].asString() ,ERROR);
 		throw UserException("User invalid.");
 	}
 
 	id = user_id;
-	first_name = userDB["first_name"];
-	last_name = userDB["last_name"];
+	first_name = userDB["first_name"].asString();
+	last_name = userDB["last_name"].asString();
 	full_name = first_name + " " + last_name;
-	description = userDB["description"];
-	email =  userDB["email"];
-	date_of_birth = userDB["date_of_birth"];
-	profile_picture = userDB["profile_picture"];
+	description = userDB["description"].asString();
+	email =  userDB["email"].asString();
+	date_of_birth = userDB["date_of_birth"].asString();
+	profile_picture = userDB["profile_picture"].asString();
 
 	if (userDB.isMember("skills")){
-		Json::Value skills = userDB["skills"];
-		for( Json::ValueIterator itr = skills_name.begin() ; itr != skills_name.end() ; itr++ ) {
-			Json::Value = skill_data = skills[itr.index()];
-			string skill_name = skill_data["name"].toStyledString();
+		Json::Value skills_db = userDB["skills"];
+		for( Json::ValueIterator itr = skills_db.begin() ; itr != skills_db.end() ; itr++ ) {
+			Json::Value skill_data = skills_db[itr.index()];
+			string skill_name = skill_data["name"].asString();
 			try{
 				Skill skill = Skill(skill_name);
 				skills.push_back(skill);
 			} catch (SkillException& e){
-				cout << Log("User.cpp::" + to_string(__LINE__) + ". create skill " + skill_name + ". " + e.what() ,ERROR) << endl;
-					throw UserException("Error on create skill " + skill_name);
+				Log("User.cpp::" + to_string(__LINE__) + ". create skill " + skill_name + ". " + e.what() ,ERROR);
+				throw UserException("Error on create skill " + skill_name);
 			}
 		}
 	}
@@ -170,10 +178,10 @@ User::User(string user_id) {
 		for( Json::ValueIterator itr = jobs_data.begin() ; itr != jobs_data.end() ; itr++ ) {
 			Json::Value job_data = jobs_data[itr.index()];
 			try{
-				Job job = Job(job_data["date_since"].toStyledString(),job_data.get("date_to","").toStyledString(),job_data["company"].toStyledString(),job_data["name_position"].toStyledString());
+				Job job = Job(job_data["date_since"].asString(),job_data.get("date_to","").asString(),job_data["company"].asString(),job_data["name_position"].asString());
 				jobs.push_back(job);
 			} catch (JobException& e){
-				cout << Log("User.cpp::" + to_string(__LINE__) + ". create job. " + e.what() ,ERROR) << endl;
+				Log("User.cpp::" + to_string(__LINE__) + ". create job. " + e.what() ,ERROR);
 					throw UserException("Error on create Job");
 			}
 		}
@@ -183,7 +191,7 @@ User::User(string user_id) {
 		Json::Value education_data = userDB["education"];
 		for( Json::ValueIterator itr = education_data.begin() ; itr != education_data.end() ; itr++ ) {
 			Json::Value ed_data = education_data[itr.index()];
-			Education ed = Education(ed_data["start_date"].toStyledString(),ed_data.get("end_date","").toStyledString(), ed_data["school_name"].toStyledString(),ed_data["degree"].toStyledString());
+			Education ed = Education(ed_data["start_date"].asString(),ed_data.get("end_date","").asString(), ed_data["school_name"].asString(),ed_data["degree"].asString());
 			education.push_back(ed);
 		}
 	}
@@ -192,11 +200,10 @@ User::User(string user_id) {
 		Json::Value recommendation = userDB["recommendations_received"];
 		for( Json::ValueIterator itr = recommendation.begin() ; itr != recommendation.end() ; itr++ ) {
 			Json::Value red_data = recommendation[itr.index()];
-			Recommendation rec = Recommendation(red_data["recommender"].toStyledString(),red_data["text"].toStyledString(),red_data["timestamp"].asInt());
+			Recommendation rec = Recommendation(red_data["recommender"].asString(),red_data["text"].asString(),red_data["timestamp"].asInt());
 			recommendations_received.push_back(rec);
 		}
 	}
-	*/
 }
 
 
@@ -209,14 +216,21 @@ DB* User::getEmailDB(){
 	return DBManager::getDB(EMAIL_DB);
 }
 
+string User::getID(){
+	return this->id;
+}
 
 ErrorMessage User::check(Json::Value data){
 	ErrorMessage error;
 
 	if (data.isMember("id")){
-		//Json::Value userInDB = getDB()->getJSON(data["id"].toStyledString());
+		//Json::Value userInDB = getDB()->getJSON(data["id"].asString());
 	}else {
 		error.addError("id","Id not specified");
+	}
+
+	if (!data.isMember("password")){
+		error.addError("password","Password not specified.");
 	}
 
 	if (!data.isMember("first_name")){
@@ -235,8 +249,8 @@ ErrorMessage User::check(Json::Value data){
 		Json::Value skills = data["skills_name"];
 		for( Json::ValueIterator itr = skills.begin() ; itr != skills.end() ; itr++ ) {
 			Json::Value val = skills[itr.index()];
-			if (! Skill::exist(val.toStyledString()) ) {
-				error.addError("skill_"+ val.toStyledString(),"Skill invalid (" + val.toStyledString() + ").");
+			if (! Skill::exist(val.asString()) ) {
+				error.addError("skill_"+ val.asString(),"Skill invalid (" + val.asString() + ").");
 			}
 		}
 	}
@@ -247,7 +261,7 @@ ErrorMessage User::check(Json::Value data){
 				Json::Value val = jobs[itr.index()];
 				ErrorMessage error_job = Job::check(val);
 				if (!error_job.empty()) {
-					error.addError("Job_"+val.toStyledString(),"Job invalid (" + val.toStyledString() + ").");
+					error.addError("Job_"+val.asString(),"Job invalid (" + val.asString() + ").");
 				}
 			}
 		}
@@ -257,11 +271,8 @@ ErrorMessage User::check(Json::Value data){
 
 bool User::exist(string user_id){
 
-	string  res = getDB()->get(user_id);
-	if (res.compare("")){
-		return false;
-	}
-	return true;
+	return getDB()->exist(user_id);
+
 }
 
 
@@ -273,10 +284,32 @@ bool User::checkPassword( string user_id,string password ){
 	Json::Value userDB = getDB()->getJSON(user_id);
 	if (userDB.isMember("error")) return false;
 
-	if(password.compare(StringUtils::passwordDecrypt(userDB["password"].toStyledString())))
+	if(password.compare(StringUtils::passwordDecrypt(userDB["password"].asString())))
 		return true;
 
 	return false;
+}
+
+string User::generateUserID(string candidate,string first_name, string last_name){
+	if(!getDB()->exist(candidate)){
+		return candidate;
+	}
+
+	bool validUserId = false;
+	int number = 0;
+	string user_id;
+
+	while (!validUserId){
+		user_id = first_name.substr(0, 1) + last_name;
+		if (number > 0){
+			user_id += to_string(number);
+		}
+		if (!getDB()->exist(user_id)){
+			validUserId = true;
+		}
+	}
+
+	return user_id;
 }
 
 Json::Value User::asJSON(){
