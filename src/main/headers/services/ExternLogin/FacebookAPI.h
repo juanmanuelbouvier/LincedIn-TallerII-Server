@@ -14,7 +14,9 @@ private:
 	ServerClient* client;
 
 	Json::Value parseResponse( HTTPResponse* response );
-	HTTPResponse* sendRequest( string query );
+	HTTPResponse* sendRequest( string path, string query);
+
+	bool connect();
 
 public:
 	FacebookAPI(){ client = new ServerClient(); };

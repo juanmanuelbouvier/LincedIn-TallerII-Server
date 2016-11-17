@@ -12,9 +12,13 @@ private:
 public:
 	ErrorMessage();
 	string summary();
+
 	void addError(string key, string error);
 	string getError(string key);
+
 	bool empty();
+	operator bool() const { return !error.empty(); }
+
 	virtual ~ErrorMessage();
 };
 

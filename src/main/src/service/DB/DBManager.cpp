@@ -47,13 +47,11 @@ bool DBManager::addDB( string DBName ) {
 DB* DBManager::getDB( string DBName ) {
 	DBManager* manager = getInstance();
 	if ( !manager->exist(DBName) ) {
-		Log("Database " + DBName + " dont exist. Attemp to create", WARNING);
+		Log("Database " + DBName + " It is not open. Attemp to do it", WARNING);
 		if ( !manager->addDB(DBName) ) {
-			Log("Cannot create Database: " + DBName,ERROR);
+			Log("Cannot open Database: " + DBName,ERROR);
 			return NULL;
 		}
-		Log("Database " + DBName + " created", INFO);
-
 	}
 	return manager->databases[DBName];
 }
