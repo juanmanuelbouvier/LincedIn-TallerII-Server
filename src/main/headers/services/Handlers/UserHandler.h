@@ -6,7 +6,7 @@
 
 class UserHandler : public Handler {
 private:
-	Json::Value _createUser(string user_id);
+	Json::Value _loadUser(string user_id);
 public:
 	UserHandler(){};
 

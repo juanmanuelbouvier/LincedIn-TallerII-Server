@@ -1,6 +1,7 @@
 #include <services/Handlers/UserHandler.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <utils/PathUtils.h>
+#include <utils/TokenUtils.h>
 #include <utils/ErrorMessage.h>
 #include <model/User.h>
 #include <exception/UserException.h>
@@ -16,42 +17,38 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 	map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/user/:user_id");
 	string user_id = path["user_id"];
 
+	if (user_id == "me"){
+		string token = http_request->getFromHeader("Authorization");
+		if ( !TokenUtils::isValidToken(token) ) {
+			return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
+		}
+		user_id = TokenUtils::userIDByToken(token);
+	}
+
+	if(!User::exist(user_id)){
+		if ((method == "PUT") or (method == "GET") or (method == "DELETE") )
+			return ResponseBuilder::createErrorResponse(404, "Usuario inexistente", 1);
+	}
+
+
 	if (method == "GET"){
 
-		//pidió su perfil
-		if (user_id == "me"){
+		Json::Value res = _loadUser(user_id);
 
-			Json::Value res = _createUser("Tu usuario");
-
-			return ResponseBuilder::createJsonResponse(200,res);
-
-		} else if (User::exist(user_id)){
-			//si pidió un usuario que está en la base de datos
-
-			Json::Value res = _createUser(path["user_id"]);
-
-			return ResponseBuilder::createJsonResponse(200,res);
-		} else {
-			//no hay usuario
-
-			Json::Value error;
-			error["Error"] = "Usuario inexistente";
-			return ResponseBuilder::createJsonResponse(400, error);
-		}
+		return ResponseBuilder::createJsonResponse(200,res);
 
 	} else if (method == "PUT"){
 		Json::Value data ;
 		ErrorMessage errorMessage = User::update(user_id,data);
-		if (errorMessage.empty()){
-			return ResponseBuilder::createOKResponse(200,"Perfil modificado.");
-		} else {
-			Json::Value error;
-			error["Error"] = "Parametros invalidos";
-			error["summary"] = errorMessage.summary();
-			return ResponseBuilder::createJsonResponse(400,error);
-		}
 
-		return ResponseBuilder::createErrorResponse(500,"Unexpected error");
+		if (errorMessage){
+			string error = "Parametros invalidos: " + errorMessage.summary();
+
+			return ResponseBuilder::createErrorResponse(400,error,2);
+
+		} else {
+			return ResponseBuilder::createOKResponse(200,"Perfil modificado.");
+		}
 
 	} else if (method == "DELETE"){
 
@@ -66,14 +63,14 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 	}
 }
 
-Json::Value UserHandler::_createUser(string user_id) {
+Json::Value UserHandler::_loadUser(string user_id) {
 
 	try {
 		User user = User(user_id);
 		return user.asJSON();
 	}catch (UserException& e){
 		Json::Value error;
-		error["Error"] = e.what();
+		error["Error"] = "Error on load user.";
 		return error;
 	}
 }
