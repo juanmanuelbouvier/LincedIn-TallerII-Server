@@ -24,6 +24,10 @@ string Image::urlByBase64(string base64Image){
 	return "";
 }
 
+string Image::getBase64(string id){
+	return getDB()->get(id);
+}
+
 bool Image::remove(string url){
 
 	//quito la base del url
@@ -63,4 +67,8 @@ bool Image::amountMetadata(string last_id){
 	}
 
 	return false;
+}
+
+bool Image::exist(string id){
+	return getDB()->exist(id);
 }

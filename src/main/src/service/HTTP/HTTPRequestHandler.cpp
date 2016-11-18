@@ -6,6 +6,7 @@
 #include <services/Handlers/FriendHandler.h>
 #include <services/Handlers/ChatHandler.h>
 #include <services/Handlers/LoginHandler.h>
+#include <services/Handlers/ImagesHandler.h>
 #include <services/Logger/Logger.h>
 #include <utils/PathUtils.h>
 
@@ -33,7 +34,7 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	}
 
 	//TODO: Delete this handler
-	addHandler("/riquelme.jpg", new HelloWorldJsonHandler() );
+	addHandler("/img/:id", new ImagesHandler() );
 
 	ChatHandler* chatHandler = new ChatHandler();
 	addHandler("/chat", chatHandler );
