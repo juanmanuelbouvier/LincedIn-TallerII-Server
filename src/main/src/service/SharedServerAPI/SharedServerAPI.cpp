@@ -160,6 +160,11 @@ Json::Value SharedServerAPI::updateSkill(string name,string description, string 
 	return updateObject(url,body);
 }
 
+Json::Value SharedServerAPI::deleteSkill(string name,string category){
+	string url = "/skill/categories/"+category+"/"+name;
+	return deleteObject(url);
+}
+
 //Job positions
 Json::Value SharedServerAPI::getJobPositions(){
 	HTTPResponse* response = doGet("/job_position");

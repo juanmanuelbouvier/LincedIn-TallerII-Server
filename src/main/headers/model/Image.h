@@ -12,7 +12,7 @@ private:
 	static bool amountMetadata(string last_id);
 public:
 	static string urlByBase64(string base64Image);
-	static bool delet(string url);
+	static bool remove(string url);
 };
 
 #endif /* SRC_MAIN_SRC_MODEL_IMAGE_H_ */

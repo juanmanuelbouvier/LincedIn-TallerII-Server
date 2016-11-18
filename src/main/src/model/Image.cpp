@@ -24,7 +24,7 @@ string Image::urlByBase64(string base64Image){
 	return "";
 }
 
-bool Image::delet(string url){
+bool Image::remove(string url){
 
 	//quito la base del url
 	string base_url = BASE_URL;

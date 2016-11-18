@@ -37,7 +37,7 @@ TEST(JobTest, createJob) {
 	EXPECT_EQ(asJson["company"].asString(),data2["company"].asString());
 	EXPECT_EQ(asJson["position"],jobPosition.asJSON());
 
-	jobPosition.delet();
+	jobPosition.remove();
 	delete job;
 }
 
@@ -67,7 +67,7 @@ TEST(JobTest, JobToJSONList) {
 
 	EXPECT_FALSE(json.empty());
 
-	jobPosition.delet();
+	jobPosition.remove();
 }
 
 

@@ -55,7 +55,7 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 
 	} else if (method == "DELETE"){
 
-		if (User::delet( user_id)){
+		if (User::remove( user_id)){
 			return ResponseBuilder::createOKResponse(200, "Perfil eliminado");
 		}
 

@@ -6,8 +6,24 @@
 #include <settings/SettingManager.h>
 #include <model/Chat.h>
 #include <utils/DateUtils.h>
+#include <model/User.h>
 
 using namespace std;
+
+
+User createUsers(string id){
+	Json::Value data;
+	data["id"] = id;
+	data["first_name"] = id;
+	data["last_name"] = "Apellido";
+	data["email"] = id + "@lincedin.com";
+	data["date_of_birth"] = "1964-04-12 16:22:00";
+	data["password"] = "123456";
+
+	User user = User::create(data);
+
+	return user;
+}
 
 void settinUpDBFolderForModel() {
 	string json = "{\"db_folder\" : \".temp-test/\"}\n";
@@ -24,27 +40,32 @@ TEST(ChatTest, TestCreateChat) {
 
 	ASSERT_EQ( SettingManager::getInstance()->getDBFolder(), ".temp-test/" );
 
-	list<string> participants = {"macri"};
+	string name1 = "cacho";
+	string name2 = "pepo";
 
-	ASSERT_FALSE(Chat::check(participants));
+	User user1 = createUsers(name1);
+	User user2 = createUsers(name2);
 
-	participants.push_back("macri");
-	ASSERT_FALSE(Chat::check(participants));
+	list<string> participants = {user1.getID()};
 
+	ASSERT_TRUE(Chat::check(participants));
 
-	participants.push_back("cfk");
-	ASSERT_FALSE(Chat::check(participants));
+	participants.push_back(user1.getID());
+	ASSERT_TRUE(Chat::check(participants));
+
+	participants.push_back(user2.getID());
+	ASSERT_TRUE(Chat::check(participants));
 
 	participants.pop_front();
 	Chat chat = Chat::create(participants);
 
-	EXPECT_EQ(chat.getId(), "cfk_macri");
+	EXPECT_EQ(chat.getId(), user1.getID() + "_" + user2.getID());
 
 	EXPECT_EQ(chat.getMessages().size(), 0);
 
 	Json::Value expectedParticipants;
-	expectedParticipants.append("macri");
-	expectedParticipants.append("cfk");
+	expectedParticipants.append(user1.getID());
+	expectedParticipants.append(user2.getID());
 
 	EXPECT_EQ( chat.getParticipants(), expectedParticipants);
 	DBManager::deleteInstance();
@@ -52,13 +73,17 @@ TEST(ChatTest, TestCreateChat) {
 
 TEST(ChatTest, TestChatSendMessage) {
 	settinUpDBFolderForModel();
-	list<string> participants = { "p1", "p2" };
 
-	Chat chat = Chat::create(participants);
+	string name1 = "cacho";
+	string name2 = "pepo";
+
+	list<string> participants = { name1, name2 };
+
+	Chat chat(name1 + "_" + name2);
 	ASSERT_FALSE(chat.addMessage("p8","Hi, p2"));
 
-	EXPECT_TRUE(chat.addMessage("p1","Hi, p2"));
-	EXPECT_TRUE(chat.addMessage("p2","Hi.."));
+	EXPECT_TRUE(chat.addMessage(name1,"Hi, p2"));
+	EXPECT_TRUE(chat.addMessage(name2,"Hi.."));
 
 	EXPECT_EQ(chat.getMessages().size(), 2);
 
@@ -69,7 +94,11 @@ TEST(ChatTest, TestChatSendMessage) {
 TEST(ChatTest, TestChatGetMessage) {
 	//Depends on the above test
 	settinUpDBFolderForModel();
-	Chat chat("p1_p2");
+
+	string name1 = "cacho";
+	string name2 = "pepo";
+
+	Chat chat(name1 + "_" + name2);
 	Json::Value messages = chat.getMessages();
 	EXPECT_EQ(messages.size(), 2);
 	EXPECT_TRUE(messages.isArray());

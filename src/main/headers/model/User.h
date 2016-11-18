@@ -27,7 +27,7 @@ public:
 	User(string user_id);
 
 	static User create( Json::Value data );
-	static bool delet( string user_id);
+	static bool remove( string user_id);
 	static ErrorMessage update(string user_id, Json::Value data);
 	static bool exist(string user_id);
 	static ErrorMessage check(Json::Value data);

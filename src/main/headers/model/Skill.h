@@ -26,6 +26,7 @@ public:
 	bool setName(string new_name);
 	bool setDescription(string new_description);
 	bool setCategory(string new_category);
+	bool remove();
 
 	Json::Value asJSON();
 

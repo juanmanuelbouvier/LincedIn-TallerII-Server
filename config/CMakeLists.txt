@@ -79,6 +79,7 @@ set (SOURCES
     ${APP_SOURCE}/model/Skill.cpp
     ${APP_SOURCE}/model/User.cpp
     ${APP_SOURCE}/model/Image.cpp
+    ${APP_SOURCE}/model/Friends.cpp
     )
     
 set (MAIN_CPP

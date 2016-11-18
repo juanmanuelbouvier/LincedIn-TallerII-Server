@@ -56,14 +56,14 @@ User User::create( Json::Value data ) {
 	throw UserException("Error on store user in DB");
 }
 
-bool User::delet( string user_id){
+bool User::remove( string user_id){
 	Json::Value data = getDB()->getJSON(user_id);
 	if (data.isMember("error"))
 		return false;
 
 	if(getDB()->Delete(user_id)){
 		getEmailDB()->Delete(data["email"].asString());
-		Image::delet(data["profile_picture"].asString());
+		Image::remove(data["profile_picture"].asString());
 		return true;
 	}
 
@@ -89,7 +89,7 @@ ErrorMessage User::update(string user_id,Json::Value data){
 
 	if (data.isMember("profile_picture")){
 		//booro imagen anterior
-		Image::delet(userDB["profile_picture"].asString());
+		Image::remove(userDB["profile_picture"].asString());
 		data["profile_picture"] = Image::urlByBase64(data["profile_picture"].asString());
 	}
 
@@ -107,56 +107,6 @@ ErrorMessage User::update(string user_id,Json::Value data){
 
 User::User(string user_id) {
 
-	//MOCK
-	/*
-	id = user_id;
-	first_name = "Carlos";
-	last_name = "Fontela";
-	full_name = first_name + " " + last_name;
-	description = "El capo de la FIUBA";
-	email =  user_id + "@lincedin.com";
-	date_of_birth = "1964-04-12 16:22:00";
-	profile_picture = "https://cysingsoft.files.wordpress.com/2009/01/carlosfontela6.jpg?w=450";
-
-	int now = DateUtils::timestamp();
-	register_timestamp = now;
-	last_edit_timestamp =  now;
-
-	try{
-		Skill java = Skill("Java");
-		skills.push_back(java);
-		Skill c = Skill("c");
-		skills.push_back(c);
-	} catch (SkillException& e){
-		cout << Log("User.cpp::" + to_string(__LINE__) + ". create skill " + e.what() ,ERROR) << endl;
-		throw UserException("Error on create skill");
-	}
-
-	try {
-		Job job1 = Job("2010-10-25 16:22:00","2011-10-25 16:22:00","Totos","project manager");
-		jobs.push_back(job1);
-
-		Job job2 = Job("2012-10-25 16:22:00","2016-10-25 16:22:00","FIUBA","developer");
-		jobs.push_back(job2);
-
-		Job current = Job("2016-10-25 17:22:00","","Esperanto","dj");
-		jobs.push_back(current);
-	} catch (JobException& je){
-		cout << Log("User.cpp::" + to_string(__LINE__) + ". Error on create job" + je.what() ,ERROR) << endl;
-		throw UserException("Error on create Job");
-	}
-
-
-	Education ed = Education("1981-03-12 16:22:00","1990-12-12 23:22:00","FIUBA","Ingeniero en casi todo");
-	education.push_back(ed);
-
-
-	Recommendation red = Recommendation("Nico Paez", "Éste es un crack, se auto cita en las diapos.",now);
-	recommendations_received.push_back(red);
-
-	*/
-
-	//real
 	Json::Value userDB = getDB()->getJSON(user_id);
 	if (userDB.isMember("error")){
 		Log("User.cpp::" + to_string(__LINE__) + ". Error on create user " + userDB["error"].asString() ,ERROR);

@@ -47,7 +47,7 @@ TEST(JobPositionTest, JobPositionGeneralTest){
 	EXPECT_TRUE(job.setCategory("music"));
 	EXPECT_EQ(job.getCategory(), "music");
 
-	EXPECT_TRUE(job.delet());
+	EXPECT_TRUE(job.remove());
 }
 
 TEST(JobPositionTest, createJobPositionInvalidCategory){

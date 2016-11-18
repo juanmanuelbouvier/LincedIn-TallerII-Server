@@ -139,6 +139,14 @@ Json::Value Skill::listToArray(list<Skill> skills){
 	return array;
 }
 
+bool Skill::remove(){
+	SharedServerAPI shared;
+	Json::Value res = shared.deleteSkill(name,category);
+	if (res.isMember("ok"))
+		return true;
+	return false;
+}
+
 Skill::~Skill() {
 
 }

@@ -9,14 +9,16 @@
 #include <iostream>
 #include <fstream>
 
+void UserTest::settinUpDBFolderForModel() {	string json = "{\"db_folder\" : \".temp-test/\"}\n";	ofstream out(".temp-test/setting-model.json");	out << json;	out.close();	SettingManager::getInstance()->readFile(".temp-test/setting-model.json");}
+
 TEST(UserTest, existUser){
-	settinUpDBFolderForModel();
+	UserTest::settinUpDBFolderForModel();
 	EXPECT_FALSE(User::exist("invalid user"));
 }
 
 
 TEST(UserTest, createBasicUser){
-	settinUpDBFolderForModel();
+	UserTest::settinUpDBFolderForModel();
 	string id = "fme";
 
 	Json::Value data;
@@ -47,13 +49,13 @@ TEST(UserTest, createBasicUser){
 
 	EXPECT_TRUE(User::exist(id));
 
-	User::delet(id);
+	User::remove(id);
 
 	EXPECT_FALSE(User::exist(id));
 }
 
 TEST(UserTest, createCompleteUser){
-	settinUpDBFolderForModel();
+	UserTest::settinUpDBFolderForModel();
 
 	string id = "fme";
 
@@ -111,7 +113,7 @@ TEST(UserTest, createCompleteUser){
 
 	EXPECT_TRUE(User::exist(id));
 
-	User::delet(id);
+	User::remove(id);
 
 	EXPECT_FALSE(User::exist(id));
 }
