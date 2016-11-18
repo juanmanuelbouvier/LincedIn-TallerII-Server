@@ -23,6 +23,8 @@ private:
 
 	string port;
 
+	bool running;
+
 	HTTPRequestHandler* HTTPHandler;
 
 	void settingUpConnection();
@@ -34,7 +36,7 @@ public:
 
 	void start();
 
-	static void stop(int signal = 0);
+	void stop();
 
 	virtual ~Server();
 };

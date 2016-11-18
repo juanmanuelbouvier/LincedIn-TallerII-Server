@@ -68,6 +68,7 @@ set (SOURCES
     ${APP_SOURCE}/utils/JSONUtils.cpp
     ${APP_SOURCE}/utils/TokenUtils.cpp
     ${APP_SOURCE}/utils/ErrorMessage.cpp
+    ${APP_SOURCE}/utils/ThreatUtils.cpp
     
     ${APP_SOURCE}/settings/SettingManager.cpp
     
@@ -187,5 +188,6 @@ set(CMAKE_BUILD_TYPE "Debug")
 if(CMAKE_COMPILER_IS_GNUCXX)
     include(CodeCoverage)
     setup_target_for_coverage(run_coverage RunUnitTests coverage)
+    setup_target_for_coverage(run_coverage_server LincedInAppServer coverage)
     target_link_libraries(lincedinapp gcov)
 endif()

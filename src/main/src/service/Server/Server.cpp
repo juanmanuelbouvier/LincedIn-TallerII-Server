@@ -3,13 +3,12 @@
 #include <services/HTTP/Message/HTTPResponse.h>
 #include <services/Logger/Logger.h>
 #include <exception/AppServerException.h>
-
-volatile static bool SERVER_RUNNING;
+#include <iostream>
 
 Server::Server(int connectionPort) {
 	mg_mgr_init(&eventManager, NULL);
 
-	SERVER_RUNNING = false;
+	running = false;
 	port = to_string(connectionPort);
 
 	bindOptions.user_data = (void*)this;
@@ -23,12 +22,10 @@ Server::Server(int connectionPort) {
 }
 
 void Server::start(){
-	SERVER_RUNNING = true;
+	running = true;
+	Log("Server start at port: " + port + " [close it with Ctrl-C SIGINT or type \"exit\"]");
 
-	signal(SIGINT, this->stop);
-	Log("Server start at port: " + port + " [close it with Ctrl-C SIGINT]");
-
-	while (SERVER_RUNNING) {
+	while (running) {
     	mg_mgr_poll(&eventManager, 1000);
   	}
 }
@@ -67,14 +64,14 @@ void Server::eventHandler(struct mg_connection* connection, int eventCode, void*
 	}
 }
 
-void Server::stop(int signal){
-	if(!SERVER_RUNNING) return;
-	SERVER_RUNNING = false;
+void Server::stop(){
+	if(!running) return;
+	running = false;
 	Log("Server close");
 }
 
 Server::~Server() {
-	if (SERVER_RUNNING) this->stop();
+	if (running) this->stop();
 	delete HTTPHandler;
 	mg_mgr_free(&eventManager);
 }
