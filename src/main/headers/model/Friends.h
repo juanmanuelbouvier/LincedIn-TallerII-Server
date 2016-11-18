@@ -14,8 +14,9 @@ private:
 	static bool storeUser(string user_id, Json::Value friend_data);
 	static Json::Value generateFriendData(int state);
 public:
+	//add or, if exist, accept.
 	static ErrorMessage add(string source_user_id, string destination_user_id);
-	static ErrorMessage accept(string source_user_id, string destination_user_id);
+	//list of accepted friends
 	static Json::Value listFriends(string user_id);
 	static Json::Value listPendingFriends(string user_id);
 	static ErrorMessage remove(string source_user_id, string destination_user_id);

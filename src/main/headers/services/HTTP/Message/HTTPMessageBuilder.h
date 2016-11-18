@@ -55,6 +55,7 @@ class ResponseBuilder : public MessageBuilder {
 private:
 	string code;
 	string phrase;
+	static Json::Value ResponseBuilder::createErrorJSON(string message,int internal_code);
 
 public:
 	ResponseBuilder();
@@ -68,6 +69,7 @@ public:
 	static HTTPResponse* createJsonResponse(int code, string body);
 	static HTTPResponse* createOKResponse(int code, string message);
 	static HTTPResponse* createErrorResponse(int code, string error);
+	static HTTPResponse* createErrorResponse(int code, string error,int internal_code);
 
 	virtual ~ResponseBuilder();
 };

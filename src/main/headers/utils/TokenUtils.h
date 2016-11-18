@@ -10,6 +10,7 @@ public:
 	static bool isValidToken(string token);
 	static string generateSessionToken(string user_id);
 	static User userByToken(string token);
+	static string userIDByToken(string token);
 	static string renovateToken(string token);
 };
 

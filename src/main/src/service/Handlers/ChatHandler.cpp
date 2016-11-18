@@ -41,30 +41,30 @@ static HTTPResponse* handleChat(HTTPRequest* request,string chat_id, User user) 
 	if ( request->isPOST() ) {
 		Json::Value body = JSONUtils::stringToJSON(request->getBody());
 		if (!body.isMember("message") || !body["message"].isString() || body["message"].asString().empty()) {
-			return ResponseBuilder::createErrorResponse(435,"NO MESSAGE");
+			return ResponseBuilder::createErrorResponse(404,"NO MESSAGE",1);
 		}
 		string message = body["message"].asString();
 		if (chat.addMessage(user.getID(),message)){
 			return ResponseBuilder::createJsonResponse(200,chat.getLastMessage());
 		}
-		ResponseBuilder::createErrorResponse(456,"INTERNAL ERROR");
+		ResponseBuilder::createErrorResponse(500,"INTERNAL ERROR");
 	}
 
 	if ( request->isDELETE() ){
 		if ( Chat::Delete(chat.getId()) ) {
 			return ResponseBuilder::createOKResponse(200,"OK");
 		}
-		return ResponseBuilder::createErrorResponse(456,"INTERNAL ERROR");
+		return ResponseBuilder::createErrorResponse(500,"INTERNAL ERROR");
 	}
 
-	return ResponseBuilder::createErrorResponse(400,"INVALID METHOD");
+	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
 }
 
 HTTPResponse* ChatHandler::handle(HTTPRequest* http_request) {
 
 	string token = http_request->getFromHeader("Authorization");
 	if ( !TokenUtils::isValidToken(token) ) {
-		return ResponseBuilder::createErrorResponse(400,"PERMISSION DENIED");
+		return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
 	}
 	User user = TokenUtils::userByToken(token);
 

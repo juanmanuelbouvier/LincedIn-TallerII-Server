@@ -1,5 +1,6 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <utils/JSONUtils.h>
+#include "LincedInServerConfig.h"
 
 using namespace std;
 
@@ -99,6 +100,17 @@ ResponseBuilder::ResponseBuilder() : MessageBuilder() {
 	phrase 	= "OK";
 }
 
+Json::Value ResponseBuilder::createErrorJSON(string message,int internal_code){
+	Json::Value json;
+	json["code"] = internal_code;
+	json["message"] = "ERROR. " + message;
+	Json::Value metadata;
+	metadata["version"] = to_string(LincedInServer_VERSION_MAJOR) + "." + to_string(LincedInServer_VERSION_MINOR);
+	json["metadata"] = metadata;
+
+	return json;
+}
+
 ResponseBuilder* ResponseBuilder::setCode(string theCode){
 	code = theCode;
 	return this;
@@ -136,6 +148,16 @@ HTTPResponse* ResponseBuilder::createJsonResponse(int code, string body){
 HTTPResponse* ResponseBuilder::createErrorResponse(int code, string error){
 	ResponseBuilder* builder = new ResponseBuilder();
 	builder = (ResponseBuilder*)builder->appendHeader("Content-type","text/html")->setBody(error);
+	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),"ERROR");
+	return builder->build();
+}
+
+HTTPResponse* ResponseBuilder::createErrorResponse(int code, string error,int internal_code){
+
+	Json::Value error_json = createErrorJSON(error,internal_code);
+
+	ResponseBuilder* builder = new ResponseBuilder();
+	builder = (ResponseBuilder*)builder->appendHeader("Content-type","application/json")->setBody(JSONUtils::JSONToString(error_json));
 	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),"ERROR");
 	return builder->build();
 }

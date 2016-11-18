@@ -46,88 +46,73 @@ Json::Value Friends::generateFriendData(int state){
 
 ErrorMessage Friends::add(string source_user_id, string destination_user_id){
 	ErrorMessage error;
+	bool accept = false;
+
 	//source
 	Json::Value source_friends = getUserFriendsValue(source_user_id);
 
 	if (source_friends.isMember(destination_user_id)){
-		error.addError("add friend","The friend is already on the list");
-		return error;
+		Json::Value fr = source_friends[destination_user_id];
+		int state = fr["state"].asInt();
+		if (state == STATE_ACCEPTED ){
+			error.addError("add friend","The friend is already on the red");
+			return error;
+		}
+		accept = true;
 	}
 
-	source_friends[destination_user_id] = generateFriendData(STATE_PENDING_FOR_HIM);
+	source_friends[destination_user_id] = generateFriendData(accept ? STATE_ACCEPTED :STATE_PENDING_FOR_HIM);
 	storeUser(source_user_id,source_friends);
 
 	//destination
 	Json::Value destination_friends = getUserFriendsValue(destination_user_id);
 
-	if (destination_friends.isMember(source_user_id)){
-		error.addError("add friend","The friend is already on the list");
-		return error;
-	}
+	//if (destination_friends.isMember(source_user_id)){
+	//	error.addError("add friend","The friend is already on the list");
+	//	return error;
+	//}
 
-	destination_friends[source_user_id] = generateFriendData(STATE_PENDING_FOR_ME);
-	storeUser(destination_user_id,source_friends);
-
-	return error;
-}
-
-ErrorMessage Friends::accept(string source_user_id, string destination_user_id){
-	//source accept destination
-
-	ErrorMessage error;
-	Json::Value source_friends = getUserFriendsValue(source_user_id);
-
-	if (!source_friends.isMember(destination_user_id)){
-		error.addError("Accept friend","Friend is not on the list");
-		return error;
-	}
-
-	source_friends[destination_user_id] = generateFriendData(STATE_ACCEPTED);
-	storeUser(source_user_id,source_friends);
-
-
-	Json::Value destination_friends = getUserFriendsValue(destination_user_id);
-	if (!destination_friends.isMember(source_user_id)){
-		error.addError("Accept friend","Friend is not on the list");
-		return error;
-	}
-
-	destination_friends[source_user_id] = generateFriendData(STATE_ACCEPTED);
+	destination_friends[source_user_id] = generateFriendData(accept ? STATE_ACCEPTED : STATE_PENDING_FOR_ME);
 	storeUser(destination_user_id,source_friends);
 
 	return error;
 }
 
 Json::Value Friends::listFriends(string user_id){
-	Json::Value friends;
+	Json::Value friends(Json::arrayValue);
 	Json::Value userDB = getDB()->getJSON(user_id);
+	Json::Value friendsDB = userDB["friends"];
 
-	if(userDB.isMember("error")){
-		friends[user_id] = Json::objectValue;
-	}else {
-		friends[user_id] = userDB["friends"];
+	if(!userDB.isMember("error")){
+		for( Json::ValueIterator itr = friendsDB.begin() ; itr != friendsDB.end() ; itr++ ) {
+			Json::Value fr = friendsDB[itr.index()];
+			int state = fr["state"].asInt();
+			if ( state == STATE_ACCEPTED) {
+				friends.append(fr);
+			}
+		}
 	}
 
 	return friends;
 }
 
 Json::Value Friends::listPendingFriends(string user_id){
-	Json::Value all_friends = listFriends(user_id);
-	all_friends = all_friends[user_id];
 
-	Json::Value pending_list;
-	pending_list[user_id] = Json::objectValue;
-	Json::Value pending = pending_list[user_id];
+	Json::Value friends(Json::arrayValue);
+	Json::Value userDB = getDB()->getJSON(user_id);
+	Json::Value friendsDB = userDB["friends"];
 
-	for( Json::ValueIterator itr = all_friends.begin() ; itr != all_friends.end() ; itr++ ) {
-		Json::Value fr = all_friends[itr.index()];
-		int state = fr["state"].asInt();
-		if ( (state == STATE_PENDING_FOR_HIM) or (state == STATE_PENDING_FOR_ME)  ) {
-			pending.append(fr);
+	if(!userDB.isMember("error")){
+		for( Json::ValueIterator itr = friendsDB.begin() ; itr != friendsDB.end() ; itr++ ) {
+			Json::Value fr = friendsDB[itr.index()];
+			int state = fr["state"].asInt();
+			if ( (state == STATE_PENDING_FOR_HIM) or (state == STATE_PENDING_FOR_ME)) {
+				friends.append(fr);
+			}
 		}
 	}
 
-	return pending_list;
+	return friends;
 }
 
 ErrorMessage Friends::remove(string source_user_id, string destination_user_id){

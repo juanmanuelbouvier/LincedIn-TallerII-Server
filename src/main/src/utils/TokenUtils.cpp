@@ -65,6 +65,17 @@ User TokenUtils::userByToken(string token){
 	return User(decodeToken["user_id"].asString());
 }
 
+string TokenUtils::userIDByToken(string token){
+	if (!isValidToken(token)){
+		Log("TokenUtils.cpp::" + to_string(__LINE__) + ".Invalid token on create user",ERROR);
+		throw TokenException("Invalid Token");
+	}
+
+	Json::Value decodeToken =  AccessToken::decode(token);
+
+	return decodeToken["user_id"].asString();
+}
+
 
 string TokenUtils::renovateToken(string token){
 
