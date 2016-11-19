@@ -4,21 +4,16 @@
 #include <model/Skill.h>
 #include <exception/UserException.h>
 #include <extern/json.h>
-#include <settings/SettingManager.h>
-
-#include <iostream>
-#include <fstream>
-
-void UserTest::settinUpDBFolderForModel() {	string json = "{\"db_folder\" : \".temp-test/\"}\n";	ofstream out(".temp-test/setting-model.json");	out << json;	out.close();	SettingManager::getInstance()->readFile(".temp-test/setting-model.json");}
+#include <TestHelper.h>
 
 TEST(UserTest, existUser){
-	UserTest::settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 	EXPECT_FALSE(User::exist("invalid user"));
 }
 
 
 TEST(UserTest, createBasicUser){
-	UserTest::settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 	string id = "fme";
 
 	Json::Value data;
@@ -55,7 +50,7 @@ TEST(UserTest, createBasicUser){
 }
 
 TEST(UserTest, createCompleteUser){
-	UserTest::settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 
 	string id = "fme";
 
@@ -80,7 +75,7 @@ TEST(UserTest, createCompleteUser){
 	data["education"].append(ed1);
 	data["education"].append(ed1);
 
-	JobPosition job_p = JobPosition("developer");
+	JobPosition job_p = JobPosition("c");
 
 	Json::Value job;
 	job["date_since"] = "2012-10-25 16:22:00";

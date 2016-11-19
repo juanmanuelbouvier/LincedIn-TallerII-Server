@@ -2,15 +2,13 @@
 #include <services/SharedServerAPI/SharedServerAPI.h>
 #include <exception/JobException.h>
 
-#include <iostream>
-
 namespace std {
 
 JobPosition::JobPosition(string name) {
 	SharedServerAPI shared;
 	Json::Value job = shared.getJobPosition(name);
 	if ( job.isObject()  && job.isMember("error") ){
-		throw JobException("error on load job position");
+		throw JobException("error on load job position " + job["error"].asString() );
 	}
 	this->name = job["name"].asString();
 	this->category = job["category"].asString();

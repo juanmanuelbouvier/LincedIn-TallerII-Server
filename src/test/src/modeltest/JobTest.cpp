@@ -4,10 +4,13 @@
 #include <exception/JobException.h>
 #include <extern/json.h>
 #include <list>
+#include <TestHelper.h>
 
 using namespace std;
 
 TEST(JobTest, createJob) {
+	TestHelper::settinUpTestModel();
+
 	string name = "cebador";
 	string category = "software";
 	string description = "El señor que ceba mates.";
@@ -42,6 +45,8 @@ TEST(JobTest, createJob) {
 }
 
 TEST(JobTest, JobToJSONList) {
+	TestHelper::settinUpTestModel();
+
 	string name = "cebador";
 	string category = "software";
 	string description = "El señor que ceba mates.";
@@ -73,6 +78,8 @@ TEST(JobTest, JobToJSONList) {
 
 
 TEST(JobTest, JobErrorTest) {
+	TestHelper::settinUpTestModel();
+
 	Json::Value invalidPosition;
 	invalidPosition["name"] = "invalid";
 	invalidPosition["position"] = "invalid position";

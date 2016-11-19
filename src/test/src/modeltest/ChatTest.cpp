@@ -1,50 +1,23 @@
 #include <modeltest/ChatTest.h>
-#include <fstream>
-#include <string>
-#include <iostream>
 #include <extern/json.h>
 #include <settings/SettingManager.h>
 #include <model/Chat.h>
 #include <utils/DateUtils.h>
 #include <model/User.h>
+#include <TestHelper.h>
 
 using namespace std;
 
-
-User createUsers(string id){
-	Json::Value data;
-	data["id"] = id;
-	data["first_name"] = id;
-	data["last_name"] = "Apellido";
-	data["email"] = id + "@lincedin.com";
-	data["date_of_birth"] = "1964-04-12 16:22:00";
-	data["password"] = "123456";
-
-	User user = User::create(data);
-
-	return user;
-}
-
-void settinUpDBFolderForModel() {
-	string json = "{\"db_folder\" : \".temp-test/\"}\n";
-
-	ofstream out(".temp-test/setting-model.json");
-	out << json;
-	out.close();
-
-	SettingManager::getInstance()->readFile(".temp-test/setting-model.json");
-}
-
 TEST(ChatTest, TestCreateChat) {
-	settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 
 	ASSERT_EQ( SettingManager::getInstance()->getDBFolder(), ".temp-test/" );
 
 	string name1 = "cacho";
 	string name2 = "pepo";
 
-	User user1 = createUsers(name1);
-	User user2 = createUsers(name2);
+	User user1 = TestHelper::createBasicUsers(name1);
+	User user2 = TestHelper::createBasicUsers(name2);
 
 	list<string> participants = {user1.getID()};
 
@@ -72,7 +45,7 @@ TEST(ChatTest, TestCreateChat) {
 }
 
 TEST(ChatTest, TestChatSendMessage) {
-	settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 
 	string name1 = "cacho";
 	string name2 = "pepo";
@@ -93,7 +66,7 @@ TEST(ChatTest, TestChatSendMessage) {
 
 TEST(ChatTest, TestChatGetMessage) {
 	//Depends on the above test
-	settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 
 	string name1 = "cacho";
 	string name2 = "pepo";

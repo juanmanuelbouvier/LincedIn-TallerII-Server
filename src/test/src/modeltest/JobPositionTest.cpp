@@ -1,10 +1,15 @@
 #include <modeltest/JobPositionTest.h>
 #include <model/JobPosition.h>
 #include <exception/JobException.h>
+#include <TestHelper.h>
+
+#include <iostream>
 
 using namespace std;
 
 TEST(JobPositionTest, ExistJobPosition){
+	TestHelper::settinUpTestModel();
+
 	string name = "developer";
 	string name_invalid = "algo que jamas exista";
 	EXPECT_TRUE(JobPosition::exist(name));
@@ -20,6 +25,8 @@ TEST(JobPositionTest, ExistJobPosition){
 }
 
 TEST(JobPositionTest, JobPositionGeneralTest){
+	TestHelper::settinUpTestModel();
+
 	string name = "Cebador";
 	string category = "software";
 	string description = "El señor que ceba mates.";
@@ -28,7 +35,6 @@ TEST(JobPositionTest, JobPositionGeneralTest){
 	data["name"] = name;
 	data["category"] = category;
 	data["description"] = description;
-
 
 	JobPosition job = JobPosition::create(data);
 
@@ -48,9 +54,13 @@ TEST(JobPositionTest, JobPositionGeneralTest){
 	EXPECT_EQ(job.getCategory(), "music");
 
 	EXPECT_TRUE(job.remove());
+
+	cout << "Ya lo removió" << endl;
 }
 
 TEST(JobPositionTest, createJobPositionInvalidCategory){
+	TestHelper::settinUpTestModel();
+
 	Json::Value data;
 	data["name"] = "name";
 	data["category"] = "Invalid category";
@@ -60,5 +70,7 @@ TEST(JobPositionTest, createJobPositionInvalidCategory){
 }
 
 TEST(JobPositionTest, JobPositionInvalidName){
+	TestHelper::settinUpTestModel();
+
 	EXPECT_THROW(JobPosition("invalid name"),JobException);
 }

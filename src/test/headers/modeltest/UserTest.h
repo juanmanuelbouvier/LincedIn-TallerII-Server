@@ -5,7 +5,6 @@ namespace std {
 
 class UserTest  : public ::testing::Test{
 public:
-	static void settinUpDBFolderForModel();
 	UserTest();
 	virtual ~UserTest();
 };

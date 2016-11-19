@@ -90,7 +90,8 @@ Json::Value SharedServerAPI::processResponse(HTTPResponse* response, int expecte
 	if (response->getCode() == expectedCode){
 		res["ok"] = "OK";
 	} else {
-		res["error"] = JSONUtils::stringToJSON(response->getBody())["message"];
+		Json::Value error = JSONUtils::stringToJSON(response->getBody());
+		res["error"] = error["message"];
 	}
 	delete response;
 	return res;
@@ -111,7 +112,6 @@ Json::Value SharedServerAPI::updateObject(string url,string body){
 
 Json::Value SharedServerAPI::deleteObject(string url){
 	HTTPResponse* response = doDelete(url);
-
 	return processResponse(response,204);
 }
 

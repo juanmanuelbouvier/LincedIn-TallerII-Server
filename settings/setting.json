@@ -5,6 +5,6 @@
 		"show_in_stout" : true,
 		"level" : 3
 	},
-	"shared_server_url": "lincedin.herokuapp.com",
+	"shared_server_url": "localhost:8080",
 	"db_folder": "db"
 }
