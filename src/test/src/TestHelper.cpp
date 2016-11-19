@@ -7,7 +7,7 @@
 using namespace std;
 
 bool TestHelper::settinUpTestModel() {
-	string json = "{\"db_folder\" : \".temp-test/\" , \"shared_server_url\": \"localhost:8080\"}\n";
+	string json = "{\"db_folder\" : \".temp-test/\" , \"shared_server_url\": \"lincedin.herokuapp.com\"}\n";
 
 	ofstream out(".temp-test/setting-model.json");
 	out << json;
