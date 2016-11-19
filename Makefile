@@ -3,15 +3,15 @@ all: build doc
 build:
 	@cd config && cmake -H. -Bbuild && cd build && make && cd ../..
 
-run:
+run: build
 	@#Default log dir
 	@mkdir -p logs
 	@mkdir -p resources
 	./config/build/bin/LincedInAppServer
 
-test:
+test: build
 	@mkdir -p .temp-test/
-	-./config/build/bin/RunUnitTests
+	@-./config/build/bin/RunUnitTests
 	@rm -rf .temp-test/ *.log
 	
 clean-test:

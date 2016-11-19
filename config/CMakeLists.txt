@@ -163,12 +163,12 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/AccessTokenTest.cpp
 	${TEST_SOURCE}/TestHelper.cpp
 	
-	${TEST_SOURCE}/modeltest/ChatTest.cpp
 	${TEST_SOURCE}/modeltest/EducationTest.cpp
 	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
 	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
 	${TEST_SOURCE}/modeltest/JobTest.cpp
 	${TEST_SOURCE}/modeltest/UserTest.cpp
+	${TEST_SOURCE}/modeltest/ChatTest.cpp
 	${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
 
 )

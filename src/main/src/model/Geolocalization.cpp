@@ -9,7 +9,7 @@
 #define USER_GEO_DB "User_Geolocalization"
 
 #define PRECISION_KEY 2
-#define MAX_RANGE 100
+#define MAX_RANGE 300
 #define SEPARATOR "#"
 
 #define DEFAULT_DISTANCE_ERROR 1;

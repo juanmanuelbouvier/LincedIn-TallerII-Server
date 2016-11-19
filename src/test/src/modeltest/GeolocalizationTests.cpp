@@ -189,7 +189,7 @@ TEST(GeolocalizationTests, findPeopleInRange) {
 	Json::Value r7 = Geolocalization::findUsersByLocation(dataSearch);
 	EXPECT_EQ(r7.size(),4);
 
-	dataSearch["range"] = 101;
+	dataSearch["range"] = 301;
 	Json::Value r8 = Geolocalization::findUsersByLocation(dataSearch);
 	EXPECT_FALSE(r8["error"].isNull());
 
