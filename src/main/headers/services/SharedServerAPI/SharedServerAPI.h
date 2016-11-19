@@ -2,6 +2,7 @@
 #define SRC_MAIN_SERVICE_SHAREDSERVERAPI_SHAREDSERVERAPI_H_
 
 #include <services/HTTP/Message/HTTPResponse.h>
+#include <services/HTTP/Message/HTTPRequest.h>
 #include <services/Server/ServerClient.h>
 #include <vector>
 #include <extern/json.h>
@@ -17,7 +18,7 @@ private:
 	Json::Value setObject(string url,string body);
 	Json::Value updateObject(string url,string body);
 	Json::Value deleteObject(string url);
-
+	HTTPResponse* sendRequest(HTTPRequest* request);
 
 public:
 	SharedServerAPI();

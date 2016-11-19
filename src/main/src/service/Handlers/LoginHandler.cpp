@@ -28,25 +28,24 @@ HTTPResponse* normalLogin(Json::Value data) {
 	return ResponseBuilder::createErrorResponse(500,"INVALID DATA");
 }
 
+HTTPResponse* createUser( Json::Value data ) {
+	User newUser = User::create(data);
+	return ResponseBuilder::createJsonResponse(200,createBody(newUser.getID()));
+}
+
 HTTPResponse* createUserFromData( Json::Value fb_data ) {
 	Json::Value data;
 	data["id"] = "tomi";
 	data["first_name"] = fb_data["first_name"].asString() + (fb_data.isMember("middle_name") ? " " + fb_data["middle_name"].asString() : "" );
 	data["last_name"] = fb_data["last_name"];
 	data["email"] = fb_data["email"];
+	data["date_of_birth"] = fb_data["birthday"];
 	data["password"] =  StringUtils::generateRandomPassword();
-	//TODO: add default profilepicture.
 
-	ErrorMessage checkErrors = User::check(data);
-	if (checkErrors) {
-		return ResponseBuilder::createErrorResponse(408,checkErrors.summary());
-	}
+	ErrorMessage errors = User::check(data);
+	return (errors) ? ResponseBuilder::createErrorResponse(408,errors.summary()) : createUser(data);
 
-	//TODO: Other data like birthday, profile, picture?
-	User newUser = User::create(data);
 
-	//TODO: need newUser.getId() ===> createBody(  );
-	return ResponseBuilder::createJsonResponse(200,createBody(newUser.getID()) );
 }
 
 HTTPResponse* facebookLogin(Json::Value data) {

@@ -43,5 +43,10 @@ clean:
 	@rm -rf config/build/ docs/build/
 	@rm -rf .temp-test/ *.log
 	@echo "OK"
+	
+db-clean:
+	@echo -n "Limpiando db..."
+	@rm -rf db/*
+	@echo "OK"
 
 .SILENT:

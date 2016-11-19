@@ -62,15 +62,6 @@ string Log(string message, LogLevel typeOfLog){
 	return full_msg;
 }
 
-/*
- * Log a INFO message in Logger.<BR>
- *  return string was logged.
- *
- */
-string Log(string message) {
-	return Log(message,INFO);
-}
-
 bool validLogLevel(int log_level){
 	return (log_level <= DEBUG && log_level >= ERROR);
 }

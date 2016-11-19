@@ -7,7 +7,7 @@
 #define FB_GRAPH "graph.facebook.com"
 #define FB_PORT "80"
 #define FB_PATH "/me"
-#define FB_QUERY "fields=email,last_name,middle_name,first_name&access_token="
+#define FB_QUERY "fields=email,last_name,middle_name,birthday,first_name&access_token="
 
 HTTPResponse* FacebookAPI::sendRequest(string path, string query ) {
 	RequestBuilder* builder = new RequestBuilder();
@@ -41,26 +41,20 @@ Json::Value FacebookAPI::parseResponse( HTTPResponse* response ) {
 	return body;
 }
 
+bool logTheError(string line, string url) {
+	Log("FacebookAPI.cpp::" + to_string(__LINE__) + ". Unable to Connect with " + url, WARNING);
+	return false;
+}
+
 bool FacebookAPI::connect() {
 	string url = string(SECURE) + string(FB_GRAPH);
-	if ( !client->connectToUrl( url ) ) {
-		Log("FacebookAPI.cpp::" + to_string(__LINE__) + ". Unable to Connect with " + url, WARNING);
-		return false;
-	}
-	return true;
+	return (client->connectToUrl( url )) ? true : logTheError(to_string(__LINE__),url);
 }
 
 Json::Value FacebookAPI::getInfoFromToken( string token ) {
-	Json::Value info;
-
-	if ( !connect() ){
-		info["error"] = "Error";
-		return info;
-	}
-
+	Json::Value infoError;
+	infoError["error"] = "Error";
 	string query = FB_QUERY + token;
-	info = parseResponse( sendRequest(string(FB_PATH),query) );
-
-	return info;
+	return (connect()) ? parseResponse( sendRequest(string(FB_PATH),query) ) : infoError;
 }
 

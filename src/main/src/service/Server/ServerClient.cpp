@@ -37,12 +37,11 @@ void ServerClient::eventHandler(mg_connection* connection, int event_code, void*
 
 bool ServerClient::connectToUrl(string url){
 	mongooseClientConnection = mg_connect_http(&eventClientManager, this->eventHandler, url.c_str(),NULL,NULL);
-	if (mongooseClientConnection == NULL) {
-		return false;
+	if (mongooseClientConnection) {
+		mongooseClientConnection->user_data = this;
+		mg_set_protocol_http_websocket(mongooseClientConnection);;
 	}
-	mongooseClientConnection->user_data = this;
-	mg_set_protocol_http_websocket(mongooseClientConnection);
-	return true;
+	return (mongooseClientConnection != NULL);
 }
 
 ServerClient::~ServerClient() {

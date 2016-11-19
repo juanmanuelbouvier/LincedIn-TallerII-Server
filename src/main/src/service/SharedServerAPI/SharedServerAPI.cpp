@@ -28,58 +28,52 @@ vector<string> SharedServerAPI::getsURL() {
 	return urls;
 }
 
+HTTPResponse* SharedServerAPI::sendRequest(HTTPRequest* request) {
+	HTTPResponse* response = ( client->connectToUrl(sharedURL) ) ? client->sendRequest(request) : ResponseBuilder::createErrorResponse(500,"CANNOT_CONNECT_SHARED");
+	return response;
+
+}
+
 HTTPResponse* SharedServerAPI::doGet( string uri ){
-	if (!client->connectToUrl(sharedURL)){
-		return NULL;
-	}
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->GET()->setUri(uri);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
-	HTTPResponse* response = client->sendRequest(theRequest);
+	HTTPResponse* response = sendRequest(theRequest);
 	delete theRequest;
 	return response;
 }
 
 HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
-	if (!client->connectToUrl(sharedURL)){
-			return NULL;
-	}
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->POST()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
-	HTTPResponse* response = client->sendRequest(theRequest);
+	HTTPResponse* response = sendRequest(theRequest);
 	delete theRequest;
 	return response;
 }
 
 HTTPResponse* SharedServerAPI::doPut(string uri, string body){
-	if (!client->connectToUrl(sharedURL)){
-		return NULL;
-	}
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->PUT()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
-	HTTPResponse* response = client->sendRequest(theRequest);
+	HTTPResponse* response = sendRequest(theRequest);
 	delete theRequest;
 	return response;
 }
 
 HTTPResponse* SharedServerAPI::doDelete(string uri){
-	if (!client->connectToUrl(sharedURL)){
-		return NULL;
-	}
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->DELETE()->setUri(uri);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
-	HTTPResponse* response = client->sendRequest(theRequest);
+	HTTPResponse* response = sendRequest(theRequest);
 	delete theRequest;
 	return response;
 }
