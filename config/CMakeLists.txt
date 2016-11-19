@@ -70,6 +70,7 @@ set (SOURCES
     ${APP_SOURCE}/utils/TokenUtils.cpp
     ${APP_SOURCE}/utils/ErrorMessage.cpp
     ${APP_SOURCE}/utils/ThreatUtils.cpp
+    ${APP_SOURCE}/utils/GeoUtils.cpp
     
     ${APP_SOURCE}/settings/SettingManager.cpp
     
@@ -82,6 +83,7 @@ set (SOURCES
     ${APP_SOURCE}/model/User.cpp
     ${APP_SOURCE}/model/Image.cpp
     ${APP_SOURCE}/model/Friends.cpp
+    ${APP_SOURCE}/model/Geolocalization.cpp
     )
     
 set (MAIN_CPP
@@ -166,6 +168,7 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
 	${TEST_SOURCE}/modeltest/JobTest.cpp
 	${TEST_SOURCE}/modeltest/UserTest.cpp
+	${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)

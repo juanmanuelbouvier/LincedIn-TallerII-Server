@@ -163,6 +163,44 @@ Note: The "messages" array is sorted by message timestamp.
 }
 ```
 
+### User_Geolocalization
+- key:
+	`user_id : string`
+- value:
+	`geo_index : string`
+
+### Geolocalization
+- key:
+	`geo_index : string`
+- value:
+```javascript
+{
+	"users" : {
+		"user_id" : {
+			"time_stamp" : string
+			"geolocalization" : {
+				"latitude" : float
+				"longitude" : float
+			}
+		},
+		...
+		"user_id" : {
+			"time_stamp" : string
+			"geolocalization" : {
+				"latitude" : float
+				"longitude" : float
+			}
+		},
+	}
+}
+```
+
+</b>Nota: **geo_index** es una key formada por la union de la latitud y la longitud con una precision definida desde el modelo. 
+Esto permite que se comporten como buckets que se encuentran a una distancia (haversine) constante.
+
+Por ejemplo:
+*lat: -25.2967829, lon: -57.5946782 === precision : 3 ===> geo_index = "-25.298-57.595"*
+
 
 ###Activity
 - key: 
