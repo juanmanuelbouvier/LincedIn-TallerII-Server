@@ -6,6 +6,7 @@
 #include <utils/DateUtils.h>
 #include <utils/JSONUtils.h>
 #include <utils/ErrorMessage.h>
+#include <utils/GeoUtils.h>
 
 #include <ctime>
 #include <extern/json.h>
@@ -19,6 +20,9 @@ TEST(UtilsTest, getFolderOfFilePath) {
 	string path = "hello/world/file.txt";
 	string result = PathUtils::getFolderOfFilePath(path);
 	EXPECT_EQ("hello/world", result);
+
+	string path2 = "file.txt";
+	EXPECT_EQ(PathUtils::getFolderOfFilePath(path2), "");
 }
 
 TEST(UtilsTest, fakePathIsInvalid) {
@@ -42,6 +46,12 @@ TEST(UtilsTest, splitPath) {
 	vector<string> expectedSplit = {"hello","world","hi"};
 
 	EXPECT_EQ(theSplitPath, expectedSplit);
+}
+
+TEST(UtilsTest, randomPassword) {
+	string pass = StringUtils::generateRandomPassword();
+
+	EXPECT_TRUE(pass.size() > 0);
 }
 
 TEST(UtilsTest, encodeURL) {
@@ -287,6 +297,32 @@ TEST(UtilsTest, stringToJSON) {
 
 	Json::Value fail = JSONUtils::stringToJSON("Invalid Json Value");
 	EXPECT_TRUE(fail["error"].isString());
+
+	Json::Value emptyFail = JSONUtils::stringToJSON("");
+	EXPECT_TRUE(emptyFail["error"].isString());
+}
+
+TEST(UtilsTest, listToJsonArray) {
+	list<string> aList = {"h","e","l","l"};
+	Json::Value array = JSONUtils::listToArrayValue(aList);
+	EXPECT_EQ(array.size(),4);
+	EXPECT_EQ(array[0],"h");
+	EXPECT_EQ(array[1],"e");
+	EXPECT_EQ(array[2],"l");
+	EXPECT_EQ(array[3],"l");
+}
+
+
+TEST(UtilsTest, JSONToString) {
+	Json::Value val(Json::arrayValue);
+	val.append(1);
+	val.append(2);
+	val.append(3);
+
+	Json::Value res = JSONUtils::JSONToString(val);
+	string expected = "[1,2,3]";
+	EXPECT_EQ(res,expected);
+
 }
 
 TEST(UtilsTest, JSONValueInArray) {
@@ -307,3 +343,70 @@ TEST(UtilsTest, JSONValueInArray) {
 	int fail_array = JSONUtils::isValueInArray("tomi",object);
 	EXPECT_EQ(fail_array,-1);
 }
+
+
+
+TEST(UtilsTest, GeoUtilsDistance) {
+	Location location1 = {45.7597, 4.8422}; //Paris
+	Location location2 = {48.8567, 2.3508}; //Lyon
+	double distance = GeoUtils::distance(location1,location2);
+	double expected = 392.21671780659625;
+	EXPECT_DOUBLE_EQ(distance,expected);
+}
+
+TEST(UtilsTest, GeoUtilsValidLocation) {
+	Location location_valid = {45.7597, 4.8422};
+	Location location_invalid = {-98.8567, 2.3508};
+	Location location_invalid2 = {-38.8567, -200.3508};
+	EXPECT_TRUE(GeoUtils::isValid(location_valid));
+	EXPECT_FALSE(GeoUtils::isValid(location_invalid));
+	EXPECT_FALSE(GeoUtils::isValid(location_invalid2));
+
+}
+
+TEST(UtilsTest, GeoUtils) {
+	double n1 = 4.4928;
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n1,3),4.493);
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n1,4),n1);
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n1,5),n1);
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n1,2),4.49);
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n1,1),4.5);
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n1,0),4);
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n1,-1),n1);
+
+	double n2 = 4.5928;
+	ASSERT_DOUBLE_EQ(GeoUtils::roundNumber(n2,0),5);
+}
+
+bool LocationInArray(Location to_find, list<Location> locations, int presicion) {
+	double lat = GeoUtils::roundNumber(to_find.latitude, presicion);
+	double lon = GeoUtils::roundNumber(to_find.longitude,presicion);
+	for (Location& l : locations) {
+		if (l.latitude == lat && l.longitude == lon) {
+			return true;
+		}
+	}
+	return false;
+}
+
+TEST(UtilsTest, GeoUtilNeighbour) {
+	Location loc = {-25.2967829,-57.5946782};
+	list<Location> neighbours = GeoUtils::getNeighbours(loc,0.11,3);
+
+	Location l1 = {	-25.298,-57.596 };
+	Location l2 = { -25.298,-57.595 };
+	Location l3 = { -25.298,-57.594 };
+	Location l4 = { -25.297,-57.596 };
+	Location l5 = { -25.297,-57.594 };
+	Location l6 = { -25.296,-57.596 };
+	Location l7 = { -25.296,-57.595 };
+	Location l8 = { -25.296,-57.594 };
+	list<Location> expected = {l1,l2,l3,l4,l5,l6,l7,l8};
+
+	for (Location& l : neighbours) {
+		ASSERT_TRUE( LocationInArray(l,expected, 3) );
+	}
+
+}
+
+

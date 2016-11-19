@@ -2,7 +2,7 @@ LincedIn - Server API
 =====================
 API para el server de LincedIn
 
-**Version** Alpha 0.2
+**Version** Alpha 0.1
 ### /search
 ---
 ##### ***GET***
@@ -97,6 +97,28 @@ API para el server de LincedIn
 | 200 | Todas los chats existentes |
 | 500 | Unexpected error |
 
+##### ***POST***
+**Summary:** Crear chat
+
+**Description:** **Crear chat con dos o mas participantes.***
+
+
+**Parameters**
+
+| Name | Located in | Description | Required | Type |
+| ---- | ---------- | ----------- | -------- | ---- |
+| access_token | header | Token de acceso | Yes | string |
+| user_id | header | User id referido al token de acceso. | Yes | string |
+| size | query | Cantidad de elementos en la respuesta. | No | integer |
+| body | body | participantes | Yes | undefined |
+
+**Responses**
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | Chat creado |
+| 500 | Unexpected error |
+
 ### /chat/online
 ---
 ##### ***GET***
@@ -119,7 +141,7 @@ API para el server de LincedIn
 | 200 | Todas los usuarios online pertenecientes a la red. |
 | 500 | Unexpected error |
 
-### /chat/{destination_user_id}
+### /chat/{chat_id}
 ---
 ##### ***GET***
 **Summary:** Obtener conversación
