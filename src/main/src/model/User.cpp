@@ -48,12 +48,8 @@ User User::create( Json::Value data ) {
 	userDB["register_timestamp"] = now;
 	userDB["last_edit_timestamp"] =  now;
 
-	if (getDB()->storeJSON(user_id, userDB)){
-		return User(user_id);
-	}
+	return (getDB()->storeJSON(user_id, userDB)) ? User(user_id) : throw UserException("Error on store user in DB");
 
-	Log("Chat.cpp::" + to_string(__LINE__) + ". Cannot store user in DB",ERROR);
-	throw UserException("Error on store user in DB");
 }
 
 bool User::remove( string user_id){
@@ -74,10 +70,16 @@ ErrorMessage User::update(string user_id,Json::Value data){
 	ErrorMessage error;
 	Json::Value userDB = getDB()->getJSON(user_id);
 
+
 	if (userDB.isMember("error")){
 		error.addError("user_id","Not find user id in DB");
 		return error;
 	}
+
+	if (!data.isMember("password")){
+		data["password"] = userDB["password"];
+	}
+
 
 	ErrorMessage checkMessage = User::check(data);
 	if (!checkMessage.empty()) return checkMessage;
@@ -258,7 +260,7 @@ bool User::checkPassword( string user_id,string password ){
 	Json::Value userDB = getDB()->getJSON(user_id);
 	if (userDB.isMember("error")) return false;
 
-	if(password.compare(StringUtils::passwordDecrypt(userDB["password"].asString())))
+	if(password == StringUtils::passwordDecrypt(userDB["password"].asString()))
 		return true;
 
 	return false;

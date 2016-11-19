@@ -8,6 +8,7 @@ using namespace std;
 class TestHelper {
 public:
 	static User createBasicUsers(string id);
+	static User createUser(string id);
 	static bool settinUpTestModel();
 };
 

@@ -16,12 +16,8 @@ string Image::urlByBase64(string base64Image){
 
 	string id = getNextID();
 
-	if(getDB()->store(id,base64Image)){
-		//update metadata
-		return BASE_URL + id;
-	}
+	return (getDB()->store(id,base64Image) && amountMetadata(id)) ? BASE_URL + id : "";
 
-	return "";
 }
 
 string Image::getBase64(string id){

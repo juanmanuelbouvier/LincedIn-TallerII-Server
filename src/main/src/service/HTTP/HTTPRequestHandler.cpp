@@ -62,6 +62,9 @@ HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 		Log("No Handler for endpoint = `" + uri + "` go to DefaultHandler",INFO);
 		return HTTPEndPointsHandlers["/"]->handle(http_request);
 	}
+
+	//AccessLog -> cada vez que se llama a un endpoint se actualizan los datos del usuario (ultima conexion y geolocalizacion)
+
 	return HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
 }
 

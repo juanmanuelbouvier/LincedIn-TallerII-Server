@@ -153,15 +153,17 @@ Json::Value SharedServerAPI::setSkill(string name,string description, string cat
 	return setObject(url,body);
 }
 
-Json::Value SharedServerAPI::updateSkill(string name,string description, string category){
-	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ name +"\", \"category\":\""+category +"\" }";
+Json::Value SharedServerAPI::updateSkill(string name,string new_name,string description,string category,string new_category){
+	string n_name = new_name.empty()? name : new_name;
+	string n_category = new_category.empty()? category : new_category;
+	string body = "{ \"description\":\""+ description +"\", \"name\":\""+ n_name +"\", \"category\":\""+n_category +"\" }";
 	string url = "/skills/categories/"+category+"/"+name;
 
 	return updateObject(url,body);
 }
 
 Json::Value SharedServerAPI::deleteSkill(string name,string category){
-	string url = "/skill/categories/"+category+"/"+name;
+	string url = "/skills/categories/"+category+"/"+name;
 	return deleteObject(url);
 }
 

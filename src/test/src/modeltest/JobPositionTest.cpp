@@ -54,8 +54,6 @@ TEST(JobPositionTest, JobPositionGeneralTest){
 	EXPECT_EQ(job.getCategory(), "music");
 
 	EXPECT_TRUE(job.remove());
-
-	cout << "Ya lo removió" << endl;
 }
 
 TEST(JobPositionTest, createJobPositionInvalidCategory){

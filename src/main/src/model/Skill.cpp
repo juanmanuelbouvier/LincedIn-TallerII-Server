@@ -11,7 +11,7 @@ Skill::Skill(string name) {
 	SharedServerAPI shared;
 	Json::Value skill = shared.getSkill(name);
 	if (skill.isObject()  && skill.isMember("error")){
-		cout << Log("Skill.cpp::" + to_string(__LINE__) + ". Error on find skill en Shared Server " + skill["error"].asString() ,WARNING) << endl;
+		Log("Skill.cpp::" + to_string(__LINE__) + ". Error on find skill en Shared Server " + skill["error"].asString() ,ERROR);
 		throw SkillException("Error on create Skill");
 	}
 	this->name = skill["name"].asString();
@@ -21,7 +21,12 @@ Skill::Skill(string name) {
 
 Skill Skill::create(Json::Value data){
 
-	//check(data);
+	ErrorMessage error = check(data);
+
+	if (error){
+		throw SkillException("Error on create Skill. " +error.summary());
+	}
+
 	SharedServerAPI shared;
 	Json::Value res = shared.setSkill(
 			data["name"].asString(),
@@ -29,11 +34,8 @@ Skill Skill::create(Json::Value data){
 			data["category"].asString()
 			);
 
-	if (res.isObject()  && res.isMember("error")){
-		cout << Log("Skill.cpp::" + to_string(__LINE__) + ". Error on create skill in Shared Server " + res["error"].asString() ,WARNING) << endl;
-		throw SkillException("Error on create Skill");
-	}
-	return Skill(data["name"].asString());
+	return (res.isObject()  && res.isMember("error")) ? throw SkillException("Error on create Skill") : Skill(data["name"].asString());
+
 }
 
 ErrorMessage Skill::check( Json::Value data ) {
@@ -90,35 +92,37 @@ string Skill::getCategory(){
 
 bool Skill::setName(string new_name){
 	SharedServerAPI shared;
-	Json::Value res = shared.updateSkill(new_name,description,category);
-	if (res.isObject()  && res.isMember("error")){
-
-		return false;
+	bool state = false;
+	Json::Value res = shared.updateSkill(name,new_name,description,category,"");
+	if (res.isObject()  && res.isMember("ok")){
+		name = new_name;
+		state = true;
 	}
-	name = new_name;
-	return true;
+	return state;
 }
 
 bool Skill::setDescription(string new_description){
 	SharedServerAPI shared;
-	Json::Value res = shared.updateSkill(name,new_description,category);
-	if (! res["error"]){
+	bool state = false;
+	Json::Value res = shared.updateSkill(name,"",new_description,category,"");
+	if (res.isObject()  && res.isMember("ok")){
 		description = new_description;
-		return true;
+		state = true;
 	}
 
-	return false;
+	return state;
 }
 
 bool Skill::setCategory(string new_category){
 	SharedServerAPI shared;
-	Json::Value res = shared.updateSkill(name,description,new_category);
-	if (! res["error"]){
+	bool state = false;
+	Json::Value res = shared.updateSkill(name,"",description,category,new_category);
+	if (res.isObject()  && res.isMember("ok")){
 		category = new_category;
-		return true;
+		state = true;
 	}
 
-	return false;
+	return state;
 }
 
 Json::Value Skill::asJSON(){
@@ -142,9 +146,8 @@ Json::Value Skill::listToArray(list<Skill> skills){
 bool Skill::remove(){
 	SharedServerAPI shared;
 	Json::Value res = shared.deleteSkill(name,category);
-	if (res.isMember("ok"))
-		return true;
-	return false;
+
+	return res.isMember("error") ? false : true;
 }
 
 Skill::~Skill() {

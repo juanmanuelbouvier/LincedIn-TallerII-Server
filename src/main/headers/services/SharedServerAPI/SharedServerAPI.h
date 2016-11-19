@@ -26,7 +26,7 @@ public:
 	Json::Value getSkills();
 	Json::Value getSkill(string name);
 	Json::Value setSkill(string name,string description, string category);
-	Json::Value updateSkill(string name,string description, string category);
+	Json::Value updateSkill(string name,string new_name,string description,string category,string new_category);
 	Json::Value deleteSkill(string name, string category);
 
 	Json::Value getJobPositions();

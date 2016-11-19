@@ -1,6 +1,7 @@
 #include <modeltest/UserTest.h>
 #include <model/User.h>
 #include <model/JobPosition.h>
+#include <model/Job.h>
 #include <model/Skill.h>
 #include <exception/UserException.h>
 #include <extern/json.h>
@@ -75,7 +76,7 @@ TEST(UserTest, createCompleteUser){
 	data["education"].append(ed1);
 	data["education"].append(ed1);
 
-	JobPosition job_p = JobPosition("c");
+	JobPosition job_p = JobPosition("project manager");
 
 	Json::Value job;
 	job["date_since"] = "2012-10-25 16:22:00";
@@ -101,15 +102,80 @@ TEST(UserTest, createCompleteUser){
 	EXPECT_EQ(jsonUser["last_name"],data["last_name"]);
 	EXPECT_EQ(jsonUser["description"],data["description"]);
 	EXPECT_EQ(jsonUser["email"],data["email"]);
+	EXPECT_EQ(id,User::getIdByEmail(data["email"].asString()));
 	EXPECT_EQ(jsonUser["date_of_birth"],data["date_of_birth"]);
 	EXPECT_EQ(jsonUser["education"],data["education"]);
 	EXPECT_EQ(jsonUser["jobs"],data["jobs"]);
 	EXPECT_EQ(jsonUser["skills"],data["skills"]);
 
 	EXPECT_TRUE(User::exist(id));
+	EXPECT_TRUE(User::checkPassword(id,data["password"].asString()));
 
 	User::remove(id);
 
 	EXPECT_FALSE(User::exist(id));
 }
+
+
+
+TEST(UserTest, updateUser){
+	TestHelper::settinUpTestModel();
+
+	string id = "fme";
+
+	User user = TestHelper::createUser(id);
+
+	Json::Value dataUpdate = user.asJSON();
+
+
+	//skills
+	string name_skill = "Perl";
+	if (Skill::exist(name_skill)){
+		Skill skill = Skill(name_skill);
+		dataUpdate["skills"].append(skill.asJSON());
+	}
+
+	//jobs
+	string position_name = "dj";
+	Job job = Job("2016-10-10 12:00:00","","ACO",position_name);
+	dataUpdate["jobs"].append(job.asJSON());
+
+
+	//update email
+	dataUpdate["email"] = "fme@gmail.com";
+
+	ErrorMessage error = User::update(id,dataUpdate);
+
+	EXPECT_FALSE(error);
+
+	user = User(id);
+
+	Json::Value finalUser = user.asJSON();
+
+	EXPECT_EQ(finalUser["id"],dataUpdate["id"]);
+	EXPECT_EQ(finalUser["first_name"],dataUpdate["first_name"]);
+	EXPECT_EQ(finalUser["last_name"],dataUpdate["last_name"]);
+	EXPECT_EQ(finalUser["description"],dataUpdate["description"]);
+	EXPECT_EQ(finalUser["email"],dataUpdate["email"]);
+	EXPECT_EQ(finalUser["date_of_birth"],dataUpdate["date_of_birth"]);
+	EXPECT_EQ(finalUser["education"],dataUpdate["education"]);
+	EXPECT_EQ(finalUser["jobs"],dataUpdate["jobs"]);
+	EXPECT_EQ(finalUser["skills"],dataUpdate["skills"]);
+
+	User::remove(id);
+}
+
+TEST(UserTest, ErrorUser){
+	TestHelper::settinUpTestModel();
+
+	Json::Value emptyData;
+
+	EXPECT_THROW(User::create(emptyData),UserException);
+
+	EXPECT_FALSE(User::remove("Invalid user"));
+
+	EXPECT_TRUE(User::update("Invalid user",emptyData));
+}
+
+
 
