@@ -6,14 +6,22 @@
 
 using namespace std;
 
-bool TestHelper::settinUpTestModel() {
-	string json = "{\"db_folder\" : \".temp-test/\" , \"shared_server_url\": \"lincedin.herokuapp.com\"}\n";
+void TestHelper::settinUpTestModel() {
+	string json = "{"
+			"\"db_folder\" : \".temp-test/\","
+			"\"logger\" : {"
+					"\"file\" : \".temp-test/ModelTest.log\","
+					"\"show_in_stout\" : false,"
+					"\"level\" : 3"
+				"},"
+			"\"shared_server_url\": \"lincedin.herokuapp.com\""
+			"}";
 
 	ofstream out(".temp-test/setting-model.json");
 	out << json;
 	out.close();
-
-	return SettingManager::getInstance()->readFile(".temp-test/setting-model.json");
+	SettingManager::getInstance()->readFile(".temp-test/setting-model.json");
+	SettingManager::getInstance()->initLogger();
 }
 
 User TestHelper::createBasicUsers(string id){

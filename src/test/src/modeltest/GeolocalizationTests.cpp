@@ -2,6 +2,7 @@
 
 #include <settings/SettingManager.h>
 #include <utils/DateUtils.h>
+#include <TestHelper.h>
 
 #include <model/User.h>
 #include <model/Geolocalization.h>
@@ -22,22 +23,9 @@ void GeolocalizationTests::settinUpDBFolderForModel() {
 	SettingManager::getInstance()->readFile(".temp-test/setting-model.json");
 }
 
-User GeolocalizationTests::createUser(string name) {
-	Json::Value data;
-	data["id"] = name;
-	data["first_name"] = name;
-	data["last_name"] = "Apellido";
-	data["email"] = name + "@lincedin.com";
-	data["date_of_birth"] = "1964-04-12 16:22:00";
-	data["password"] = "123456";
-
-	User user = User::create(data);
-
-	return user;
-}
 
 TEST(GeolocalizationTests, findUserEmpty) {
-	GeolocalizationTests::settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 	Json::Value location;
 	location["latitude"] = -25.298;
 	location["longitude"] = -57.596;
@@ -48,7 +36,7 @@ TEST(GeolocalizationTests, findUserEmpty) {
 
 
 TEST(GeolocalizationTests, updateUserLocation) {
-	GeolocalizationTests::settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 
 	EXPECT_TRUE( Geolocalization::remove("a user id") );
 
@@ -56,7 +44,7 @@ TEST(GeolocalizationTests, updateUserLocation) {
 	Json::Value result = Geolocalization::getUserLocation(user1);
 	EXPECT_TRUE( result.isNull() );
 
-	User u1 = GeolocalizationTests::createUser(user1);
+	User u1 = TestHelper::createBasicUsers(user1);
 	Json::Value data;
 	data["user_id"] = user1;
 	data["latitude"] = -25.2967829;
@@ -111,9 +99,9 @@ TEST(GeolocalizationTests, updateUserLocation) {
 
 
 TEST(GeolocalizationTests, findPeopleInRange) {
-	GeolocalizationTests::settinUpDBFolderForModel();
+	TestHelper::settinUpTestModel();
 
-	User u1 = GeolocalizationTests::createUser("theUser1");
+	User u1 = TestHelper::createBasicUsers("theUser1");
 	Json::Value data1;
 	data1["user_id"] = u1.getID();
 	data1["latitude"] = -25.2967829;
@@ -121,7 +109,7 @@ TEST(GeolocalizationTests, findPeopleInRange) {
 	EXPECT_TRUE( Geolocalization::updateLocation(data1) );
 
 	//0.41 km to u1
-	User u2 = GeolocalizationTests::createUser("theUser2");
+	User u2 = TestHelper::createBasicUsers("theUser2");
 	Json::Value data2;
 	data2["user_id"] = u2.getID();
 	data2["latitude"] = -25.296966;
@@ -129,7 +117,7 @@ TEST(GeolocalizationTests, findPeopleInRange) {
 	EXPECT_TRUE( Geolocalization::updateLocation(data2) );
 
 	//1.45 km to u1
-	User u3 = GeolocalizationTests::createUser("theUser3");
+	User u3 = TestHelper::createBasicUsers("theUser3");
 	Json::Value data3;
 	data3["user_id"] = u3.getID();
 	data3["latitude"] = -25.302980;
@@ -137,7 +125,7 @@ TEST(GeolocalizationTests, findPeopleInRange) {
 	EXPECT_TRUE( Geolocalization::updateLocation(data3) );
 
 	//9.09 km to u1
-	User u4 = GeolocalizationTests::createUser("theUser4");
+	User u4 = TestHelper::createBasicUsers("theUser4");
 	Json::Value data4;
 	data4["user_id"] = u4.getID();
 	data4["latitude"] = -25.215364;

@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <services/DB/DBManager.h>
+#include <settings/SettingManager.h>
 #include <gtest/gtest.h>
 
 int main(int argc, char **argv) {
@@ -13,6 +14,8 @@ int main(int argc, char **argv) {
 
   int code = RUN_ALL_TESTS();
 
+  DBManager::deleteInstance();
+  SettingManager::deleteInstance();
   //Remove enviroment
   system("rm -rf \".temp-test/\" *.log");
 

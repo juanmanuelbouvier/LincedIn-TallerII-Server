@@ -19,10 +19,10 @@ DB* Chat::getChatsDB(){
 }
 
 Chat::Chat( string chat_id ) {
-	Json::Value chat = getDB()->getJSON(chat_id);
-	if ( chat.isNull() ) {
+	if ( !getDB()->exist(chat_id) ) {
 		throw ChatException ( Log("Chat.cpp::"+ to_string(__LINE__) +". Chat (" + chat_id + ") Can not be created because it doesn't exist in the database",ERROR) );
 	}
+	Json::Value chat = getDB()->getJSON(chat_id);
 	chatID = chat_id;
 	messages = chat["messages"];
 	participants = chat["participants"];
@@ -42,11 +42,12 @@ list<Chat> Chat::getChatsFromUser(string user_id) {
 }
 
 bool Chat::isUserInChat( string user_id, string chat_id ) {
+	bool found = false;
 	if ( getChatsDB()->exist(user_id) ) {
 		Json::Value chats = getChatsDB()->getJSON(user_id);
-		return ( JSONUtils::isValueInArray(chat_id, chats["chats"]) != -1 );
+		found = ( JSONUtils::isValueInArray(chat_id, chats["chats"]) != -1 );
 	}
-	return false;
+	return found;
 }
 
 void Chat::setChatToUser( list<string> users_id, string chat_id ) {
@@ -57,13 +58,14 @@ void Chat::setChatToUser( list<string> users_id, string chat_id ) {
 			chats["chats"].append(chat_id);
 			chats["total"] = chats["chats"].size();
 		} else {
-			chats["chats"] = { chat_id };
+			Json::Value chats_id(Json::arrayValue);
+			chats_id.append(chat_id);
+			chats["chats"] = chats_id;
 			chats["total"] = 1;
 		}
 		if ( !getChatsDB()->storeJSON(user_id, chats) ) {
 			throw ChatException( Log("Chat.cpp::"+ to_string(__LINE__) +". Cannot set chat to user_id: " + user_id, ERROR) );
 		}
-		Log("Assigned chat (" + chat_id + ") to user (" + user_id + ")");
 	}
 }
 
@@ -79,11 +81,8 @@ Chat Chat::create( list<string> participants_id ) {
 	chat["participants"] = JSONUtils::listToArrayValue(participants_id);
 	chat["messages"] = Json::arrayValue;
 	chat["total"] = 0;
-	if ( getDB()->storeJSON(chatId,chat) ) {
-		setChatToUser( participants_id, chatId );
-		return Chat(chatId);
-	}
-	throw ChatException( Log("Cannot create chat with id: " + chatId,WARNING) );
+	setChatToUser( participants_id, chatId );
+	return ( getDB()->storeJSON(chatId,chat) ) ? Chat(chatId) : throw ChatException( Log("Cannot create chat with id: " + chatId,WARNING) );
 
 }
 
@@ -104,10 +103,6 @@ ErrorMessage Chat::check( list<string> participants ) {
 		if (!User::exist(user_id)) {
 			error.addError(user_id,user_id + " does not exist.");
 		}
-		//TODO: is redundant?
-		if (isUserInChat(user_id,posibleChatId)) {
-			error.addError("chat " + user_id, user_id + " already part of the chat");
-		}
 	}
 
 	return error;
@@ -124,9 +119,6 @@ bool Chat::update() {
 	chatDB["messages"] = messages;
 	chatDB["total"] = messages.size();
 	return getDB()->storeJSON(chatID, chatDB);
-
-	Log("Chat.cpp::" + to_string(__LINE__) + ". Cannot update Chat in DB, can't open Chat DB",WARNING);
-	return false;
 }
 
 string Chat::generateID( list<string> participants ) {
@@ -180,38 +172,39 @@ bool Chat::addMessage(string user_id, string message) {
 	return false;
 }
 
+
 bool Chat::deleteChatOfParticipant( Json::Value participants, string chat_id ) {
-	for (int i = 0; participants.size(); i++) {
+	bool checkRemove = true;
+	bool checkStore = true;
+	for (int i = 0; i < participants.size() && checkRemove && checkStore; i++) {
 		string user_id = participants[i].asString();
 		if (getChatsDB()->exist(user_id)) {
 			Json::Value participantData = getChatsDB()->getJSON(user_id);
 			Json::Value chats_id = participantData["chats"];
 			int position = JSONUtils::isValueInArray(chat_id,chats_id);
 			Json::Value removedValue;
-			if ( !chats_id.removeIndex( position, &removedValue) ) {
-				Log("Chat.cpp::"+ to_string(__LINE__) +". Cannot delete chat (" + chat_id + ") on user (" + user_id + ").\n" + participantData.toStyledString(),ERROR);
-				return false;
+			checkRemove = chats_id.removeIndex( position, &removedValue);
+			if ( checkRemove ) {
+				participantData["chats"] = chats_id;
+				participantData["total"] = chats_id.size();
+				checkStore = getChatsDB()->storeJSON(user_id,participantData);
 			}
-			participantData["chats"] = chats_id;
-			participantData["total"] = chats_id.size();
-			if ( !getChatsDB()->storeJSON(user_id,participantData) ) {
-				return false;
-			}
+			//Log("Chat.cpp::"+ to_string(__LINE__) +". Cannot delete chat (" + chat_id + ") on user (" + user_id + ").\n" + participantData.toStyledString(),ERROR);
 		}
-		Log("Successful remove chat (" + chat_id + ") from user (" + user_id + ")");
 	}
 	return true;
 }
 
 bool Chat::Delete(string chat_id) {
+	bool ok = false;
 	if ( getDB()->exist(chat_id) ) {
 		Chat chat(chat_id);
 		if (getDB()->Delete(chat_id)) {
 			Json::Value participants = chat.getParticipants();
-			return deleteChatOfParticipant(participants, chat_id);
+			ok = deleteChatOfParticipant(participants, chat_id);
 		}
 	}
-	return false;
+	return ok;
 }
 
 Chat::~Chat() {
