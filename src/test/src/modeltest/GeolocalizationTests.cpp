@@ -181,4 +181,9 @@ TEST(GeolocalizationTests, findPeopleInRange) {
 	Json::Value r8 = Geolocalization::findUsersByLocation(dataSearch);
 	EXPECT_FALSE(r8["error"].isNull());
 
+	dataSearch["range"] = 3;
+	dataSearch["latitude"] = 21645201;
+	Json::Value r9 = Geolocalization::findUsersByLocation(dataSearch);
+	EXPECT_FALSE(r9["error"].isNull());
+
 }

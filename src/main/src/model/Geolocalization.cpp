@@ -138,6 +138,8 @@ Json::Value Geolocalization::findUsersByLocation( Json::Value data ) {
 			list<Location> neighbours = GeoUtils::getNeighbours(location,range,PRECISION_KEY);
 			neighbours.push_back( location );
 			dataFound = collectLocations( location, neighbours, range );
+		} else {
+			dataFound["error"] = "Invalid Location input";
 		}
 	}
 	return dataFound;

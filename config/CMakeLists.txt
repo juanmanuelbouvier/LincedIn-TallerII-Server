@@ -55,6 +55,8 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/FriendHandler.cpp
     ${APP_SOURCE}/service/Handlers/LoginHandler.cpp
     ${APP_SOURCE}/service/Handlers/ImagesHandler.cpp
+    ${APP_SOURCE}/service/Handlers/RecommendationHandler.cpp
+    ${APP_SOURCE}/service/Handlers/GeolocalizationHandler.cpp
     
     ${APP_SOURCE}/service/ExternLogin/FacebookAPI.cpp
     

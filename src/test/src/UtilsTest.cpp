@@ -352,6 +352,25 @@ TEST(UtilsTest, listToJsonArray) {
 	EXPECT_EQ(array[3],"l");
 }
 
+TEST(UtilsTest, queryToJson) {
+	string q1 = "hello=world 2016&linced=in";
+	Json::Value r1 = JSONUtils::queryToJson(q1);
+	EXPECT_EQ(r1["hello"].asString(),"world 2016");
+	EXPECT_EQ(r1["linced"].asString(),"in");
+
+	string q2 = "hello=world&linced=in&linced=out&linced=2";
+	Json::Value r2 = JSONUtils::queryToJson(q2);
+	EXPECT_EQ(r2["hello"],"world");
+	EXPECT_EQ(r2["linced"].size(),3);
+	EXPECT_EQ(r2["linced"][0],"in");
+	EXPECT_EQ(r2["linced"][1],"out");
+	EXPECT_EQ(r2["linced"][2],"2");
+
+	string q3 = "hellos  asjdghb as jahsf asfkjk asfkhasf";
+	Json::Value r3 = JSONUtils::queryToJson(q3);
+	EXPECT_TRUE(r3.isNull());
+}
+
 
 TEST(UtilsTest, JSONToString) {
 	Json::Value val(Json::arrayValue);

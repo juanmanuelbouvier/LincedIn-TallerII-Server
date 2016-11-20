@@ -59,6 +59,10 @@ TEST(DBTest, storeJson) {
 	Json::Value expectedEmpty;
 	EXPECT_TRUE(db.getJSON("b").isMember("error"));
 
+	EXPECT_TRUE(db.store("key2","{value205:245"));
+	Json::Value result2 = db.getJSON("key2");
+	EXPECT_TRUE(result2.isMember("error"));
+
 	SettingManager::deleteInstance();
 
 }

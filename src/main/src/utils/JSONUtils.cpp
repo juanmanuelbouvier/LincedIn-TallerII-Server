@@ -1,5 +1,6 @@
 #include <utils/JSONUtils.h>
 #include <iostream>
+#include <utils/StringUtils.h>
 
 
 string JSONUtils::JSONToString( Json::Value json ) {
@@ -59,6 +60,32 @@ Json::Value JSONUtils::listToArrayValue(list<string> theList) {
 		array.append(element);
 	}
 	return array;
+}
+
+Json::Value JSONUtils::queryToJson( string query ) {
+	Json::Value queryData;
+	vector<string> parameters = StringUtils::splitString(query,"&");
+	for (string& p : parameters) {
+		vector<string> arg_value = StringUtils::splitString(p,"=");
+		if (arg_value.size() < 2 ) {
+			continue;
+		}
+		string arg = arg_value[0];
+		string val = arg_value[1];
+		if ( queryData.isMember(arg) ) {
+			if (queryData[arg].isArray()) {
+				queryData[arg].append(val);
+			} else {
+				Json::Value array(Json::arrayValue);
+				array.append(queryData[arg]);
+				array.append(val);
+				queryData[arg] = array;
+			}
+		} else {
+			queryData[arg] = val;
+		}
+	}
+	return queryData;
 }
 
 

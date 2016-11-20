@@ -61,7 +61,9 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 		user_id = TokenUtils::userIDByToken(token);
 	}
 
-	if( !User::exist(user_id) && (http_request->isDELETE() || http_request->isGET() || http_request->isPUT()) ){
+
+
+	if( !User::exist(user_id) ){
 		return ResponseBuilder::createErrorResponse(404, "INVALID USERID", 1);
 	}
 
@@ -73,19 +75,19 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 	}
 
 	if ( http_request->isPUT() ){
-		Json::Value data ;
+		Json::Value data;
 		ErrorMessage errorMessage = User::update(user_id,data);
 
 		if (errorMessage){
 			string error = "Parametros invalidos: " + errorMessage.summary();
 			return ResponseBuilder::createErrorResponse(400,error,2);
 		}
-		return ResponseBuilder::createOKResponse(200,"Perfil modificado.");
+		return ResponseBuilder::createOKResponse(200,"UPDATED PROFILE");
 
 
 	}
 
-	if (http_request->isDELETE()){
+	if ( http_request->isDELETE() ){
 		return (User::remove(user_id)) ?
 			ResponseBuilder::createOKResponse(200, "PROFILE DELETED") : ResponseBuilder::createErrorResponse(500, "UNEXPECTED ERROR");
 	}
