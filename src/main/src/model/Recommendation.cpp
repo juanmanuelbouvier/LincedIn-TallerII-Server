@@ -1,6 +1,8 @@
 #include <model/Recommendation.h>
 #include <utils/DateUtils.h>
 
+#include <iostream>
+
 #define RECOMMENDATION_DB "Recommendations"
 #define RECOMMENDATION_COUNT "CountRecommendations"
 
@@ -29,6 +31,11 @@ ErrorMessage Recommendation::addRecommendation(string user_id,string recommender
 
 	Json::Value user_recommendations = getUserRecommendations(user_id);
 
+	if (user_id == recommender_id){
+		error.addError("add recommendation","Cannot recommender yourself");
+		return error;
+	}
+
 	if (user_recommendations.isMember(recommender_id)){
 		error.addError("add recommendation",user_id + " already recommended by the user " + recommender_id);
 		return error;
@@ -52,7 +59,10 @@ ErrorMessage Recommendation::addRecommendation(string user_id,string recommender
 		getCountDB()->storeJSON(to_string(count),old_cant);
 	}
 
-	Json::Value cant = getDB()->getJSON(new_count);
+	Json::Value cant;
+	if (getCountDB()->exist(new_count)){
+		cant = getCountDB()->getJSON(new_count);
+	}
 	cant[user_id] = new_count;
 	getCountDB()->storeJSON(new_count,cant);
 
@@ -76,14 +86,18 @@ ErrorMessage Recommendation::removeRecommendation(string user_id,string recommen
 	getDB()->storeJSON(user_id,user_recommendations);
 
 	int new_count = count - 1;
-	Json::Value old_cant = getDB()->getJSON(to_string(count));
+	Json::Value old_cant = getCountDB()->getJSON(to_string(count));
 	old_cant.removeMember(user_id);
-	getDB()->storeJSON(to_string(count),old_cant);
+	getCountDB()->storeJSON(to_string(count),old_cant);
 
 	if (new_count > 0){
-		Json::Value cant = getDB()->getJSON(to_string(new_count));
+
+		Json::Value cant;
+		if (getCountDB()->exist(to_string(new_count))){
+			cant = getCountDB()->getJSON(to_string(new_count));
+		}
 		cant[user_id] = new_count;
-		getDB()->storeJSON(user_id,cant);
+		getCountDB()->storeJSON(user_id,cant);
 	}
 
 	return error;
@@ -119,15 +133,13 @@ Json::Value Recommendation::getUsersMostRecommendation(int cantUser){
 		Json::Value userMostrecommender = getCountDB()->getHigherKeyValue(index);
 		if (userMostrecommender.isMember("error")){
 			moreRes = false;
-			continue;
+			break;
 		}
 		Json::Value::Members memberNames = userMostrecommender.getMemberNames();
 		for (string& mem : memberNames){
-			Json::Value recom = userMostrecommender[mem];
 			Json::Value rec;
-			rec["recommender"] = mem;
-			rec["text"] = recom["text"];
-			rec["timestamp"] = recom["timestamp"];
+			rec["user_id"] = mem;
+			rec["count_recommendations"] = userMostrecommender[mem];
 			mostRecommender.append(rec);
 			cantUserAppending++;
 		}

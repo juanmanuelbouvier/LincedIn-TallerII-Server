@@ -1,48 +1,33 @@
 #include <modeltest/RecommendationTest.h>
 #include <model/Recommendation.h>
+#include <TestHelper.h>
+#include <utils/ErrorMessage.h>
 
 using namespace std;
-/*
-TEST(RecommendationTest, RecommendationAsJSON){
-	string recommender = "Juan Manue";
-	string text = "Este es bueno.";
-	int timestamp = 123456789;
 
-	Recommendation* recommendation = new Recommendation(recommender,text,timestamp);
+TEST(RecommendationTest, addRecommendation){
+	TestHelper::settinUpTestModel();
 
-	Json::Value json = recommendation->asJSON();
+	string idUser1 = "pe";
+	string idUser2 = "yss";
 
-	EXPECT_EQ(recommender,json["recommender"].asString());
-	EXPECT_EQ(recommender,recommendation->getRecommender());
+	User user1 = TestHelper::createBasicUsers(idUser1);
+	User user2 = TestHelper::createBasicUsers(idUser2);
 
-	EXPECT_EQ(text,json["text"].asString());
-	EXPECT_EQ(text,recommendation->getText());
+	string text = "recomiendo a este user";
 
-	EXPECT_EQ(timestamp,json["timestamp"].asInt());
-	EXPECT_EQ(timestamp,recommendation->getTimestamp());
+	ErrorMessage error = Recommendation::addRecommendation(idUser2,idUser1,text);
 
-	delete recommendation;
+	EXPECT_FALSE(error);
+
+	Json::Value recommendations = Recommendation::getRecommendation(idUser2);
+
+	EXPECT_TRUE(recommendations.isMember(idUser1));
+	EXPECT_EQ(recommendations[idUser1]["text"],text);
+
+	Json::Value mostRecommendations = Recommendation::getUsersMostRecommendation(10);
+
+	EXPECT_EQ(mostRecommendations.size(),1);
+	Json::Value userMostRecomendation = mostRecommendations[0];
+	EXPECT_EQ(userMostRecomendation["user_id"].asString(),idUser2);
 }
-
-TEST(RecommendationTest, RecommendationListAsJSON){
-	string recommender = "Juan Manuel";
-	string text = "Este es bueno.";
-
-	list<Recommendation> recommendations;
-
-	Recommendation rec1 = Recommendation(recommender,text,123456);
-	Recommendation rec2 = Recommendation(recommender,text,123459);
-
-	recommendations.push_back(rec1);
-	recommendations.push_back(rec2);
-
-	Json::Value listOriginal = Json::Value(Json::arrayValue);
-	listOriginal.append(rec1.asJSON());
-	listOriginal.append(rec2.asJSON());
-
-	Json::Value list = Recommendation::listToArray(recommendations);
-
-	EXPECT_EQ(list,listOriginal);
-}
-
-*/

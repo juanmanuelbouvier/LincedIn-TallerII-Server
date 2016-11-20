@@ -4,6 +4,7 @@
 #include <services/Logger/Logger.h>
 #include <utils/JSONUtils.h>
 
+#include <iostream>
 
 DB::DB( string DBName ) {
 	nameOfDB = DBName;
@@ -82,12 +83,6 @@ Json::Value DB::getJSON( string key ){
 		if ( root.isMember("error") ) {
 			root["error"] = "error on parse value of key.";
 		}
-		/*Json::Reader* reader = new Json::Reader();
-		bool parsingSuccessful = reader->parse( returnJSON.c_str(), root );
-		if (!parsingSuccessful){
-			root["error"] = "error on parse value of key.";
-		}
-		delete reader;*/
 	}
 
 	return root;
@@ -102,16 +97,19 @@ Json::Value DB::getHigherKeyValue(int withoutTheLatters){
 	leveldb::Iterator* it = db->NewIterator(leveldb::ReadOptions());
 	it->SeekToLast();
 
-	for (int i = 0 ; i < withoutTheLatters; it++){
-		it->Prev();
+	if (withoutTheLatters > 0) {
+		for (int i = 0 ; i < withoutTheLatters; i++){
+			it->Prev();
+		}
 	}
 
-	string res = ( it->Valid() ) ? it->key().ToString() : "";
+	string key = ( it->Valid() ) ? it->key().ToString() : "";
 
-	if (res.empty()){
+
+	if (key.empty()){
 		root["error"] = "not find key in DB";
 	} else {
-		root = JSONUtils::stringToJSON(res);
+		root = getJSON(key);
 		if ( root.isMember("error") ) {
 			root["error"] = "error on parse value of key.";
 		}
