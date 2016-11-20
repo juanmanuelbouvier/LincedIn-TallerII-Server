@@ -2,7 +2,7 @@
 #include <model/Recommendation.h>
 
 using namespace std;
-
+/*
 TEST(RecommendationTest, RecommendationAsJSON){
 	string recommender = "Juan Manue";
 	string text = "Este es bueno.";
@@ -45,3 +45,4 @@ TEST(RecommendationTest, RecommendationListAsJSON){
 	EXPECT_EQ(list,listOriginal);
 }
 
+*/

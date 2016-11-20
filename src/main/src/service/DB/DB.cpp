@@ -93,6 +93,29 @@ Json::Value DB::getJSON( string key ){
 	return root;
 }
 
+Json::Value DB::getHigherKeyValue(){
+	Json::Value root;
+	if (!opened){
+		root["error"] = "cannot open DB";
+		return root;
+	}
+	leveldb::Iterator* it = db->NewIterator(leveldb::ReadOptions());
+	it->SeekToLast();
+
+	string res = ( it->Valid() ) ? it->key().ToString() : "";
+
+	if (res.empty()){
+		root["error"] = "not find key in DB";
+	} else {
+		root = JSONUtils::stringToJSON(res);
+		if ( root.isMember("error") ) {
+			root["error"] = "error on parse value of key.";
+		}
+	}
+
+	return root;
+}
+
 DB::~DB() {
 	delete db;
 }

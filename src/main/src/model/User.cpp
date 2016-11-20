@@ -23,6 +23,11 @@ User User::create( Json::Value data ) {
 		throw UserException("Error on create user, check data. Summary: " + error.summary());
 	}
 
+	if (getEmailDB()->exist(data["email"].asString())){
+		Log("User.cpp::" + to_string(__LINE__) + ". Email already exist.",ERROR);
+		throw UserException("Email already exist.");
+	}
+
 	string user_id = generateUserID(data["id"].asString(),data["first_name"].asString(),data["last_name"].asString());
 
 	Json::Value userDB;
@@ -41,7 +46,6 @@ User User::create( Json::Value data ) {
 	userDB["skills"] = data["skills"];
 	userDB["jobs"] = data["jobs"];
 	userDB["education"] = data["education"];
-	userDB["recommendations_received"] = Json::arrayValue;
 
 	userDB["password"] = StringUtils::passwordEncrypt(data["password"].asString());
 	int now = DateUtils::timestamp();
@@ -82,12 +86,11 @@ ErrorMessage User::update(string user_id,Json::Value data){
 
 
 	ErrorMessage checkMessage = User::check(data);
-	if (!checkMessage.empty()) return checkMessage;
+	if (checkMessage) return checkMessage;
 
 	//no public information
 	data["register_timestamp"] = userDB["register_timestamp"].asInt();
 	data["last_edit_timestamp"] = DateUtils::timestamp();
-	data["password"] = userDB["password"];
 
 	if (data.isMember("profile_picture")){
 		//booro imagen anterior
@@ -163,14 +166,6 @@ User::User(string user_id) {
 		}
 	}
 
-	if (userDB.isMember("recommendations_received")){
-		Json::Value recommendation = userDB["recommendations_received"];
-		for( Json::ValueIterator itr = recommendation.begin() ; itr != recommendation.end() ; itr++ ) {
-			Json::Value red_data = recommendation[itr.index()];
-			Recommendation rec = Recommendation(red_data["recommender"].asString(),red_data["text"].asString(),red_data["timestamp"].asInt());
-			recommendations_received.push_back(rec);
-		}
-	}
 }
 
 
@@ -190,9 +185,7 @@ string User::getID(){
 ErrorMessage User::check(Json::Value data){
 	ErrorMessage error;
 
-	if (data.isMember("id")){
-		//Json::Value userInDB = getDB()->getJSON(data["id"].asString());
-	}else {
+	if (!data.isMember("id")){
 		error.addError("id","Id not specified");
 	}
 
@@ -267,7 +260,7 @@ bool User::checkPassword( string user_id,string password ){
 }
 
 string User::generateUserID(string candidate,string first_name, string last_name){
-	if(!getDB()->exist(candidate)){
+	if(!candidate.empty() and !getDB()->exist(candidate)){
 		return candidate;
 	}
 
@@ -305,8 +298,6 @@ Json::Value User::asJSON(){
 	user["jobs"] = Job::listToArray(jobs);
 
 	user["education"] = Education::listToArray(education);
-
-	user["recommendations_received"] = Recommendation::listToArray(recommendations_received);
 
 	return user;
 

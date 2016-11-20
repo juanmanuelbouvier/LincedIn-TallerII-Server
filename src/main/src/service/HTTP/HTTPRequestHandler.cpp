@@ -33,7 +33,6 @@ HTTPRequestHandler::HTTPRequestHandler() {
 		addHandler(url, sharedHandler);
 	}
 
-	//TODO: Delete this handler
 	addHandler("/img/:id", new ImagesHandler() );
 
 	ChatHandler* chatHandler = new ChatHandler();

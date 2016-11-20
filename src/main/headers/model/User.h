@@ -17,7 +17,6 @@ private:
 	list<Job> jobs;
 	list<Skill> skills;
 	list<Education> education;
-	list<Recommendation> recommendations_received;
 	int register_timestamp,last_edit_timestamp;
 	static DB* getDB();
 	static DB* getEmailDB();
@@ -35,7 +34,6 @@ public:
 	static bool checkPassword( string user_id,string password );
 
 	Json::Value asJSON();
-	Json::Value getRecommendationAsJSON();
 	string getID();
 
 	virtual ~User();

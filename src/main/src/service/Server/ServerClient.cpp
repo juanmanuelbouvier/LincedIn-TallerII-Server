@@ -1,5 +1,7 @@
 #include <services/Server/ServerClient.h>
 
+#define MAX_TIME 10
+
 using namespace std;
 
 ServerClient::ServerClient() {
@@ -13,9 +15,13 @@ ServerClient::ServerClient() {
 HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
 	sendingRequest = true;
-	while (sendingRequest) {
+
+	int time = 0;
+	while (sendingRequest && time <= MAX_TIME) {
 		mg_mgr_poll(&eventClientManager, 1000);
+		time++;
 	}
+
 	return response;
 }
 
