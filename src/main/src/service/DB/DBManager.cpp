@@ -11,13 +11,6 @@ DBManager* DBManager::getInstance(){
 	return managerInstance;
 }
 
-void DBManager::setInstance(DBManager* dbManager){
-	if (managerInstance) {
-		delete managerInstance;
-	}
-	managerInstance = dbManager;
-}
-
 void DBManager::deleteInstance(){
 	if (managerInstance) {
 		delete managerInstance;

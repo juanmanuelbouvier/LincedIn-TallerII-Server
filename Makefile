@@ -34,7 +34,7 @@ coverage-test:
 	@rm -rf config/build/.temp-test config/build/*.log config/build/db
 	
 coverage-run:
-	@mkdir -p config/build/db mkdir -p config/build/logs && mkdir -p config/build/settings && cp settings/setting.json config/build/settings/setting.json
+	@mkdir -p config/build/db && mkdir -p config/build/logs && mkdir -p config/build/settings && cp settings/setting.json config/build/settings/setting.json
 	@cd config && cd build && make run_coverage_server && cd ../..
 	@rm -rf config/build/db config/build/logs config/build/db
 

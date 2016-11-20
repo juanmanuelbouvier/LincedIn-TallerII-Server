@@ -20,6 +20,8 @@ private:
 	Json::Value deleteObject(string url);
 	HTTPResponse* sendRequest(HTTPRequest* request);
 
+	Json::Value findSkill(Json::Value skills, string name);
+
 public:
 	SharedServerAPI();
 

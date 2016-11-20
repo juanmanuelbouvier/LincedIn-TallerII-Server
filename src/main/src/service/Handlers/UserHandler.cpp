@@ -62,6 +62,9 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 		if ( SELF_RESERVATED_ID != user_id && !User::exist(user_id)) {
 			return ResponseBuilder::createErrorResponse(404,"INVALID USER");
 		}
+		if ( SELF_RESERVATED_ID == user_id && !auth ) {
+			return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
+		}
 		if (user_id == SELF_RESERVATED_ID && auth) {
 			user_id = user_id_auth;
 		}
