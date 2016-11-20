@@ -93,7 +93,7 @@ Json::Value DB::getJSON( string key ){
 	return root;
 }
 
-Json::Value DB::getHigherKeyValue(){
+Json::Value DB::getHigherKeyValue(int withoutTheLatters){
 	Json::Value root;
 	if (!opened){
 		root["error"] = "cannot open DB";
@@ -101,6 +101,10 @@ Json::Value DB::getHigherKeyValue(){
 	}
 	leveldb::Iterator* it = db->NewIterator(leveldb::ReadOptions());
 	it->SeekToLast();
+
+	for (int i = 0 ; i < withoutTheLatters; it++){
+		it->Prev();
+	}
 
 	string res = ( it->Valid() ) ? it->key().ToString() : "";
 

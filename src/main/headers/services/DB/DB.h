@@ -33,7 +33,7 @@ public:
 
 	string get(string key);
 	Json::Value getJSON(string key);
-	Json::Value getHigherKeyValue();
+	Json::Value getHigherKeyValue(int withoutTheLatters);
 
 	bool exist(string key);
 

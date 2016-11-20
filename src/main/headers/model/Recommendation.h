@@ -18,6 +18,7 @@ public:
 	static Json::Value getArrayRecommendation(string user_id);
 	static Json::Value getUsersMostRecommendation(int cantUser);
 	static ErrorMessage addRecommendation(string user_id,string recommender_id,string text);
+	static ErrorMessage removeRecommendation(string user_id,string recommender_id);
 
 	virtual ~Recommendation();
 };
