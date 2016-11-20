@@ -157,11 +157,12 @@ include_directories(${TEST_HEADERS})
 
 add_executable(RunUnitTests
 	${TEST_SOURCE}/mainTests.cpp
+	${TEST_SOURCE}/TestHelper.cpp
+	
 	${TEST_SOURCE}/UtilsTest.cpp
 	${TEST_SOURCE}/SettingManagerTest.cpp
 	${TEST_SOURCE}/DBTest.cpp
 	${TEST_SOURCE}/AccessTokenTest.cpp
-	${TEST_SOURCE}/TestHelper.cpp
 	
 	${TEST_SOURCE}/modeltest/EducationTest.cpp
 	${TEST_SOURCE}/modeltest/RecommendationTest.cpp

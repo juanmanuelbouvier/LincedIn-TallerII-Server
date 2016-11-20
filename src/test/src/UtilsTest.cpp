@@ -48,6 +48,33 @@ TEST(UtilsTest, splitPath) {
 	EXPECT_EQ(theSplitPath, expectedSplit);
 }
 
+TEST(UtilsTest, stringReplace) {
+	string s = "hello world";
+	string r1 = StringUtils::replace(s," ","");
+	EXPECT_EQ(r1, "helloworld");
+
+	string r2 = StringUtils::replace(s,"o","a");
+	EXPECT_EQ(r2, "hella warld");
+
+	string r3 = StringUtils::replace(s,"hello world","goodbye");
+	EXPECT_EQ(r3, "goodbye");
+
+	string r4 = StringUtils::replace(s,"","goodbye");
+	EXPECT_EQ(r4,s);
+
+	string r5 = StringUtils::replace("nospace"," ","");
+	EXPECT_EQ(r5,"nospace");
+}
+
+TEST(UtilsTest, upperCaseAndLoweCase) {
+	string s = "theStrigWith UPPErAndLowWer";
+	string r1 = StringUtils::toLowerCase(s);
+	EXPECT_EQ(r1,"thestrigwith upperandlowwer");
+
+	string r2 = StringUtils::toUpperCase(s);
+	EXPECT_EQ(r2,"THESTRIGWITH UPPERANDLOWWER");
+}
+
 TEST(UtilsTest, randomPassword) {
 	string pass = StringUtils::generateRandomPassword();
 
@@ -245,6 +272,19 @@ TEST(UtilsTest, DuummyGetTime) {
 	string expectedYear = to_string(1900 + timePtr->tm_year);
 
 	EXPECT_EQ(date,"Rand0m[" + expectedYear + "]Rand0m");
+
+}
+
+TEST(UtilsTest, DateConvert) {
+	string date = "12/04/1994";
+
+	string e1 = "1994-04-12 00:00:00";
+	string r1 = DateUtils::parseDate(date,"%d/%m/%Y");
+	EXPECT_EQ(e1,r1);
+
+	string e2 = "00hs 00m 00s 1994 hello 12 -======-----=- 04]";
+	string r2 = DateUtils::parseDate(date,"%d/%m/%Y","%Hhs %Mm %Ss %Y hello %d -======-----=- %m]");
+	EXPECT_EQ(e2,r2);
 
 }
 

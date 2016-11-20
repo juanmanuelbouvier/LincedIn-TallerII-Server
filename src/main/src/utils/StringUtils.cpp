@@ -5,6 +5,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <iomanip>
+#include <algorithm>
+#include <cctype>
 
 #define PASSWORD_CHARS "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 #define PASSWORD_LEN 8
@@ -141,4 +143,38 @@ string StringUtils::passwordEncrypt(string password){
 }
 string StringUtils::passwordDecrypt(string password){
 	return password;
+}
+
+string StringUtils::replace(string original, string toReplace, string theReplace) {
+	string result = original;
+	size_t index = 0;
+	size_t size = theReplace.size();
+	if (original == toReplace) {
+		return theReplace;
+	}
+	if (toReplace.size() == 0) {
+		return result;
+	}
+	while (true) {
+	     index = result.find(toReplace, index);
+	     if (index >= result.size()) break;
+	     if (size == 0) {
+	    	 result.erase(index, 1);
+	     } else {
+	    	 result.replace(index, size, theReplace);
+	     }
+	     index += size;
+	}
+	return result;
+
+}
+string StringUtils::toLowerCase(string input) {
+	string result = input;
+	transform(result.begin(), result.end(), result.begin(), (int (*)(int))tolower);
+	return result;
+}
+string StringUtils::toUpperCase(string input) {
+	string result = input;
+	transform(result.begin(), result.end(), result.begin(), (int (*)(int))toupper);
+	return result;
 }

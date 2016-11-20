@@ -1,4 +1,9 @@
 #include <utils/DateUtils.h>
+#include <iomanip>
+#include <ctime>
+#include <sstream>
+
+const string DateUtils::dateTimeFormat = "%Y-%m-%d %H:%M:%S";
 
 /**
  * Get time string with especific format.<BR>
@@ -20,4 +25,13 @@ const string DateUtils::getTimeWithFormat(string format) {
 int DateUtils::timestamp(){
     string now = DateUtils::getTimeWithFormat("%s");
     return atoi(now.c_str());
+}
+
+const string DateUtils::parseDate(string date, string date_format, string toFormat) {
+    tm t = {};
+    istringstream stream1(date);
+    stream1 >> get_time(&t, date_format.c_str());
+    stringstream stream2;
+    stream2 << put_time(&t, toFormat.c_str());
+    return ( stream1.fail() ) ? "" : stream2.str();
 }

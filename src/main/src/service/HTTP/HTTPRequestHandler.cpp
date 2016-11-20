@@ -47,8 +47,9 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	addHandler("/friends",friendHandler);
 	addHandler("/friends/:destination_user_id",friendHandler);
 
-
-	addHandler("/user/:user_id", new UserHandler());
+	UserHandler* userHandler = new UserHandler();
+	addHandler("/user/:user_id", userHandler);
+	addHandler("/user", userHandler);
 
 	addHandler("/login", new LoginHandler());
 }

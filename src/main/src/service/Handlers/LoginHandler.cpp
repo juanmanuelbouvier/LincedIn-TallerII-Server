@@ -4,9 +4,10 @@
 #include <utils/JSONUtils.h>
 #include <utils/TokenUtils.h>
 #include <utils/StringUtils.h>
+#include <utils/DateUtils.h>
 #include <services/ExternLogin/FacebookAPI.h>
 #include <services/Logger/Logger.h>
-
+#include <exception/UserException.h>
 
 Json::Value createBody(string user_id) {
 	Json::Value responseBody;
@@ -29,23 +30,30 @@ HTTPResponse* normalLogin(Json::Value data) {
 }
 
 HTTPResponse* createUser( Json::Value data ) {
-	User newUser = User::create(data);
-	return ResponseBuilder::createJsonResponse(200,createBody(newUser.getID()));
+	string user_id;
+	try {
+		User newUser = User::create(data);
+		user_id = newUser.getID();
+	} catch (UserException& e) {
+		Log("LoginHandler.cpp::" + to_string(__LINE__) + ". " + string(e.what()),ERROR);
+		ResponseBuilder::createErrorResponse(500, "UNEXPECTED ERROR");
+	}
+	return ResponseBuilder::createJsonResponse(200,createBody(user_id));
 }
 
-HTTPResponse* createUserFromData( Json::Value fb_data ) {
+HTTPResponse* createUserFromFacebookData( Json::Value fb_data ) {
 	Json::Value data;
-	data["id"] = "tomi";
+	data["id"] = StringUtils::toLowerCase(StringUtils::replace(fb_data["first_name"].asString()," ",""));
 	data["first_name"] = fb_data["first_name"].asString() + (fb_data.isMember("middle_name") ? " " + fb_data["middle_name"].asString() : "" );
 	data["last_name"] = fb_data["last_name"];
 	data["email"] = fb_data["email"];
-	data["date_of_birth"] = fb_data["birthday"];
+	bool existBirth = fb_data["birthday"].isConvertibleTo(Json::stringValue);
+	Json::Value birth = DateUtils::parseDate(fb_data["birthday"].asString(),FacebookAPI::FB_BirthdayDateFormat);
+	data["date_of_birth"] = ( existBirth ) ? birth : Json::nullValue;
 	data["password"] =  StringUtils::generateRandomPassword();
 
 	ErrorMessage errors = User::check(data);
 	return (errors) ? ResponseBuilder::createErrorResponse(408,errors.summary()) : createUser(data);
-
-
 }
 
 HTTPResponse* facebookLogin(Json::Value data) {
@@ -63,7 +71,7 @@ HTTPResponse* facebookLogin(Json::Value data) {
 			return ResponseBuilder::createJsonResponse(200, createBody(user_id) );
 		}
 		Log("User not in LincedIn database. Attemp to create it");
-		return createUserFromData(fb_data);
+		return createUserFromFacebookData(fb_data);
 
 	}
 	Log("Invalid Facebook Token");
