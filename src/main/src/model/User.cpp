@@ -207,7 +207,7 @@ ErrorMessage User::check(Json::Value data){
 	if (!data.isMember("last_name")){
 		error.addError("last_name","Last name not specified");
 	}
-
+	//TODO: Check if email already in DB
 	if (!data.isMember("email")){
 		error.addError("email","Email not specified");
 	}

@@ -84,6 +84,10 @@ bool HTTPRequest::isPATCH() {
 	return method == "PATCH";
 }
 
+bool HTTPRequest::isPUT() {
+	return method == "PUT";
+}
+
 string HTTPRequest::getURI(){
 	return StringUtils::unescapeString(uri);
 }

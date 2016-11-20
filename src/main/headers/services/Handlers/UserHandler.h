@@ -5,8 +5,6 @@
 #include <extern/json.h>
 
 class UserHandler : public Handler {
-private:
-	Json::Value _loadUser(string user_id);
 public:
 	UserHandler(){};
 

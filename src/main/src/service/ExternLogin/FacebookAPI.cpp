@@ -9,6 +9,9 @@
 #define FB_PATH "/me"
 #define FB_QUERY "fields=email,last_name,middle_name,birthday,first_name&access_token="
 
+const string FacebookAPI::FB_BirthdayDateFormat = "%m/%d/%Y";
+
+
 HTTPResponse* FacebookAPI::sendRequest(string path, string query ) {
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->GET();

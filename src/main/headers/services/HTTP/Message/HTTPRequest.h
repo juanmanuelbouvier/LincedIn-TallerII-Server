@@ -37,6 +37,7 @@ public:
 	bool isPOST();
 	bool isDELETE();
 	bool isPATCH();
+	bool isPUT();
 
 	string toString();
 

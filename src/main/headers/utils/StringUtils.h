@@ -14,6 +14,9 @@ public:
 	static string passwordEncrypt(string password);
 	static string passwordDecrypt(string password);
 	static string generateRandomPassword();
+	static string replace(string original, string toReplace, string replace = "");
+	static string toLowerCase(string input);
+	static string toUpperCase(string input);
 };
 
 #endif /* SRC_MAIN_UTILS_STRINGUTILS_H_ */
