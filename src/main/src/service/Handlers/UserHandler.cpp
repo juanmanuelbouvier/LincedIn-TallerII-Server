@@ -53,26 +53,27 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 	map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/user/:user_id");
 	string user_id = path["user_id"];
 
-	if (user_id == SELF_RESERVATED_ID){
-		string token = http_request->getFromHeader("Authorization");
-		if ( !TokenUtils::isValidToken(token) ) {
-			return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
-		}
-		user_id = TokenUtils::userIDByToken(token);
-	}
 
-
-
-	if( !User::exist(user_id) ){
-		return ResponseBuilder::createErrorResponse(404, "INVALID USERID", 1);
-	}
-
+	string token = http_request->getFromHeader("Authorization");
+	bool auth = TokenUtils::isValidToken(token);
+	string user_id_auth = (auth) ? TokenUtils::userIDByToken(token) : "";
 
 	if ( http_request->isGET() ){
+		if ( SELF_RESERVATED_ID != user_id && !User::exist(user_id)) {
+			return ResponseBuilder::createErrorResponse(404,"INVALID USER");
+		}
+		if (user_id == SELF_RESERVATED_ID && auth) {
+			user_id = user_id_auth;
+		}
 		Json::Value res = _loadUser(user_id);
 		return ResponseBuilder::createJsonResponse(200,res);
-
 	}
+
+	if ( ( user_id == SELF_RESERVATED_ID && !auth )  || ( user_id != SELF_RESERVATED_ID && user_id != user_id_auth ) ) {
+		return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
+	}
+
+	user_id = user_id_auth;
 
 	if ( http_request->isPUT() ){
 		Json::Value data;
