@@ -27,11 +27,7 @@ bool DB::open() {
 
 bool DB::write(string action) {
 	leveldb::Status status = db->Write(leveldb::WriteOptions(), &batchWorker);
-	if ( !status.ok() ) {
-		Log("Cannot " + action + " in '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),WARNING);
-		return false;
-	}
-	return true;
+	return ( status.ok() ) ? true : Log("Cannot " + action + " in '" + nameOfDB + "'\n levelDB Status: " + status.ToString() ,WARNING).empty();
 }
 
 bool DB::Delete(string key) {
@@ -98,24 +94,15 @@ Json::Value DB::getHigherKeyValue(int withoutTheLatters){
 	it->SeekToLast();
 
 	if (withoutTheLatters > 0) {
-		for (int i = 0 ; i < withoutTheLatters; i++){
+		for (int i = 0 ; i < withoutTheLatters && it->Valid(); i++){
 			it->Prev();
 		}
 	}
 
 	string key = ( it->Valid() ) ? it->key().ToString() : "";
 
-
-	if (key.empty()){
-		root["error"] = "not find key in DB";
-	} else {
-		root = getJSON(key);
-		if ( root.isMember("error") ) {
-			root["error"] = "error on parse value of key.";
-		}
-	}
-
-	return root;
+	root["error"] = "not find key in DB";
+	return ( key.empty() ) ? root : getJSON(key);
 }
 
 DB::~DB() {

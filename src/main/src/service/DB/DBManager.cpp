@@ -1,6 +1,7 @@
 #include <services/DB/DBManager.h>
 #include <exception/DBManagerException.h>
 #include <services/Logger/Logger.h>
+#include <exception/DBManagerException.h>
 
 DBManager* DBManager::managerInstance = NULL;
 
@@ -26,27 +27,25 @@ bool DBManager::exist( string DBName ) {
 }
 
 bool DBManager::addDB( string DBName ) {
-	if ( exist(DBName) ) {
-		return false;
+	bool success = false;
+	if ( !exist(DBName) ) {
+		DB* db = new DB(DBName);
+		if ( db->open() ) {
+			databases[DBName] = db;
+			success = true;
+		}
 	}
-	DB* db = new DB(DBName);
-	if ( db->open() ) {
-		databases[DBName] = db;
-		return true;
-	}
-	return false;
+	return success;
 }
 
 DB* DBManager::getDB( string DBName ) {
 	DBManager* manager = getInstance();
+	bool success = true;
 	if ( !manager->exist(DBName) ) {
 		Log("Database " + DBName + " It is not open. Attemp to do it", WARNING);
-		if ( !manager->addDB(DBName) ) {
-			Log("Cannot open Database: " + DBName,ERROR);
-			return NULL;
-		}
+		success = manager->addDB(DBName);
 	}
-	return manager->databases[DBName];
+	return (success) ? manager->databases[DBName] : throw DBManagerException("Cannot open DB: " + DBName);
 }
 
 DBManager::~DBManager() {
