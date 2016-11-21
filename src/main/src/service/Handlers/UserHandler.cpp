@@ -9,6 +9,7 @@
 #include <services/Logger/Logger.h>
 #include <exception/UserException.h>
 #include <string>
+#include <services/HTTP/HTTPResponseConstants.h>
 
 
 using namespace std;
@@ -20,7 +21,7 @@ HTTPResponse* createUserFromData( Json::Value data ) {
 	data["id"] = ( data["id"].isString() && data["id"].asString() != SELF_RESERVATED_ID ) ? data["id"].asString() : safeId;
 	ErrorMessage error = User::check(data);
 	if (error) {
-		return ResponseBuilder::createErrorResponse(400,error.summary(),3);
+		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error.summary(),3);
 	}
 	string user_id;
 	try {
@@ -28,13 +29,13 @@ HTTPResponse* createUserFromData( Json::Value data ) {
 		user_id = newUser.getID();
 	} catch (UserException& e) {
 		Log("UserHandler.cpp::" + to_string(__LINE__) + ". " + string(e.what()),ERROR);
-		ResponseBuilder::createErrorResponse(500, "UNEXPECTED ERROR");
+		ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR, "UNEXPECTED ERROR",10);
 	}
 	Json::Value body;
 	body["message"] = "Welcome, " + user_id;
 	body["token"] = TokenUtils::generateSessionToken( user_id );
 	Log("Token created for the new user \"" + user_id + "\"\n\ttoken: " + body["token"].asString());
-	return ResponseBuilder::createJsonResponse(200,body);
+	return ResponseBuilder::createJsonResponse(CODE_OK,body);
 
 }
 
@@ -60,20 +61,20 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 
 	if ( http_request->isGET() ){
 		if ( SELF_RESERVATED_ID != user_id && !User::exist(user_id)) {
-			return ResponseBuilder::createErrorResponse(404,"INVALID USER");
+			return ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,"INVALID USER",CODE_NONEXISTEN);
 		}
 		if ( SELF_RESERVATED_ID == user_id && !auth ) {
-			return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
+			return ResponseBuilder::createErrorResponse(CODE_PERMISSION_DENIED,"PERMISSION DENIED",CODE_PERMISSION_DENIED);
 		}
 		if (user_id == SELF_RESERVATED_ID && auth) {
 			user_id = user_id_auth;
 		}
 		Json::Value res = _loadUser(user_id);
-		return ResponseBuilder::createJsonResponse(200,res);
+		return ResponseBuilder::createJsonResponse(CODE_OK,res);
 	}
 
 	if ( ( user_id == SELF_RESERVATED_ID && !auth )  || ( user_id != SELF_RESERVATED_ID && user_id != user_id_auth ) ) {
-		return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
+		return ResponseBuilder::createErrorResponse(CODE_PERMISSION_DENIED,"PERMISSION DENIED",CODE_PERMISSION_DENIED);
 	}
 
 	user_id = user_id_auth;
@@ -84,18 +85,18 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 
 		if (errorMessage){
 			string error = "Parametros invalidos: " + errorMessage.summary();
-			return ResponseBuilder::createErrorResponse(400,error,2);
+			return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error,CODE_BREACH_PRECONDITIONS);
 		}
-		return ResponseBuilder::createOKResponse(200,"UPDATED PROFILE");
+		return ResponseBuilder::createEmptyResponse(CODE_UPDATE,"UPDATED PROFILE");
 
 
 	}
 
 	if ( http_request->isDELETE() ){
 		return (User::remove(user_id)) ?
-			ResponseBuilder::createOKResponse(200, "PROFILE DELETED") : ResponseBuilder::createErrorResponse(500, "UNEXPECTED ERROR");
+			ResponseBuilder::createEmptyResponse(CODE_DELETE, "PROFILE DELETED") : ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR, "UNEXPECTED ERROR",CODE_UNEXPECTED_ERROR);
 	}
-	return ResponseBuilder::createErrorResponse(500, "BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST, "BAD REQUEST",CODE_BAD_REQUEST);
 }
 
 
@@ -108,5 +109,5 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 		Json::Value data = JSONUtils::stringToJSON( http_request->getBody() );
 		return createUserFromData(data);
 	}
-	return ResponseBuilder::createErrorResponse(500, "BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST, "BAD REQUEST",CODE_BAD_REQUEST);
 }

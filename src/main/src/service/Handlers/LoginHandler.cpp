@@ -8,6 +8,8 @@
 #include <services/ExternLogin/FacebookAPI.h>
 #include <services/Logger/Logger.h>
 #include <exception/UserException.h>
+#include <services/HTTP/HTTPResponseConstants.h>
+
 
 Json::Value createBody(string user_id) {
 	Json::Value responseBody;
@@ -22,11 +24,11 @@ HTTPResponse* normalLogin(Json::Value data) {
 		string password = data["password"].asString();
 		string user_id = ( data["email"].isString() ) ? User::getIdByEmail( data["email"].asString() ) : data["user_id"].asString();
 		if ( !user_id.empty() && User::exist(user_id) && User::checkPassword(user_id,password) ) {
-			return ResponseBuilder::createJsonResponse(200, createBody(user_id) );
+			return ResponseBuilder::createJsonResponse(CODE_OK, createBody(user_id) );
 		}
-		return ResponseBuilder::createErrorResponse(500,"WRONG PASSWORD");
+		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"WRONG PASSWORD");
 	}
-	return ResponseBuilder::createErrorResponse(500,"INVALID DATA");
+	return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"INVALID DATA");
 }
 
 HTTPResponse* createUser( Json::Value data ) {
@@ -36,9 +38,9 @@ HTTPResponse* createUser( Json::Value data ) {
 		user_id = newUser.getID();
 	} catch (UserException& e) {
 		Log("LoginHandler.cpp::" + to_string(__LINE__) + ". " + string(e.what()),ERROR);
-		ResponseBuilder::createErrorResponse(500, "UNEXPECTED ERROR");
+		ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR, "UNEXPECTED ERROR",10);
 	}
-	return ResponseBuilder::createJsonResponse(200,createBody(user_id));
+	return ResponseBuilder::createJsonResponse(CODE_OK,createBody(user_id));
 }
 
 HTTPResponse* createUserFromFacebookData( Json::Value fb_data ) {
@@ -53,12 +55,12 @@ HTTPResponse* createUserFromFacebookData( Json::Value fb_data ) {
 	data["password"] =  StringUtils::generateRandomPassword();
 
 	ErrorMessage errors = User::check(data);
-	return (errors) ? ResponseBuilder::createErrorResponse(408,errors.summary()) : createUser(data);
+	return (errors) ? ResponseBuilder::createErrorResponse(408,errors.summary(),408) : createUser(data);
 }
 
 HTTPResponse* facebookLogin(Json::Value data) {
 	if ( !data["fb_token"].isString() ) {
-		return ResponseBuilder::createErrorResponse(400,"NO_FB_TOKEN");
+		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"NO_FB_TOKEN",400);
 	}
 	string fb_token = data["fb_token"].asString();
 	FacebookAPI fb;
@@ -68,20 +70,20 @@ HTTPResponse* facebookLogin(Json::Value data) {
 		string email = fb_data["email"].asString();
 		string user_id = User::getIdByEmail( email );
 		if ( !user_id.empty() ) {
-			return ResponseBuilder::createJsonResponse(200, createBody(user_id) );
+			return ResponseBuilder::createJsonResponse(CODE_OK, createBody(user_id) );
 		}
 		Log("User not in LincedIn database. Attemp to create it");
 		return createUserFromFacebookData(fb_data);
 
 	}
 	Log("Invalid Facebook Token");
-	return ResponseBuilder::createErrorResponse(400,"INVALID_FB_TOKEN");
+	return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"INVALID_FB_TOKEN");
 }
 
 
 HTTPResponse* LoginHandler::handle(HTTPRequest* request) {
 	if (!request->isPOST()) {
-		return ResponseBuilder::createErrorResponse(400,"ERROR");
+		return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,"ERROR");
 	}
 	Json::Value bodyJson = JSONUtils::stringToJSON(request->getBody());
 	if ( bodyJson["type"].isString() ) {
@@ -93,6 +95,6 @@ HTTPResponse* LoginHandler::handle(HTTPRequest* request) {
 			return normalLogin(bodyJson);
 		}
 	}
-	return ResponseBuilder::createErrorResponse(400,"INVALID_TYPE");
+	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,PHRASE_BAD_REQUEST);
 }
 

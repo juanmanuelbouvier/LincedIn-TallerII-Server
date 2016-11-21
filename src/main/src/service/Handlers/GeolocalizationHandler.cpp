@@ -4,6 +4,7 @@
 #include <utils/TokenUtils.h>
 #include <model/Geolocalization.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
+#include <services/HTTP/HTTPResponseConstants.h>
 
 HTTPResponse* findNear(HTTPRequest* request) {
 	//TODO: Method
@@ -11,9 +12,9 @@ HTTPResponse* findNear(HTTPRequest* request) {
 	Json::Value found = Geolocalization::findUsersByLocation(queryData);
 	if (found.isMember("error")) {
 		found["parameters"] = queryData;
-		return ResponseBuilder::createJsonResponse(404,found);
+		return ResponseBuilder::createJsonResponse(CODE_NONEXISTEN,found);
 	}
-	return ResponseBuilder::createErrorResponse(200,"PERMISSION DENIED");
+	return ResponseBuilder::createErrorResponse(CODE_OK,"PERMISSION DENIED");
 }
 
 HTTPResponse* sendLocation(HTTPRequest* request) {
@@ -21,14 +22,14 @@ HTTPResponse* sendLocation(HTTPRequest* request) {
 	string token = request->getFromHeader("Authorization");
 
 	if ( !TokenUtils::isValidToken(token) ) {
-		return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
+		return ResponseBuilder::createErrorResponse(CODE_PERMISSION_DENIED,PHRASE_PERMISSION_DENIED);
 	}
 
 	data["user_id"] = TokenUtils::userIDByToken(token);
 	if ( Geolocalization::updateLocation(data) ) {
-		return ResponseBuilder::createOKResponse(200,"OK");
+		return ResponseBuilder::createEmptyResponse(CODE_OK,"OK");
 	}
-	return ResponseBuilder::createErrorResponse(500,"UNEXPECTED ERROR");
+	return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED ERROR");
 }
 
 HTTPResponse* handler(HTTPRequest* request) {
@@ -36,10 +37,10 @@ HTTPResponse* handler(HTTPRequest* request) {
 		map<string,string> path = PathUtils::routerParser(request->getURI(),"geolocalization/:user_id");
 		string user_id = path["user_id"];
 		if (!User::exist(user_id)) {
-			ResponseBuilder::createErrorResponse(404,"INVALID USER");
+			ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,"INVALID USER");
 		}
 		Json::Value localization = Geolocalization::getUserLocation(user_id);
-		return ResponseBuilder::createJsonResponse(200,localization);
+		return ResponseBuilder::createJsonResponse(CODE_OK,localization);
 	}
 
 	if ( PathUtils::matchPathRegexp(request->getURI(),"geolocalization") ) {
@@ -51,5 +52,5 @@ HTTPResponse* handler(HTTPRequest* request) {
 		}
 
 	}
-	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,PHRASE_BAD_REQUEST);
 }

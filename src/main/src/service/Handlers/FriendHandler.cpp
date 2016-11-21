@@ -5,6 +5,8 @@
 #include <utils/ErrorMessage.h>
 #include <model/Friends.h>
 #include <extern/json.h>
+#include <list>
+#include <services/HTTP/HTTPResponseConstants.h>
 
 using namespace std;
 
@@ -15,7 +17,7 @@ HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 
 	string token = http_request->getFromHeader("Authorization");
 	if ( !TokenUtils::isValidToken(token) ) {
-		return ResponseBuilder::createErrorResponse(401,"PERMISSION DENIED");
+		return ResponseBuilder::createErrorResponse(CODE_PERMISSION_DENIED,PHRASE_PERMISSION_DENIED);
 	}
 	string user_source_id = TokenUtils::userIDByToken(token);
 
@@ -32,7 +34,7 @@ HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 	}
 
 
-	return ResponseBuilder::createErrorResponse(500,"BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,PHRASE_BAD_REQUEST);
 
 }
 
@@ -40,7 +42,7 @@ HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 HTTPResponse* _actionUser(string method,string source_user_id,string user_destination_id){
 
 	if (!User::exist(user_destination_id)){
-		return ResponseBuilder::createErrorResponse(404,"Usuario destino inexistente: " + user_destination_id,1);
+		return ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,"Usuario destino inexistente: " + user_destination_id);
 	}
 
 	if (method == "POST"){
@@ -48,23 +50,23 @@ HTTPResponse* _actionUser(string method,string source_user_id,string user_destin
 		ErrorMessage error = Friends::add(source_user_id,user_destination_id);
 
 		if (error){
-			return ResponseBuilder::createErrorResponse(408,"Usuario ya es parte de la red",2);
+			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,"Usuario ya es parte de la red");
 		}
 
-		return ResponseBuilder::createOKResponse(200,"Solicitud para agregar a la red enviada");
+		return ResponseBuilder::createEmptyResponse(CODE_OK,"Solicitud para agregar a la red enviada");
 
 	} else if (method == "DELETE"){
 
 		ErrorMessage error = Friends::remove(source_user_id,user_destination_id);
 
 		if (error){
-			return ResponseBuilder::createErrorResponse(408,"Usuario no es parte de la red",3);
+			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,"Usuario no es parte de la red");
 		}
 
-		return ResponseBuilder::createOKResponse(204,"Eliminado de la red");
+		return ResponseBuilder::createEmptyResponse(CODE_DELETE,"Eliminado de la red");
 	}
 
-	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,PHRASE_BAD_REQUEST);
 
 }
 
@@ -81,7 +83,7 @@ HTTPResponse* _friends(string source_user_id){
 	general["metadata"] = metadata;
 	general["friends"] = friends;
 
-	return ResponseBuilder::createJsonResponse(200,general);
+	return ResponseBuilder::createJsonResponse(CODE_OK,general);
 
 }
 

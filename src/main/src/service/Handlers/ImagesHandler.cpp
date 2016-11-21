@@ -3,6 +3,7 @@
 #include <extern/json.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <utils/PathUtils.h>
+#include <services/HTTP/HTTPResponseConstants.h>
 
 using namespace std;
 
@@ -67,5 +68,5 @@ HTTPResponse* ImagesHandler::handle(HTTPRequest* http_request) {
 
 	}
 
-	return ResponseBuilder::createErrorResponse(400,"BAD REQUEST");
+	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,PHRASE_BAD_REQUEST);
 }
