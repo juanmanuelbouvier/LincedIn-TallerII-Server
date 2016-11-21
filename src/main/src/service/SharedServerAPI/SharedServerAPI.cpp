@@ -16,17 +16,13 @@ SharedServerAPI::SharedServerAPI() {
 }
 
 
-vector<string> SharedServerAPI::getsURL() {
-	vector<string> urls = {
-		"/job_positions/categories/:category",
-		"/job_positions",
-		"/skills",
-		"/skills/categories/:category/:name",
-		"/categories"
-	};
-
-	return urls;
-}
+const vector<string> SharedServerAPI::EndPoints = {
+	"/job_positions/categories/:category",
+	"/job_positions",
+	"/skills",
+	"/skills/categories/:category/:name",
+	"/categories"
+};
 
 HTTPResponse* SharedServerAPI::sendRequest(HTTPRequest* request) {
 	HTTPResponse* response = ( client->connectToUrl(sharedURL) ) ? client->sendRequest(request) : ResponseBuilder::createErrorResponse(500,"CANNOT_CONNECT_SHARED");
@@ -111,33 +107,12 @@ Json::Value SharedServerAPI::deleteObject(string url){
 
 //skills
 Json::Value SharedServerAPI::getSkills(){
-	HTTPResponse* response = doGet("/skills");
-	Json::Value res = JSONUtils::stringToJSON(response->getBody());
-	delete response;
-	return res["skills"];
+	return getObjectsFromResponse("/skills","skills");
 }
 
 Json::Value SharedServerAPI::getSkill(string name){
-	HTTPResponse* response = doGet("/skills");
-	Json::Value body = JSONUtils::stringToJSON(response->getBody());
-	delete response;
-	if (body.isMember("error") || !body.isMember("skills")){
-		Json::Value error;
-		error["error"] = "error on list skills";
-		return error;
-	}
-
-	Json::Value skills = body["skills"];
-
-	Json::Value skill = JSONUtils::findValue(skills,"name",name);
-
-	if (skill.isMember("error")){
-		Json::Value error;
-		error["error"] = "skill does not exist.";
-		return error;
-	}
-
-	return skill;
+	Json::Value skills = getSkills();
+	return findObjectFromResponse(skills,"Skills","name",name);
 }
 
 Json::Value SharedServerAPI::setSkill(string name,string description, string category){
@@ -163,27 +138,29 @@ Json::Value SharedServerAPI::deleteSkill(string name,string category){
 
 //Job positions
 Json::Value SharedServerAPI::getJobPositions(){
-	HTTPResponse* response = doGet("/job_position");
-	Json::Value body = JSONUtils::stringToJSON(response->getBody());
-	delete response;
-	return body["job_positions"];
+	return getObjectsFromResponse("/job_positions","job_positions");
 }
 
 Json::Value SharedServerAPI::getJobPosition(string name){
-	HTTPResponse* response = doGet("/job_positions");
+	Json::Value job_positions = getJobPositions();
+	return findObjectFromResponse(job_positions,"Job positions","name",name);
+}
+
+Json::Value SharedServerAPI::getObjectsFromResponse(string uri, string value) {
+	HTTPResponse* response = doGet(uri);
 	Json::Value body = JSONUtils::stringToJSON(response->getBody());
 	delete response;
-	Json::Value positions = body["job_positions"];
+	Json::Value error;
+	error["error"] = "Error on get " + value;
+	return ( body.isMember("error") || !body.isMember(value) ) ? error : body[value];
 
-	Json::Value pos = JSONUtils::findValue(positions,"name",name);
+}
 
-	if (pos.isMember("error")){
-		Json::Value error;
-		error["error"] = "job position does not exist.";
-		return error;
-	}
-
-	return pos;
+Json::Value SharedServerAPI::findObjectFromResponse(Json::Value objects, string value,string tag_in_value, string goal) {
+	Json::Value error;
+	error["error"] = "Cannot find " + tag_in_value + " " + goal + " in " + value;
+	Json::Value found = ( !objects.isArray() ) ? error : JSONUtils::findValue(objects,tag_in_value,goal);
+	return ( found.isMember("error") ) ? error : found;
 }
 
 Json::Value SharedServerAPI::setJobPosition(string name,string description, string category){

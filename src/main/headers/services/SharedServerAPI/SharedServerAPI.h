@@ -20,7 +20,8 @@ private:
 	Json::Value deleteObject(string url);
 	HTTPResponse* sendRequest(HTTPRequest* request);
 
-	Json::Value findSkill(Json::Value skills, string name);
+	Json::Value getObjectsFromResponse(string uri, string value);
+	Json::Value findObjectFromResponse(Json::Value objects, string value, string tag_in_value, string goal);
 
 public:
 	SharedServerAPI();
@@ -43,7 +44,7 @@ public:
 	HTTPResponse* doPut(string uri, string body);
 	HTTPResponse* doDelete(string uri);
 
-	vector<string> getsURL();
+	static const vector<string> EndPoints;
 
 	virtual ~SharedServerAPI();
 };

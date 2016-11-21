@@ -7,8 +7,7 @@
 #define PREFIX "/shared"
 
 vector<string> SharedServerHandler::getKnowURLs(){
-	SharedServerAPI shared;
-	vector<string> gets = shared.getsURL();
+	vector<string> gets = SharedServerAPI::EndPoints;
 	for (int i = 0; i < gets.size(); i++ ) {
 		gets[i] = string(PREFIX) + gets[i];
 	}
