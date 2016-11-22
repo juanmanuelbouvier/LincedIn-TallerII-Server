@@ -1,4 +1,5 @@
 #include <services/Server/ServerClient.h>
+#include <services/HTTP/Message/HTTPMessageBuilder.h>
 
 #define MAX_TIME 10
 
@@ -17,7 +18,11 @@ HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 	sendingRequest = true;
 
 	int time = 0;
-	while (sendingRequest && time <= MAX_TIME) {
+	while (sendingRequest) {
+		if (time > MAX_TIME) {
+			response = ResponseBuilder::createErrorResponse(408,"TIMEOUT");
+			break;
+		}
 		mg_mgr_poll(&eventClientManager, 1000);
 		time++;
 	}

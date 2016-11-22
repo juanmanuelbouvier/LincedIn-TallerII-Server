@@ -7,11 +7,17 @@
 #define PREFIX "/shared"
 
 vector<string> SharedServerHandler::getKnowURLs(){
-	vector<string> gets = SharedServerAPI::EndPoints;
-	for (int i = 0; i < gets.size(); i++ ) {
-		gets[i] = string(PREFIX) + gets[i];
+	vector<string> endPoints = {
+			"/job_positions/categories/:category",
+			"/job_positions",
+			"/skills",
+			"/skills/categories/:category/:name",
+			"/categories"
+	};
+	for (int i = 0; i < endPoints.size(); i++ ) {
+		endPoints[i] = string(PREFIX) + endPoints[i];
 	}
-	return gets;
+	return endPoints;
 }
 
 HTTPResponse* SharedServerHandler::handle(HTTPRequest* http_request){
