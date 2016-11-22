@@ -8,7 +8,9 @@
 #include <services/Handlers/LoginHandler.h>
 #include <services/Handlers/ImagesHandler.h>
 #include <services/Logger/Logger.h>
+#include <services/Access/AccessLog.h>
 #include <utils/PathUtils.h>
+#include <utils/TokenUtils.h>
 
 
 #include <string>
@@ -63,6 +65,8 @@ HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 		return HTTPEndPointsHandlers["/"]->handle(http_request);
 	}
 
+
+	accessLog(http_request);
 	//AccessLog -> cada vez que se llama a un endpoint se actualizan los datos del usuario (ultima conexion y geolocalizacion)
 
 	return HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
@@ -101,6 +105,19 @@ bool HTTPRequestHandler::addHandler(string uri_path, Handler* handler) {
 	registerPath(uri_path);
 	HTTPEndPointsHandlers[uri_path] = handler;
 	return true;
+}
+
+void HTTPRequestHandler::accessLog(HTTPRequest* http_request){
+	Json::Value dataAccessLog;
+
+	string token = http_request->getFromHeader("Authorization");
+	if (!token.empty() and TokenUtils::isValidToken(token)){
+		dataAccessLog["user_id"] = TokenUtils::userIDByToken(token);
+	}
+
+	//Geolocation TODO
+
+	AccessLog::accessLog(dataAccessLog);
 }
 
 HTTPRequestHandler::~HTTPRequestHandler() {

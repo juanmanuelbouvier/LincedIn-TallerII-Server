@@ -20,6 +20,7 @@ private:
 
 	string matchPath( string uri );
 	void registerPath( string path );
+	void accessLog(HTTPRequest* http_request);
 
 public:
 	HTTPRequestHandler();

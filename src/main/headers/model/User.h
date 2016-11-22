@@ -32,7 +32,6 @@ public:
 	static ErrorMessage check(Json::Value data);
 	static string getIdByEmail(string email );
 	static bool checkPassword( string user_id,string password );
-
 	Json::Value asJSON();
 	string getID();
 

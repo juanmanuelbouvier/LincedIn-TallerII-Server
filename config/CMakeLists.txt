@@ -61,6 +61,7 @@ set (SOURCES
     ${APP_SOURCE}/service/ExternLogin/FacebookAPI.cpp
     
     ${APP_SOURCE}/service/Access/AccessToken.cpp
+    ${APP_SOURCE}/service/Access/AccessLog.cpp
     
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
     
@@ -86,6 +87,7 @@ set (SOURCES
     ${APP_SOURCE}/model/Image.cpp
     ${APP_SOURCE}/model/Friends.cpp
     ${APP_SOURCE}/model/Geolocalization.cpp
+    ${APP_SOURCE}/model/UserActivity.cpp
     )
     
 set (MAIN_CPP

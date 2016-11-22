@@ -19,11 +19,15 @@ using namespace std;
 HTTPResponse* createUserFromData( Json::Value data ) {
 	string safeId = ( data.isMember("first_name") ) ? StringUtils::replace( StringUtils::toLowerCase(data["first_name"].asString())," ","") : "user";
 	data["id"] = ( data["id"].isString() && data["id"].asString() != SELF_RESERVATED_ID ) ? data["id"].asString() : safeId;
+
 	ErrorMessage error = User::check(data);
+
 	if (error) {
-		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error.summary(),3);
+		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error.summary());
 	}
+
 	string user_id;
+
 	try {
 		User newUser = User::create(data);
 		user_id = newUser.getID();
@@ -31,10 +35,12 @@ HTTPResponse* createUserFromData( Json::Value data ) {
 		Log("UserHandler.cpp::" + to_string(__LINE__) + ". " + string(e.what()),ERROR);
 		ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR, "UNEXPECTED ERROR",10);
 	}
+
 	Json::Value body;
-	body["message"] = "Welcome, " + user_id;
-	body["token"] = TokenUtils::generateSessionToken( user_id );
-	Log("Token created for the new user \"" + user_id + "\"\n\ttoken: " + body["token"].asString());
+	//body["message"] = "Welcome, " + user_id;
+	body["user_id"] = user_id;
+	//body["token"] = TokenUtils::generateSessionToken( user_id );
+	//Log("Token created for the new user \"" + user_id + "\"\n\ttoken: " + body["token"].asString());
 	return ResponseBuilder::createJsonResponse(CODE_OK,body);
 
 }
