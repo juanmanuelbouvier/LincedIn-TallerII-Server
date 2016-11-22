@@ -15,15 +15,6 @@ SharedServerAPI::SharedServerAPI() {
 	sharedURL = SettingManager::getInstance()->getSharedServerURL();
 }
 
-
-const vector<string> SharedServerAPI::EndPoints = {
-	"/job_positions/categories/:category",
-	"/job_positions",
-	"/skills",
-	"/skills/categories/:category/:name",
-	"/categories"
-};
-
 HTTPResponse* SharedServerAPI::sendRequest(HTTPRequest* request) {
 	HTTPResponse* response = ( client->connectToUrl(sharedURL) ) ? client->sendRequest(request) : ResponseBuilder::createErrorResponse(500,"CANNOT_CONNECT_SHARED");
 	return response;

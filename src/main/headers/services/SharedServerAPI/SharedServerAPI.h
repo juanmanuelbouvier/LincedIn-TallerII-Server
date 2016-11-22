@@ -44,8 +44,6 @@ public:
 	HTTPResponse* doPut(string uri, string body);
 	HTTPResponse* doDelete(string uri);
 
-	static const vector<string> EndPoints;
-
 	virtual ~SharedServerAPI();
 };
 
