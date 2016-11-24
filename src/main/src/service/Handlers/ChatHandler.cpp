@@ -4,6 +4,7 @@
 #include <utils/PathUtils.h>
 #include <model/Chat.h>
 #include <model/User.h>
+#include <model/Friends.h>
 #include <utils/JSONUtils.h>
 #include <utils/TokenUtils.h>
 #include <list>
@@ -24,9 +25,11 @@ static HTTPResponse* getChatFromUser(User user) {
 }
 
 static HTTPResponse* getOnlineFriendsFromUser(User user) {
+
 	Json::Value general;
-	general["info"] = "sooon";
+	general["friends_online"] = Friends::listFriendsOnline(user.getID());
 	return ResponseBuilder::createJsonResponse(CODE_OK,general);
+
 }
 
 static HTTPResponse* handleChat(HTTPRequest* request,string chat_id, User user) {
