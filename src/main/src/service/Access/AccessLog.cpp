@@ -10,10 +10,6 @@ void AccessLog::accessLog(Json::Value data){
 		recordUserAccess(data["user_id"].asString());
 	}
 
-	if (data.isMember("geolocation")){
-		//record geolocation
-	}
-
 }
 
 

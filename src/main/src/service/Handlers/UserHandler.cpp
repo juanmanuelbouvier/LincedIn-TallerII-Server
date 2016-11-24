@@ -37,10 +37,7 @@ HTTPResponse* createUserFromData( Json::Value data ) {
 	}
 
 	Json::Value body;
-	//body["message"] = "Welcome, " + user_id;
 	body["user_id"] = user_id;
-	//body["token"] = TokenUtils::generateSessionToken( user_id );
-	//Log("Token created for the new user \"" + user_id + "\"\n\ttoken: " + body["token"].asString());
 	return ResponseBuilder::createJsonResponse(CODE_OK,body);
 
 }

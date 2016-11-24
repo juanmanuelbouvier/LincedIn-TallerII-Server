@@ -11,6 +11,8 @@ private:
 	static DB* getDB();
 public:
 	static ErrorMessage recordAccess(string user_id);
+	static int getLastAccessTimestamp(string user_id);
+	static bool isOnline(string user_id);
 };
 
 #endif /* SRC_MAIN_SRC_MODEL_USERACTIVITY_H_ */

@@ -115,8 +115,6 @@ void HTTPRequestHandler::accessLog(HTTPRequest* http_request){
 		dataAccessLog["user_id"] = TokenUtils::userIDByToken(token);
 	}
 
-	//Geolocation TODO
-
 	AccessLog::accessLog(dataAccessLog);
 }
 

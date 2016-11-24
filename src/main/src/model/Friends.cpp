@@ -1,5 +1,6 @@
 #include <model/Friends.h>
 #include <utils/DateUtils.h>
+#include <model/UserActivity.h>
 
 using namespace std;
 
@@ -84,16 +85,34 @@ Json::Value Friends::listFriends(string user_id){
 	Json::Value friendsDB = userDB["friends"];
 
 	if(!userDB.isMember("error")){
-		for( Json::ValueIterator itr = friendsDB.begin() ; itr != friendsDB.end() ; itr++ ) {
-			Json::Value fr = friendsDB[itr.index()];
+
+		//iterar members
+		Json::Value::Members members = friendsDB.getMemberNames();
+		for( string& friend_id : members ) {
+			Json::Value fr = friendsDB[friend_id];
 			int state = fr["state"].asInt();
 			if ( state == STATE_ACCEPTED) {
-				friends.append(fr);
+				friends.append(friend_id);
 			}
 		}
 	}
 
 	return friends;
+}
+
+Json::Value Friends::listFriendsOnline(string user_id){
+	Json::Value friends = listFriends(user_id);
+	Json::Value friends_online(Json::arrayValue);
+
+	for( Json::ValueIterator itr = friends.begin() ; itr != friends.end() ; itr++ ) {
+		Json::Value fr = friends[itr.index()];
+		string friend_id = fr.asString();
+		if ( UserActivity::isOnline(friend_id)) {
+			friends_online.append(friend_id);
+		}
+	}
+
+	return friends_online;
 }
 
 Json::Value Friends::listPendingFriends(string user_id){
