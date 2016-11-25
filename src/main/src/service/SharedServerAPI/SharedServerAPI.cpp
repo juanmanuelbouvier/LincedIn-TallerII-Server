@@ -7,7 +7,6 @@
 #include <settings/SettingManager.h>
 #include <utils/JSONUtils.h>
 #include <iostream>
-#include <ctime>
 
 using namespace std;
 
@@ -17,15 +16,7 @@ SharedServerAPI::SharedServerAPI() {
 }
 
 HTTPResponse* SharedServerAPI::sendRequest(HTTPRequest* request) {
-	time_t timer;
-	time_t last_timer;
-	double seconds;
-	time(&timer);
-
 	HTTPResponse* response = ( client->connectToUrl(sharedURL) ) ? client->sendRequest(request) : ResponseBuilder::createErrorResponse(500,"CANNOT_CONNECT_SHARED");
-	time(&last_timer);
-	seconds = difftime(last_timer,timer);
-	cout << to_string (seconds) + " seconds in " + request->getMethod() + ": " + request->getURI() + " " + request->getBody()  << endl;
 
 	return response;
 }

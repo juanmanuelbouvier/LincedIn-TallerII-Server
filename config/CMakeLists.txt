@@ -165,19 +165,19 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/mainTests.cpp
 	${TEST_SOURCE}/TestHelper.cpp
 	
-	#${TEST_SOURCE}/UtilsTest.cpp
-	#${TEST_SOURCE}/SettingManagerTest.cpp
-	#${TEST_SOURCE}/DBTest.cpp
-	#${TEST_SOURCE}/AccessTokenTest.cpp
+	${TEST_SOURCE}/UtilsTest.cpp
+	${TEST_SOURCE}/SettingManagerTest.cpp
+	${TEST_SOURCE}/DBTest.cpp
+	${TEST_SOURCE}/AccessTokenTest.cpp
 	
-	#${TEST_SOURCE}/modeltest/EducationTest.cpp
-	#${TEST_SOURCE}/modeltest/RecommendationTest.cpp
+	${TEST_SOURCE}/modeltest/EducationTest.cpp
+	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
 	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
-	#${TEST_SOURCE}/modeltest/JobTest.cpp
-	#${TEST_SOURCE}/modeltest/SkillTest.cpp
-	#${TEST_SOURCE}/modeltest/UserTest.cpp
-	#${TEST_SOURCE}/modeltest/ChatTest.cpp
-	#${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
+	${TEST_SOURCE}/modeltest/JobTest.cpp
+	${TEST_SOURCE}/modeltest/SkillTest.cpp
+	${TEST_SOURCE}/modeltest/UserTest.cpp
+	${TEST_SOURCE}/modeltest/ChatTest.cpp
+	${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
 
 )
 # Test libraries
