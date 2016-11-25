@@ -1,5 +1,6 @@
 #include <services/Server/ServerClient.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
+#include <services/Logger/Logger.h>
 
 #define MAX_TIME 10
 
@@ -10,6 +11,7 @@ ServerClient::ServerClient() {
 	sendingRequest = false;
 	mongooseClientConnection = NULL;
 	response = NULL;
+	url = "";
 
 }
 
@@ -20,6 +22,8 @@ HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 	int time = 0;
 	while (sendingRequest) {
 		if (time > MAX_TIME) {
+			request->getFromHeader("Host");
+			LOG(url + " does not respond. Returning TIMEOUT response",WARNING);
 			response = ResponseBuilder::createErrorResponse(408,"TIMEOUT");
 			break;
 		}
@@ -50,7 +54,8 @@ bool ServerClient::connectToUrl(string url){
 	mongooseClientConnection = mg_connect_http(&eventClientManager, this->eventHandler, url.c_str(),NULL,NULL);
 	if (mongooseClientConnection) {
 		mongooseClientConnection->user_data = this;
-		mg_set_protocol_http_websocket(mongooseClientConnection);;
+		mg_set_protocol_http_websocket(mongooseClientConnection);
+		this->url = url;
 	}
 	return (mongooseClientConnection != NULL);
 }

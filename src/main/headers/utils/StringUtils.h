@@ -17,6 +17,7 @@ public:
 	static string replace(string original, string toReplace, string replace = "");
 	static string toLowerCase(string input);
 	static string toUpperCase(string input);
+	static string generateFileMessage( string file, int line );
 };
 
 #endif /* SRC_MAIN_UTILS_STRINGUTILS_H_ */

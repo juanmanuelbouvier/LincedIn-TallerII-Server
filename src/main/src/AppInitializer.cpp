@@ -1,8 +1,8 @@
 #include "LincedInServerConfig.h"
+#include <services/Logger/Logger.h>
 #include <services/Server/Server.h>
 #include <settings/SettingManager.h>
 #include <services/DB/DBManager.h>
-#include <services/SharedServerAPI/SharedServerAPI.h>
 #include <utils/ThreatUtils.h>
 #include <exception/AppServerException.h>
 
@@ -86,6 +86,10 @@ int main(int argc, char **argv) {
 	Server* server;
 	try {
 		server = new Server( setting->getServerPort() );
+		string version = to_string(LincedInServer_VERSION_MAJOR) + "." + to_string(LincedInServer_VERSION_MINOR);
+		Log("------------------------------------------------------------------",INFO);
+		Log("\t\tNew Run of: LincedInAppServer | Version: " + version,INFO);
+		Log("------------------------------------------------------------------",INFO);
 	} catch (AppServerException& e) {
 		cleanMemory();
 		return 0;

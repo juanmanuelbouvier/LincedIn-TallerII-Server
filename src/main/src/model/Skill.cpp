@@ -11,8 +11,8 @@ Skill::Skill(string name) {
 	SharedServerAPI shared;
 	Json::Value skill = shared.getSkill(name);
 	if (skill.isObject()  && skill.isMember("error")){
-		Log("Skill.cpp::" + to_string(__LINE__) + ". Error on find skill en Shared Server " + skill["error"].asString() ,ERROR);
-		throw SkillException("Error on create Skill");
+		Log("Skill.cpp::" + to_string(__LINE__) + ". Error on find skill in Shared Server " + skill["error"].asString() ,ERROR);
+		throw SkillException("Error on create Skill \"" + name + "\"");
 	}
 	this->name = skill["name"].asString();
 	this->category = skill["category"].asString();

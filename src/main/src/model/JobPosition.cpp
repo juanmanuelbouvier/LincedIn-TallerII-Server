@@ -8,7 +8,7 @@ JobPosition::JobPosition(string name) {
 	SharedServerAPI shared;
 	Json::Value job = shared.getJobPosition(name);
 	if ( job.isObject()  && job.isMember("error") ){
-		throw JobException("error on load job position " + job["error"].asString() );
+		throw JobException("Error on load job position " + job["error"].asString() );
 	}
 	this->name = job["name"].asString();
 	this->category = job["category"].asString();
@@ -23,7 +23,7 @@ JobPosition JobPosition::create(Json::Value data){
 			data["category"].asString()
 			);
 	if (res.isObject()  && res.isMember("error")){
-		throw JobException("error on create job position " + res["error"].asString());
+		throw JobException("Error on create job position " + res["error"].asString());
 	}
 	return JobPosition(data["name"].asString());
 }

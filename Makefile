@@ -9,6 +9,9 @@ run: build
 	@mkdir -p resources
 	./config/build/bin/LincedInAppServer
 
+index-database:
+	./config/build/bin/IndexUserDatabase
+
 test: build
 	@mkdir -p .temp-test/
 	@-./config/build/bin/RunUnitTests
