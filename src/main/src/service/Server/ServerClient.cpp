@@ -1,7 +1,7 @@
 #include <services/Server/ServerClient.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 
-#define MAX_TIME 10
+#define MAX_CICLES 300
 
 using namespace std;
 
@@ -17,16 +17,18 @@ HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
 	sendingRequest = true;
 
-	int time = 0;
+	cout << request->toString() << endl;
+
+	int cicles = 0;
 	while (sendingRequest) {
-		if (time > MAX_TIME) {
+		if (cicles > MAX_CICLES) {
 			response = ResponseBuilder::createErrorResponse(408,"TIMEOUT");
 			break;
 		}
 		mg_mgr_poll(&eventClientManager, 1000);
-		time++;
+		cicles++;
 	}
-
+	cout << "cicles " + to_string(cicles) << endl;
 	return response;
 }
 

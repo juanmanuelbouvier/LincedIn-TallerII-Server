@@ -33,7 +33,7 @@ bool SettingManager::readFile( string file ) {
 	try {
 		ifstream stream_file(file, ifstream::binary);
 		if (!stream_file.good()){
-			cout << "Error at reading settings file (\"" << file <<"\"). Check if exists" << endl;
+			Log("Error at reading settings file (\""+ file +"\"). Check if exists",WARNING);
 			return false;
 		}
 		stream_file >> setting;
@@ -72,7 +72,7 @@ string SettingManager::getDBFolder() {
 			return dbFolder;
 		}
 	}
-	cout << "Invalid DB folder. Check if exist. Using default" << endl;
+	Log("Invalid DB folder. Check if exist. Using default.",WARNING);
 	mkdir(DEFAULT_DB_FOLDER, ACCESSPERMS);
 	return DEFAULT_DB_FOLDER;
 }
@@ -89,12 +89,13 @@ int SettingManager::getLogLevel(){
 			if (validLogLevel(log_level)){
 				return log_level;
 			} else {
-				cout << "Invalid Log Level (" << log_level << "). Using default [" << DEFAULT_LOG_LEVEL << "]" << endl;
+				Log("Invalid Log Level ("+ log_level_value.asString() + "). Using default [" + to_string(DEFAULT_LOG_LEVEL) + "]",WARNING);
 				return DEFAULT_LOG_LEVEL;
 			}
 		}
 	}
-	cout << "not found or invalid level logger setting value. Using default" << endl;
+
+	Log("not found or invalid level logger setting value. Using default.",WARNING);
 	return DEFAULT_LOG_LEVEL;
 }
 
@@ -109,7 +110,7 @@ string SettingManager::getLogFile() {
 			}
 		}
 	}
-	cout << "Invalid or not Found file logger setting. Using default";
+	Log("Invalid or not Found file logger setting. Using default.",WARNING);
 	return DEFAULT_LOG_FILE;
 }
 
@@ -120,7 +121,7 @@ bool SettingManager::showLoggerInStdout(){
 			return booleanStdout.asBool();
 		}
 	}
-	cout << "Cannot read show_in_stdout value. Work with default." << endl;
+	Log("Cannot read show_in_stdout value. Work with default.",WARNING);
 	return DEFAULT_LOG_STDOUT;
 }
 

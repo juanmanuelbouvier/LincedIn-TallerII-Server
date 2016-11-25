@@ -4,6 +4,9 @@
 #include <iostream>
 #include <settings/SettingManager.h>
 
+const string HEROKU = "lincedin.herokuapp.com";
+const string LOCAL = "localhost:8080";
+
 using namespace std;
 
 void TestHelper::settinUpTestModel() {
@@ -14,7 +17,7 @@ void TestHelper::settinUpTestModel() {
 					"\"show_in_stout\" : false,"
 					"\"level\" : 3"
 				"},"
-			"\"shared_server_url\": \"lincedin.herokuapp.com\""
+			"\"shared_server_url\": \"" + LOCAL + "\""
 			"}";
 
 	ofstream out(".temp-test/setting-model.json");
@@ -76,11 +79,25 @@ User TestHelper::createUser(string id) {
 
 	data["jobs"].append(job);
 
-	Skill skill = Skill("Java");
-	Skill skill2 = Skill("c");
+	Skill skill = createSkill("Java","software","Lenguaje de programación Java");
+	Skill skill2 = createSkill("c","software","Lenguaje de programación C");
 	data["skills"].append(skill.asJSON());
 	data["skills"].append(skill2.asJSON());
 
 
 	return User::create(data);
+}
+
+Skill TestHelper::createSkill(string name, string description,string category){
+
+	Json::Value skill;
+	skill["name"] = name;
+	skill["category"] = category;
+	skill["description"] = description;
+
+	if (Skill::exist(skill)){
+		return Skill(name);
+	}
+
+	return Skill::create(skill);
 }

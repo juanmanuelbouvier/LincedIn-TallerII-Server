@@ -86,8 +86,10 @@ TEST(UserTest, createCompleteUser){
 
 	data["jobs"].append(job);
 
-	Skill skill = Skill("Java");
-	Skill skill2 = Skill("c");
+
+
+	Skill skill = TestHelper::createSkill("Java","software","Lenguaje de programación Java");
+	Skill skill2 = TestHelper::createSkill("c","software","Lenguaje de programación C");;
 	data["skills"].append(skill.asJSON());
 	data["skills"].append(skill2.asJSON());
 
