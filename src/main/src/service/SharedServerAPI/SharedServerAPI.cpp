@@ -80,9 +80,7 @@ Json::Value SharedServerAPI::processResponse(HTTPResponse* response, int expecte
 	if (response->getCode() == expectedCode){
 		res["ok"] = "OK";
 	} else {
-		cout << response->getCode() << response->getBody() << endl;
-		Json::Value error = JSONUtils::stringToJSON(response->getBody());
-		res["error"] = error["message"];
+		res["error"] = response->getBody();
 	}
 	delete response;
 	return res;

@@ -60,6 +60,8 @@ set (SOURCES
     
     ${APP_SOURCE}/service/ExternLogin/FacebookAPI.cpp
     
+    ${APP_SOURCE}/service/Search/ElasticClient.cpp
+    
     ${APP_SOURCE}/service/Access/AccessToken.cpp
     ${APP_SOURCE}/service/Access/AccessLog.cpp
     
@@ -163,19 +165,19 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/mainTests.cpp
 	${TEST_SOURCE}/TestHelper.cpp
 	
-	${TEST_SOURCE}/UtilsTest.cpp
-	${TEST_SOURCE}/SettingManagerTest.cpp
-	${TEST_SOURCE}/DBTest.cpp
-	${TEST_SOURCE}/AccessTokenTest.cpp
+	#${TEST_SOURCE}/UtilsTest.cpp
+	#${TEST_SOURCE}/SettingManagerTest.cpp
+	#${TEST_SOURCE}/DBTest.cpp
+	#${TEST_SOURCE}/AccessTokenTest.cpp
 	
-	${TEST_SOURCE}/modeltest/EducationTest.cpp
-	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
+	#${TEST_SOURCE}/modeltest/EducationTest.cpp
+	#${TEST_SOURCE}/modeltest/RecommendationTest.cpp
 	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
-	${TEST_SOURCE}/modeltest/JobTest.cpp
-	${TEST_SOURCE}/modeltest/SkillTest.cpp
-	${TEST_SOURCE}/modeltest/UserTest.cpp
-	${TEST_SOURCE}/modeltest/ChatTest.cpp
-	${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
+	#${TEST_SOURCE}/modeltest/JobTest.cpp
+	#${TEST_SOURCE}/modeltest/SkillTest.cpp
+	#${TEST_SOURCE}/modeltest/UserTest.cpp
+	#${TEST_SOURCE}/modeltest/ChatTest.cpp
+	#${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
 
 )
 # Test libraries
@@ -204,3 +206,14 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     setup_target_for_coverage(run_coverage_server LincedInAppServer coverage)
     target_link_libraries(lincedinapp gcov)
 endif()
+
+
+
+### SCRIPT TO INDEX DATABASE ####
+set (SCRIPTS_SOURCE "${PROJECT_SOURCE_DIR}/../scripts")
+add_executable(IndexUserDatabase ${SCRIPTS_SOURCE}/IndexUserDatabase.cpp)
+#Libraries from LincedInAppServer
+target_link_libraries (IndexUserDatabase lincedinapp)
+
+#External libraries
+target_link_libraries (IndexUserDatabase mongoose json pthread snappy leveldb jwt)

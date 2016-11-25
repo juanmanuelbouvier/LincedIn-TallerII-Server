@@ -5,7 +5,7 @@ using namespace std;
 
 Job::Job(string date_since, string date_to, string company, Json::Value position_data) {
 	if (!JobPosition::exist(position_data))
-		throw JobException("error on create job, position invalid");
+		throw JobException("Error on create job, position invalid");
 
 	this->date_since= date_since,
 	this->date_to = date_to;
@@ -26,7 +26,7 @@ ErrorMessage Job::check(Json::Value job){
 	if (job.isMember("date_since")){
 		//TODO check correct format
 	} else {
-		error.addError("date_since","not defined date_since");
+		error.addError("date_since","Not defined date_since");
 	}
 
 	//date_to

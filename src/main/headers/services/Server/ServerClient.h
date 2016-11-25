@@ -13,6 +13,7 @@ private:
 	struct mg_mgr eventClientManager;
 	struct mg_connection* mongooseClientConnection; //Listener de las conexiones.
 	bool sendingRequest;
+	string url;
 
 	HTTPResponse* response;
 

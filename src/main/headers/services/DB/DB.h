@@ -35,6 +35,8 @@ public:
 	Json::Value getJSON(string key);
 	Json::Value getHigherKeyValue(int withoutTheLatters);
 
+	void iterateAllKeyJson( void(*f)(string key, Json::Value value), Json::Value& collector );
+
 	bool exist(string key);
 
 	virtual ~DB();

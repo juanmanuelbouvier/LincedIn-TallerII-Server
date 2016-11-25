@@ -98,11 +98,24 @@ Json::Value DB::getHigherKeyValue(int withoutTheLatters){
 			it->Prev();
 		}
 	}
-
-	string key = ( it->Valid() ) ? it->key().ToString() : "";
-
 	root["error"] = "not find key in DB";
-	return ( key.empty() ) ? root : getJSON(key);
+	return ( it->Valid() ) ? JSONUtils::stringToJSON(it->value().ToString()) : root;
+}
+
+void DB::iterateAllKeyJson( void (*f)(string key, Json::Value value), Json::Value& collector ) {
+	if (!opened) {
+		return;
+	}
+	leveldb::Iterator* it = db->NewIterator(leveldb::ReadOptions());
+	for (it->SeekToFirst(); it->Valid(); it->Next()) {
+	    string key = it->key().ToString();
+	    Json::Value value = JSONUtils::stringToJSON(it->value().ToString());
+	    f(key,value);
+	    if (!collector.isNull()) {
+	    	collector[key] = value;
+	    }
+	}
+	delete it;
 }
 
 DB::~DB() {

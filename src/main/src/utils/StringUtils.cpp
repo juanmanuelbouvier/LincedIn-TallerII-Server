@@ -178,3 +178,8 @@ string StringUtils::toUpperCase(string input) {
 	transform(result.begin(), result.end(), result.begin(), (int (*)(int))toupper);
 	return result;
 }
+
+string StringUtils::generateFileMessage( string file, int line ) {
+	file.erase(0,file.find("main/"));
+	return file + "::" + to_string(line);
+}

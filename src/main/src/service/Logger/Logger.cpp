@@ -11,14 +11,6 @@ struct LoggerSetting LogSetting;
 
 const string LoggerLevelToString[] = {"ERROR", "WARNING", "INFO", "DEBUG"};
 
-
-void _LoggerInitLogMessage(){
-	string version = to_string(LincedInServer_VERSION_MAJOR) + "." + to_string(LincedInServer_VERSION_MINOR);
-	Log("------------------------------------------------------------------",INFO);
-	Log("\t\tNew Run of: LincedInAppServer | Version: " + version,INFO);
-	Log("------------------------------------------------------------------",INFO);
-}
-
 /**
  * Init Logger<BR>
  *  level: Log level (0: "ERROR", 1: "WARNING", 2: "INFO", 3: "DEBUG").<BR>
@@ -31,7 +23,6 @@ void LoggerInit(int level, bool log_console, string path){
 	LogSetting.LoggerConsole = log_console;
 	LogSetting.LoggerPathFile = path;
 	LogSetting.init = true;
-    _LoggerInitLogMessage();
 }
 
 
