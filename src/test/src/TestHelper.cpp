@@ -28,6 +28,10 @@ void TestHelper::settinUpTestModel() {
 }
 
 User TestHelper::createBasicUsers(string id){
+
+	if (User::exist(id))
+		return User(id);
+
 	Json::Value data;
 	data["id"] = id;
 	data["first_name"] = id;
@@ -95,7 +99,7 @@ Skill TestHelper::createSkill(string name, string description,string category){
 	skill["category"] = category;
 	skill["description"] = description;
 
-	if (Skill::exist(skill)){
+	if (Skill::exist(name)){
 		return Skill(name);
 	}
 
