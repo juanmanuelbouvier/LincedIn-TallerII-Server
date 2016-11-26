@@ -2,6 +2,7 @@
 #define SRC_MAIN_SRC_MODEL_IMAGE_H_
 
 #include <services/DB/DBManager.h>
+#define BASE_URL "/img/"
 
 using namespace std;
 

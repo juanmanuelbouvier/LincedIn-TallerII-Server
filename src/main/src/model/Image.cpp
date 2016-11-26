@@ -4,7 +4,6 @@
 using namespace std;
 
 #define IMAGE_DB "Image"
-#define BASE_URL "/img/"
 #define METADATA_KEY "metadata"
 #define BASE_ID "lincedin"
 

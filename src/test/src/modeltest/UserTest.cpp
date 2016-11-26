@@ -118,8 +118,6 @@ TEST(UserTest, createCompleteUser){
 	EXPECT_FALSE(User::exist(id));
 }
 
-
-
 TEST(UserTest, updateUser){
 	TestHelper::settinUpTestModel();
 
@@ -177,6 +175,21 @@ TEST(UserTest, ErrorUser){
 	EXPECT_FALSE(User::remove("Invalid user"));
 
 	EXPECT_TRUE(User::update("Invalid user",emptyData));
+}
+
+TEST(UserTest, AddTwoUserWithEqualID){
+	TestHelper::settinUpTestModel();
+
+	string id = "fme";
+
+	User user = TestHelper::createUser(id);
+
+	Json::Value data = user.asJSON();
+	data["password"] = "ASD123";
+
+	User user2 = User::create(data);
+
+	EXPECT_NE(id,user2.getID());
 }
 
 

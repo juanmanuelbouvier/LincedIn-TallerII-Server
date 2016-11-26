@@ -177,6 +177,7 @@ add_executable(RunUnitTests
 	${TEST_SOURCE}/modeltest/SkillTest.cpp
 	${TEST_SOURCE}/modeltest/UserTest.cpp
 	${TEST_SOURCE}/modeltest/ChatTest.cpp
+	${TEST_SOURCE}/modeltest/ImageTest.cpp
 	${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
 	${TEST_SOURCE}/modeltest/UserActivityTest.cpp
 

@@ -104,11 +104,11 @@ ErrorMessage Recommendation::removeRecommendation(string user_id,string recommen
 }
 
 Json::Value Recommendation::getRecommendation(string user_id){
-	return getDB()->getJSON(user_id);
+	return getUserRecommendations(user_id);
 }
 
 Json::Value Recommendation::getArrayRecommendation(string user_id){
-	Json::Value recommendations = getRecommendation(user_id);
+	Json::Value recommendations = getUserRecommendations(user_id);
 	Json::Value array = Json::arrayValue;
 
 	Json::Value::Members memberNames = recommendations.getMemberNames();

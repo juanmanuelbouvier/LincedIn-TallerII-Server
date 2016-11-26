@@ -42,3 +42,13 @@ TEST(UserAcrivityTest, UserOnline){
 	EXPECT_TRUE(UserActivity::isOnline(id));
 	EXPECT_FALSE(UserActivity::isOnline("tab"));
 }
+
+
+TEST(UserAcrivityTest, ErrorInRegisterAccess){
+
+	TestHelper::settinUpTestModel();
+
+	ErrorMessage error = UserActivity::recordAccess("INVALID ID");
+
+	EXPECT_TRUE(error);
+}

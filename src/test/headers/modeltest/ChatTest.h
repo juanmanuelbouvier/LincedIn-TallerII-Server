@@ -1,10 +1,3 @@
-/*
- * ChatTest.h
- *
- *  Created on: 9 nov. 2016
- *      Author: tomi
- */
-
 #ifndef SRC_TEST_SRC_MODELTEST_CHATTEST_H_
 #define SRC_TEST_SRC_MODELTEST_CHATTEST_H_
 #include <gtest/gtest.h>
