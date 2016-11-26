@@ -1,8 +1,10 @@
-
+#if elastic search not work "bootstrap error" `sudo sysctl -w vm.max_map_count=262144`
 elastic:  
   image: elasticsearch
   ports:
-    - "9200:9200"
+    - "9200"
+  expose:
+    - "9200"
   volumes:
     - ./db/_elastic:/usr/share/elasticsearch/data
 lincedin_appserver:  

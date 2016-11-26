@@ -5,6 +5,7 @@
 #include <services/DB/DBManager.h>
 #include <utils/ThreatUtils.h>
 #include <exception/AppServerException.h>
+#include <services/Indexer/UsersIndexer.h>
 
 #include <iostream>
 #include <string>
@@ -12,14 +13,6 @@
 using namespace std;
 
 #define SETTING_FILE "settings/setting.json"
-
-string CLOSE_FINISH;
-bool CLOSE_SIGINT = false;
-void closeSignal(int signal) {
-	istringstream oss("\n");
-	cin.rdbuf(oss.rdbuf());
-	CLOSE_SIGINT = true;
-}
 
 string parseArguments(int argc, char** argv){
 	int option;
@@ -58,9 +51,9 @@ string parseArguments(int argc, char** argv){
 }
 
 void* closeServerWithInput(void* server) {
-	signal(SIGINT, closeSignal);
-	while (CLOSE_FINISH != "exit" && !CLOSE_SIGINT) {
-		getline(cin, CLOSE_FINISH);
+	string closeFinish;
+	while (closeFinish != "exit") {
+		getline(cin, closeFinish);
 	}
 
 	Server* theServer = (Server*)server;
@@ -68,10 +61,45 @@ void* closeServerWithInput(void* server) {
 	return NULL;
 }
 
+bool CLOSE_SIGINT = false;
+void closeSignal(int signal) {
+	istringstream oss("\n");
+	cin.rdbuf(oss.rdbuf());
+	CLOSE_SIGINT = true;
+}
+
+void* closeWithSIGINT( void* server ) {
+	signal(SIGINT, closeSignal);
+	while (!CLOSE_SIGINT) {
+		sleep(1);
+	}
+	Server* theServer = (Server*)server;
+	theServer->stop();
+	return NULL;
+}
+
+void* callIndexers( void* data ) {
+	while (true) {
+		UsersIndexer::index();
+		sleep(60*20);
+	}
+
+	return NULL;
+}
+
+void* logLive( void* data ) {
+	while (true) {
+		sleep(60*60);
+		Log("Server info: OK",INFO);
+	}
+	return NULL;
+}
+
 void cleanMemory() {
 	SettingManager::deleteInstance();
 	DBManager::deleteInstance();
 }
+
 
 /**
 * Launchs the application server.<BR>
@@ -96,6 +124,9 @@ int main(int argc, char **argv) {
 	}
 
 	ThreatUtils::startThreath(closeServerWithInput, server);
+	ThreatUtils::startThreath(closeWithSIGINT, server);
+	ThreatUtils::startThreath(callIndexers,NULL);
+	ThreatUtils::startThreath(logLive,NULL);
 	server->start();
 
 

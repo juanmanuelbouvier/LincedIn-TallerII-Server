@@ -20,7 +20,7 @@ public:
 
 	bool index(string index, string type, string id, Json::Value data);
 	Json::Value get(string index, string type, string id);
-	Json::Value search(string index, string type, string query);
+	Json::Value search(string index, string type, string query, bool onlyID = false);
 
 	virtual ~ElasticClient();
 };

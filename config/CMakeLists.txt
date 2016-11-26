@@ -57,10 +57,13 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/ImagesHandler.cpp
     ${APP_SOURCE}/service/Handlers/RecommendationHandler.cpp
     ${APP_SOURCE}/service/Handlers/GeolocalizationHandler.cpp
+    ${APP_SOURCE}/service/Handlers/SearchHandler.cpp
     
     ${APP_SOURCE}/service/ExternLogin/FacebookAPI.cpp
     
     ${APP_SOURCE}/service/Search/ElasticClient.cpp
+    
+    ${APP_SOURCE}/service/Indexer/UsersIndexer.cpp
     
     ${APP_SOURCE}/service/Access/AccessToken.cpp
     ${APP_SOURCE}/service/Access/AccessLog.cpp
@@ -208,14 +211,3 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     setup_target_for_coverage(run_coverage_server LincedInAppServer coverage)
     target_link_libraries(lincedinapp gcov)
 endif()
-
-
-
-### SCRIPT TO INDEX DATABASE ####
-set (SCRIPTS_SOURCE "${PROJECT_SOURCE_DIR}/../scripts")
-add_executable(IndexUserDatabase ${SCRIPTS_SOURCE}/IndexUserDatabase.cpp)
-#Libraries from LincedInAppServer
-target_link_libraries (IndexUserDatabase lincedinapp)
-
-#External libraries
-target_link_libraries (IndexUserDatabase mongoose json pthread snappy leveldb jwt)
