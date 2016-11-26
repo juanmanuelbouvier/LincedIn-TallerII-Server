@@ -83,7 +83,15 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 	user_id = user_id_auth;
 
 	if ( http_request->isPUT() ){
-		Json::Value data;
+
+		Json::Value data = JSONUtils::stringToJSON(http_request->getBody());
+
+		if (data.isMember("error"))
+			return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"INVALID DATA");
+
+		if (!data.isMember("id"))
+			data["id"] = user_id;
+
 		ErrorMessage errorMessage = User::update(user_id,data);
 
 		if (errorMessage){
@@ -109,7 +117,12 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 	}
 
 	if ( PathUtils::matchPathRegexp(http_request->getURI(),"/user") && http_request->isPOST() ) {
+
 		Json::Value data = JSONUtils::stringToJSON( http_request->getBody() );
+		if (data.isMember("error")){
+			return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"Error in data.");
+		}
+
 		return createUserFromData(data);
 	}
 	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST, "BAD REQUEST",CODE_BAD_REQUEST);
