@@ -1,4 +1,4 @@
-#include <services/Searcher/ElasticClient.h>
+#include <services/Search/ElasticClient.h>
 #include <utils/JSONUtils.h>
 
 ElasticClient::ElasticClient(string aHost) {
@@ -31,6 +31,7 @@ Json::Value ElasticClient::sendRequest(RequestBuilder* builder) {
 	HTTPRequest* req = builder->build();
 	delete builder;
 	if ( !client->connectToUrl(host) ) {
+		delete req;
 		Json::Value empty;
 		return empty;
 	}
@@ -41,18 +42,30 @@ Json::Value ElasticClient::sendRequest(RequestBuilder* builder) {
 		response["response"] = JSONUtils::stringToJSON(res->getBody());
 	}
 	response["_code"] = res->getCode();
+	delete res;
 	return response;
 }
 
-Json::Value ElasticClient::search(string index, string type, string query) {
+Json::Value ElasticClient::search(string index, string type, string query, bool returnObject) {
 	RequestBuilder* builder = new RequestBuilder();
 	builder = builder->GET()->setUri("/" + index + "/" + type + "/_search")->setQuery("q=" + query + "&default_operator=or");
+
 	Json::Value result = sendRequest(builder);
+	Json::Value collect(Json::arrayValue);
+
 	if ( result.isMember("response") && result["response"].isMember("hits") && result["response"]["hits"].isMember("hits") ) {
-		return result["response"]["hits"]["hits"];
+		if (returnObject) {
+			Json::Value objectResult;
+			for ( int i = 0; i < result["response"]["hits"]["hits"].size(); i++ ) {
+				string id = result["response"]["hits"]["hits"][i]["_id"].asString();
+				objectResult[id] = result["response"]["hits"]["hits"][i]["_source"];
+			}
+			collect = objectResult;
+		} else {
+			collect = result["response"]["hits"]["hits"];
+		}
 	}
-	result = Json::Value(Json::arrayValue);
-	return result;
+	return collect;
 }
 
 Json::Value ElasticClient::get(string index, string type, string id) {

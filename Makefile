@@ -9,9 +9,6 @@ run: build
 	@mkdir -p resources
 	./config/build/bin/LincedInAppServer
 
-index-database:
-	./config/build/bin/IndexUserDatabase
-
 test: build
 	@mkdir -p .temp-test/
 	@-./config/build/bin/RunUnitTests
@@ -24,11 +21,11 @@ doc:
 	@cd docs && cmake -H. -Bbuild && cd build && make && cd ../..
 
 valgrind:
-	valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all config/build/bin/LincedInAppServer
+	valgrind -v --tool=memcheck --leak-check=full --track-origins=yes --show-leak-kinds=all config/build/bin/LincedInAppServer
 
 valgrind-test:
 	@mkdir -p .temp-test/
-	-valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all config/build/bin/RunUnitTests
+	-valgrind -v --tool=memcheck --leak-check=full --track-origins=yes --show-leak-kinds=all config/build/bin/RunUnitTests
 	@rm -rf .temp-test/ *.log
 
 coverage-test:

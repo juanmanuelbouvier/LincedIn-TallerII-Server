@@ -7,6 +7,7 @@
 #include <services/Handlers/ChatHandler.h>
 #include <services/Handlers/LoginHandler.h>
 #include <services/Handlers/ImagesHandler.h>
+#include <services/Handlers/SearchHandler.h>
 #include <services/Logger/Logger.h>
 #include <services/Access/AccessLog.h>
 #include <utils/PathUtils.h>
@@ -43,7 +44,7 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	addHandler("/chat/:chat_id", chatHandler );
 
 
-	//addHandler("/search",);
+	addHandler("/search", new SearchHandler());
 
 	FriendHandler* friendHandler = new FriendHandler();
 	addHandler("/friends",friendHandler);
