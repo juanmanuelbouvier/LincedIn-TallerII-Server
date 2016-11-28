@@ -21,6 +21,9 @@ static HTTPResponse* getChatFromUser(User user) {
 		jsonChat["last_message"] = chat.getLastMessage();
 		chatsArray.append(jsonChat);
 	}
+
+	body["chats"] = chatsArray;
+
 	return ResponseBuilder::createJsonResponse(CODE_OK,body);
 }
 

@@ -7,12 +7,12 @@
 #include <services/Handlers/ChatHandler.h>
 #include <services/Handlers/LoginHandler.h>
 #include <services/Handlers/ImagesHandler.h>
+#include <services/Handlers/RecommendationHandler.h>
 #include <services/Handlers/SearchHandler.h>
 #include <services/Logger/Logger.h>
 #include <services/Access/AccessLog.h>
 #include <utils/PathUtils.h>
 #include <utils/TokenUtils.h>
-
 
 #include <string>
 #include <algorithm>
@@ -23,7 +23,6 @@ using namespace std;
 
 HTTPRequestHandler::HTTPRequestHandler() {
 	// Inicialize all Handlers.
-
 
 	//Defaults
 	DefaultHandler* defaultHandler = new DefaultHandler();
@@ -56,6 +55,10 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	addHandler("/user", userHandler);
 
 	addHandler("/login", new LoginHandler());
+
+	RecommendationHandler* recommendationHandler= new RecommendationHandler();
+	addHandler("/recommendations", recommendationHandler);
+	addHandler("/recommendations/:user_id", recommendationHandler);
 }
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){

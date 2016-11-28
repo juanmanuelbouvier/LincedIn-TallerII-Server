@@ -21,10 +21,13 @@ TEST(RecommendationTest, addRecommendation){
 
 	EXPECT_FALSE(error);
 
-	Json::Value recommendations = Recommendation::getRecommendation(idUser2);
+	Json::Value recommendations = Recommendation::getReceivedRecommendations(idUser2);
 
 	EXPECT_TRUE(recommendations.isMember(idUser1));
 	EXPECT_EQ(recommendations[idUser1]["text"],text);
+
+	Json::Value sent_recommendations = Recommendation::getSentRecommendations(idUser1);
+	EXPECT_TRUE(sent_recommendations.isMember(idUser2));
 
 	Json::Value mostRecommendations = Recommendation::getUsersMostRecommendation(10);
 
@@ -56,7 +59,7 @@ TEST(RecommendationTest, ErrorRecommendation){
 	ErrorMessage error2 = Recommendation::addRecommendation(idUser3,idUser2,text);
 	EXPECT_FALSE(error2);
 
-	Json::Value recommendations = Recommendation::getArrayRecommendation(idUser1);
+	Json::Value recommendations = Recommendation::getArrayReceivedRecommendations(idUser1);
 
 	EXPECT_EQ(recommendations.size(),2);
 
@@ -70,6 +73,6 @@ TEST(RecommendationTest, ErrorRecommendation){
 	ErrorMessage errorRemove = Recommendation::removeRecommendation(idUser1,idUser3);
 	EXPECT_FALSE(errorRemove);
 
-	recommendations = Recommendation::getArrayRecommendation(idUser1);
+	recommendations = Recommendation::getArrayReceivedRecommendations(idUser1);
 	EXPECT_EQ(recommendations.size(),1);
 }

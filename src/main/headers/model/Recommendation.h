@@ -15,10 +15,17 @@ private:
 	static Json::Value getUserRecommendations(string user_id);
 public:
 	static Json::Value getRecommendation(string user_id);
-	static Json::Value getArrayRecommendation(string user_id);
-	static Json::Value getUsersMostRecommendation(int cantUser);
+
 	static ErrorMessage addRecommendation(string user_id,string recommender_id,string text);
 	static ErrorMessage removeRecommendation(string user_id,string recommender_id);
+
+	static Json::Value getArraySentRecommendations(string user_id);
+	static Json::Value getArrayReceivedRecommendations(string user_id);
+
+	static Json::Value getSentRecommendations(string user_id);
+	static Json::Value getReceivedRecommendations(string user_id);
+
+	static Json::Value getUsersMostRecommendation(int cantUser);
 
 	virtual ~Recommendation();
 };

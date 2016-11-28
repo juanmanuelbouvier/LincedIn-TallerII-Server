@@ -22,34 +22,67 @@ Json::Value Recommendation::getUserRecommendations(string user_id){
 	}
 
 	Json::Value recommendations;
+	recommendations["received_recommendations"];
+	recommendations["sent_recommendations"];
 	getDB()->storeJSON(user_id,recommendations);
 	return recommendations;
+}
+
+Json::Value Recommendation::getArraySentRecommendations(string user_id){
+	if (!getDB()->exist(user_id)){
+		return Json::arrayValue;
+	}
+
+	Json::Value recommendations = getDB()->getJSON(user_id);
+	Json::Value sent_recommendations = recommendations["sent_recommendations"];
+	Json::Value arraySentRecommendations = Json::arrayValue;
+
+	Json::Value::Members memberNames = sent_recommendations.getMemberNames();
+	for (string& mem : memberNames){
+		Json::Value recom = sent_recommendations[mem];
+		Json::Value rec;
+		rec["user_id"] = mem;
+		rec["text"] = recom["text"];
+		rec["timestamp"] = recom["timestamp"];
+		arraySentRecommendations.append(rec);
+	}
+
+	return arraySentRecommendations;
 }
 
 ErrorMessage Recommendation::addRecommendation(string user_id,string recommender_id,string text){
 	ErrorMessage error;
 
 	Json::Value user_recommendations = getUserRecommendations(user_id);
+	Json::Value received_recommendations = user_recommendations["received_recommendations"] ;
+
+	Json::Value recommender_recommendations = getUserRecommendations(recommender_id);
+	Json::Value sent_recommendations = recommender_recommendations["sent_recommendations"];
 
 	if (user_id == recommender_id){
 		error.addError("add recommendation","Cannot recommender yourself");
 		return error;
 	}
 
-	if (user_recommendations.isMember(recommender_id)){
+	if (received_recommendations.isMember(recommender_id)){
 		error.addError("add recommendation",user_id + " already recommended by the user " + recommender_id);
 		return error;
 	}
 
-	int count = user_recommendations.getMemberNames().size();
+	int count = received_recommendations.getMemberNames().size();
 
 	Json::Value recommendation;
 	recommendation["text"] = text;
 	recommendation["timestamp"] = DateUtils::timestamp();
 
-	user_recommendations[recommender_id] = recommendation;
+	received_recommendations[recommender_id] = recommendation;
+	sent_recommendations[user_id] = recommendation;
 
+	user_recommendations["received_recommendations"] = received_recommendations;
 	getDB()->storeJSON(user_id,user_recommendations);
+
+	recommender_recommendations["sent_recommendations"] = sent_recommendations;
+	getDB()->storeJSON(recommender_id,recommender_recommendations);
 
 	string new_count = "1";
 	if (count > 0){
@@ -73,16 +106,18 @@ ErrorMessage Recommendation::removeRecommendation(string user_id,string recommen
 	ErrorMessage error;
 
 	Json::Value user_recommendations = getUserRecommendations(user_id);
+	Json::Value received_recommendations = user_recommendations["received_recommendations"];
 
-	if (!user_recommendations.isMember(recommender_id)){
+	if (!received_recommendations.isMember(recommender_id)){
 		error.addError("not exist recommendation",user_id + " no recommended by the user " + recommender_id);
 		return error;
 	}
 
-	int count = user_recommendations.getMemberNames().size();
+	int count = received_recommendations.getMemberNames().size();
 
-	user_recommendations.removeMember(recommender_id);
+	received_recommendations.removeMember(recommender_id);
 
+	user_recommendations["received_recommendations"] = received_recommendations;
 	getDB()->storeJSON(user_id,user_recommendations);
 
 	int new_count = count - 1;
@@ -100,6 +135,13 @@ ErrorMessage Recommendation::removeRecommendation(string user_id,string recommen
 		getCountDB()->storeJSON(user_id,cant);
 	}
 
+	Json::Value recommender_recommendations = getUserRecommendations(recommender_id);
+	Json::Value sent_recommendations = recommender_recommendations["sent_recommendations"];
+
+	sent_recommendations.removeMember(user_id);
+	recommender_recommendations["sent_recommendations"] = sent_recommendations;
+	getDB()->storeJSON(recommender_id,recommender_recommendations);
+
 	return error;
 }
 
@@ -107,8 +149,10 @@ Json::Value Recommendation::getRecommendation(string user_id){
 	return getUserRecommendations(user_id);
 }
 
-Json::Value Recommendation::getArrayRecommendation(string user_id){
-	Json::Value recommendations = getUserRecommendations(user_id);
+Json::Value Recommendation::getArrayReceivedRecommendations(string user_id){
+
+	Json::Value user_recommendations = getUserRecommendations(user_id);
+	Json::Value recommendations = user_recommendations["received_recommendations"];
 	Json::Value array = Json::arrayValue;
 
 	Json::Value::Members memberNames = recommendations.getMemberNames();
@@ -147,6 +191,17 @@ Json::Value Recommendation::getUsersMostRecommendation(int cantUser){
 	}
 
 	return mostRecommender;
+}
+
+
+Json::Value Recommendation::getSentRecommendations(string user_id){
+	Json::Value recommendations = getUserRecommendations(user_id);
+	return recommendations["sent_recommendations"];
+}
+
+Json::Value Recommendation::getReceivedRecommendations(string user_id){
+	Json::Value recommendations = getUserRecommendations(user_id);
+	return recommendations["received_recommendations"];
 }
 
 
