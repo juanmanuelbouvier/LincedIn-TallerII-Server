@@ -5,9 +5,6 @@
 #include <utils/PathUtils.h>
 #include <services/HTTP/HTTPResponseConstants.h>
 
-#include <iostream>
-#include <services/DB/DBManager.h>
-
 using namespace std;
 
 static const char reverse_table[128] = {
@@ -53,19 +50,18 @@ HTTPResponse* ImagesHandler::handle(HTTPRequest* http_request) {
 	if (PathUtils::matchPathRegexp(http_request->getURI(),"/img/:id") && http_request->isGET()){
 		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/img/:id");
 		string id = path["id"];
-		cout << id << endl;
+
 		if (!Image::exist(id)){
-			cout << DBManager::getDB("Image")->getAllKeys().toStyledString() << endl;
 			return ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,"Imagen inexistente");
 		}
 		string base64 = Image::getBase64(id);
-		string dataH = "data:image/jpeg;base64,";
+		string dataH = "data:image/jpeg;base64";
 
 		Json::Value body;
 		body["info"] = dataH;
 		body["name"] = id;
 		body["content"] = base64;
-		ResponseBuilder::createJsonResponse(200,body);
+		return ResponseBuilder::createJsonResponse(200,body);
 
 	}
 

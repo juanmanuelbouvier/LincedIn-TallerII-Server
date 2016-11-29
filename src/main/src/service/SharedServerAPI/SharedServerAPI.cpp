@@ -34,7 +34,7 @@ HTTPResponse* SharedServerAPI::doGet( string uri ){
 
 HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
 	RequestBuilder* builder = new RequestBuilder();
-	builder = (RequestBuilder*)builder->POST()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
+	builder = (RequestBuilder*)builder->POST()->setUri(uri)->appendHeader("Content-Type","application/json")->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
@@ -45,7 +45,7 @@ HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
 
 HTTPResponse* SharedServerAPI::doPut(string uri, string body){
 	RequestBuilder* builder = new RequestBuilder();
-	builder = (RequestBuilder*)builder->PUT()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
+	builder = (RequestBuilder*)builder->PUT()->setUri(uri)->appendHeader("Content-Type","application/json")->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;

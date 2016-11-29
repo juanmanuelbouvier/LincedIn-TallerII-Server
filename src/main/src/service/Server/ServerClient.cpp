@@ -2,7 +2,7 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <services/Logger/Logger.h>
 
-#define MAX_CICLES 200
+#define MAX_CICLES 300
 
 using namespace std;
 

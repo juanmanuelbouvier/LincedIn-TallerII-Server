@@ -65,6 +65,8 @@ set (SOURCES
     
     ${APP_SOURCE}/service/Indexer/UsersIndexer.cpp
     
+    ${APP_SOURCE}/service/Firebase/FirebaseClient.cpp
+    
     ${APP_SOURCE}/service/Access/AccessToken.cpp
     ${APP_SOURCE}/service/Access/AccessLog.cpp
     
