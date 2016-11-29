@@ -38,6 +38,13 @@ User User::create( Json::Value data ) {
 	getEmailDB()->store(data["email"].asString(),user_id);
 	userDB["date_of_birth"] = data["date_of_birth"];
 
+	//firebase id
+	string idFirebase = "";
+	if (data.isMember("firebase_id")){
+		idFirebase = data["firebase_id"].asString();
+	}
+	userDB["firebase_id"] = idFirebase;
+
 	//imagen en base 64, guardar url
 	if (data.isMember("profile_picture")){
 		userDB["profile_picture"] = Image::urlByBase64(data["profile_picture"].asString());
@@ -126,6 +133,7 @@ User::User(string user_id) {
 	email =  userDB["email"].asString();
 	date_of_birth = userDB["date_of_birth"].asString();
 	profile_picture = userDB["profile_picture"].asString();
+	firebase_id = userDB["firebase_id"].asString();
 
 	if (userDB.isMember("skills")){
 		Json::Value skills_db = userDB["skills"];
@@ -182,6 +190,10 @@ string User::getID(){
 	return this->id;
 }
 
+string User::getFirebaseID(){
+	return this->firebase_id;
+}
+
 ErrorMessage User::check(Json::Value data){
 	ErrorMessage error;
 
@@ -200,7 +212,7 @@ ErrorMessage User::check(Json::Value data){
 	if (!data.isMember("last_name")){
 		error.addError("last_name","Last name not specified");
 	}
-	//TODO: Check if email already in DB
+
 	if (!data.isMember("email")){
 		error.addError("email","Email not specified");
 	}
@@ -292,6 +304,7 @@ Json::Value User::asJSON(){
 	user["email"] = email;
 	user["date_of_birth"] = date_of_birth;
 	user["profile_picture"] = profile_picture;
+	user["firebase_id"] = firebase_id;
 
 	user["skills"] = Skill::listToArray(skills);
 

@@ -13,7 +13,7 @@ using namespace std;
 
 class User{
 private:
-	string id,full_name,first_name,last_name,description,date_of_birth,email,profile_picture;
+	string id,full_name,first_name,last_name,description,date_of_birth,email,profile_picture,firebase_id;
 	list<Job> jobs;
 	list<Skill> skills;
 	list<Education> education;
@@ -35,6 +35,7 @@ public:
 	static bool checkPassword( string user_id,string password );
 	Json::Value asJSON();
 	string getID();
+	string getFirebaseID();
 
 	virtual ~User();
 };

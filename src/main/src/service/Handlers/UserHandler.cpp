@@ -56,7 +56,7 @@ Json::Value _loadUser(string user_id) {
 HTTPResponse* getUsers() {
 	Json::Value body;
 	body["users"] = User::getAllUsers();
-	return ResponseBuilder::createJsonResponse(CODE_OK,body);
+	return  ResponseBuilder::createJsonResponse(CODE_OK,body);
 }
 
 HTTPResponse* handleProfile(HTTPRequest* http_request) {

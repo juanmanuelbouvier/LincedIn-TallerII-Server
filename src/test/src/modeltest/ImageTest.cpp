@@ -14,10 +14,10 @@ TEST(ImageTest, addImage) {
 	string id = url.substr(string(BASE_URL).size(),url.size());
 
 	EXPECT_TRUE(Image::exist(id));
-	EXPECT_FALSE(Image::exist("Invalid idl"));
+	EXPECT_FALSE(Image::exist("Invalid id"));
 
 	string imageBase64 = Image::getBase64(id);
 
-	EXPECT_TRUE(imageBase64 == base64);
+	EXPECT_EQ(imageBase64,base64);
 
 }
