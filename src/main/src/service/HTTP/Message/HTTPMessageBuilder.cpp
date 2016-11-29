@@ -104,6 +104,7 @@ ResponseBuilder::ResponseBuilder() : MessageBuilder() {
 Json::Value ResponseBuilder::createErrorJSON(string message,int internal_code){
 	Json::Value json;
 	json["code"] = internal_code;
+	json["status"] = "ERROR";
 	json["message"] = "ERROR. " + message;
 	Json::Value metadata;
 	metadata["version"] = to_string(LincedInServer_VERSION_MAJOR) + "." + to_string(LincedInServer_VERSION_MINOR);
@@ -128,14 +129,18 @@ HTTPResponse* ResponseBuilder::build(){
 	return theResponse;
 }
 
-HTTPResponse* ResponseBuilder::createEmptyResponse(int code, string phrase){
-	ResponseBuilder* builder = new ResponseBuilder();
-	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),phrase);
-	HTTPResponse* res = builder->build();
-	delete builder;
-	return res;
-	return builder->build();
+HTTPResponse* ResponseBuilder::createEmptyResponse(int code,string message){
+	Json::Value json;
+	json["code"] = code;
+	json["status"] = "OK";
+	json["message"] =  message;
+	Json::Value metadata;
+	metadata["version"] = to_string(LincedInServer_VERSION_MAJOR) + "." + to_string(LincedInServer_VERSION_MINOR);
+	json["metadata"] = metadata;
+
+	return createJsonResponse(code,json);
 }
+
 
 HTTPResponse* ResponseBuilder::createJsonResponse(int code, Json::Value body) {
 	return createJsonResponse(code, JSONUtils::JSONToString(body) );
