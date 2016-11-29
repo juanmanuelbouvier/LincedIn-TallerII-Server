@@ -183,3 +183,11 @@ string StringUtils::generateFileMessage( string file, int line ) {
 	file.erase(0,file.find("main/"));
 	return file + "::" + to_string(line);
 }
+
+string StringUtils::replaceUnderscoresForHyphens(string input){
+	string s = input;
+	std::transform(s.begin(), s.end(), s.begin(), [](char ch) {
+	    return ch == ' ' ? '-' : ch;
+	});
+	return s;
+}

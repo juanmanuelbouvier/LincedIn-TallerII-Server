@@ -32,7 +32,7 @@ HTTPResponse::HTTPResponse(string _code, string _phrase, string _body, map<strin
 void HTTPResponse::generateRawMessage(){
 	//Status-line
 	httpRawMessage = HTTP_VERSION;
-	httpRawMessage += char(SP) + code + char(SP) + StringUtils::urlEncode(phrase) + HTTP_CRLF;
+	httpRawMessage += char(SP) + code + char(SP) + StringUtils::replaceUnderscoresForHyphens(phrase) + HTTP_CRLF;
 
 	//Zero or more headers
 	for (map<string,string>::iterator it = headers.begin(); it != headers.end(); ++it) {
