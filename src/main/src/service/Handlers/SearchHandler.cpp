@@ -5,6 +5,7 @@
 #include <model/Geolocalization.h>
 #include <model/Recommendation.h>
 #include <services/Logger/Logger.h>
+#include <services/HTTP/HTTPResponseConstants.h>
 
 Json::Value joinResult(Json::Value dataSearch) {
 	/* Expected:
@@ -103,7 +104,7 @@ HTTPResponse* SearchHandler::handle(HTTPRequest* request) {
 
 	Json::Value result;
 	result = (toJoin.size() == 0) ? result : joinResult(toJoin);
-	return ResponseBuilder::createJsonResponse(200,result);
+	return ResponseBuilder::createJsonResponse(CODE_OK,result);
 
 }
 

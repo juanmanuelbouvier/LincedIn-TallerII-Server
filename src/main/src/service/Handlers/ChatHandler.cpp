@@ -68,6 +68,27 @@ static HTTPResponse* handleChat(HTTPRequest* request,string chat_id, User user) 
 	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,PHRASE_BAD_REQUEST);
 }
 
+HTTPResponse* createChatFromUser(User user, Json::Value data) {
+	if (data.isMember("participants") && data["participants"].isArray() ) {
+		list<string> participants;
+		participants.push_back(user.getID());
+		for (auto p : data["participants"]) {
+			participants.push_back(p.asString());
+		}
+		ErrorMessage error = Chat::check(participants);
+		if (!error) {
+			Chat chat = Chat::create(participants);
+			Json::Value body;
+			body["chat_id"] = chat.getId();
+			ResponseBuilder::createJsonResponse(CODE_OK,body);
+		}
+		ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error.summary());
+	}
+	ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"Not defined Participants in body");
+
+
+}
+
 HTTPResponse* ChatHandler::handle(HTTPRequest* http_request) {
 
 	string token = http_request->getFromHeader("Authorization");
@@ -76,8 +97,13 @@ HTTPResponse* ChatHandler::handle(HTTPRequest* http_request) {
 	}
 	User user = TokenUtils::userByToken(token);
 
-	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat") && http_request->isGET()){
-		return getChatFromUser(user);
+	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat")){
+		if (http_request->isGET()) {
+			return getChatFromUser(user);
+		} else if (http_request->isPOST()) {
+			Json::Value data = JSONUtils::stringToJSON(http_request->getBody());
+			return createChatFromUser(user,data);
+		}
 	}
 
 	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/online") && http_request->isGET()) {
