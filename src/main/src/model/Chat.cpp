@@ -20,7 +20,8 @@ DB* Chat::getChatsDB(){
 
 Chat::Chat( string chat_id ) {
 	if ( !getDB()->exist(chat_id) ) {
-		throw ChatException ( Log("Chat.cpp::"+ to_string(__LINE__) +". Chat (" + chat_id + ") Can not be created because it doesn't exist in the database",ERROR) );
+		LOG("Chat (" + chat_id + ") Can not be created because it doesn't exist in the database",ERROR);
+		throw ChatException ( "Chat (" + chat_id + ") Can not be created because it doesn't exist in the database" );
 	}
 	Json::Value chat = getDB()->getJSON(chat_id);
 	chatID = chat_id;
@@ -64,7 +65,8 @@ void Chat::setChatToUser( list<string> users_id, string chat_id ) {
 			chats["total"] = 1;
 		}
 		if ( !getChatsDB()->storeJSON(user_id, chats) ) {
-			throw ChatException( Log("Chat.cpp::"+ to_string(__LINE__) +". Cannot set chat to user_id: " + user_id, ERROR) );
+			Log("Cannot set chat to user_id: " + user_id, ERROR);
+			throw ChatException( "Cannot set chat to user_id: " + user_id );
 		}
 	}
 }
@@ -72,7 +74,7 @@ void Chat::setChatToUser( list<string> users_id, string chat_id ) {
 Chat Chat::create( list<string> participants_id ) {
 	ErrorMessage errors = check(participants_id);
 	if (errors) {
-		Log("Chat.cpp::"+ to_string(__LINE__) +". Cannot create chat. Data is invalid.\n Errors: " + errors.summary());
+		LOG("Cannot create chat. Data is invalid.\n Errors: " + errors.summary(),ERROR);
 		throw ChatException(errors.summary());
 	}
 
@@ -168,7 +170,7 @@ bool Chat::addMessage(string user_id, string message) {
 		messages.append( messageValue );
 		return update();
 	}
-	Log("Chat.cpp::" + to_string(__LINE__) + ". The user_id " + user_id + " must be member of chat " + chatID + " to send message",WARNING);
+	LOG("The user_id " + user_id + " must be member of chat " + chatID + " to send message",WARNING);
 	return false;
 }
 
@@ -189,7 +191,7 @@ bool Chat::deleteChatOfParticipant( Json::Value participants, string chat_id ) {
 				participantData["total"] = chats_id.size();
 				checkStore = getChatsDB()->storeJSON(user_id,participantData);
 			}
-			//Log("Chat.cpp::"+ to_string(__LINE__) +". Cannot delete chat (" + chat_id + ") on user (" + user_id + ").\n" + participantData.toStyledString(),ERROR);
+			LOG("Cannot delete chat (" + chat_id + ") on user (" + user_id + ").\n" + participantData.toStyledString(),ERROR);
 		}
 	}
 	return true;

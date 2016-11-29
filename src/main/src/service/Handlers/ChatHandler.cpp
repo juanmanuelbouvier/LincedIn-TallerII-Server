@@ -17,6 +17,7 @@ static HTTPResponse* getChatFromUser(User user) {
 	Json::Value chatsArray(Json::arrayValue);
 	for (Chat& chat : chats) {
 		Json::Value jsonChat;
+		jsonChat["chat_id"] = chat.getId();
 		jsonChat["participants"] = chat.getParticipants();
 		jsonChat["last_message"] = chat.getLastMessage();
 		chatsArray.append(jsonChat);
@@ -83,8 +84,8 @@ HTTPResponse* ChatHandler::handle(HTTPRequest* http_request) {
 		return getOnlineFriendsFromUser(user);
 	}
 
-	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/:user_id")) {
-		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/chat/:user_id");
+	if (PathUtils::matchPathRegexp(http_request->getURI(),"/chat/:chat_id")) {
+		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/chat/:chat_id");
 		string chat_id = path["chat_id"];
 		return handleChat(http_request,chat_id,user);
 	}
