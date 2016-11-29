@@ -6,7 +6,9 @@
 #include <extern/mongoose.h>
 
 using namespace std;
-
+/**
+ * Wrapper for a Raw HTTPResponse
+ */
 class HTTPResponse {
 	map<string,string> headers;
 
@@ -20,7 +22,14 @@ class HTTPResponse {
 
 
 public:
+	/**
+	 * Create response from a mongoose message
+	 */
 	HTTPResponse(struct http_message* msg);
+
+	/**
+	 * Create response with specific parameters
+	 */
 	HTTPResponse(string code, string phrase, string body,map<string,string> headers);
 
 	string getStringCode();

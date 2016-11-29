@@ -10,6 +10,11 @@
 
 class ThreatUtils {
 public:
+	/**
+	 * Create thread and call function with arg_function.
+	 * @param function.
+	 * @param arg_function
+	 */
 	static void startThreath( void *(*function)(void *), void* arg_function );
 };
 

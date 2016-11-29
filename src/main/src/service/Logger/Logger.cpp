@@ -11,13 +11,7 @@ struct LoggerSetting LogSetting;
 
 const string LoggerLevelToString[] = {"ERROR", "WARNING", "INFO", "DEBUG"};
 
-/**
- * Init Logger<BR>
- *  level: Log level (0: "ERROR", 1: "WARNING", 2: "INFO", 3: "DEBUG").<BR>
- *  log_console: if true, the logger also use stdout.<BR>
- *  path: path to the file which logs.<BR>
- *
- */
+
 void LoggerInit(int level, bool log_console, string path){
 	LogSetting.LoggerLevel = level;
 	LogSetting.LoggerConsole = log_console;
@@ -26,13 +20,7 @@ void LoggerInit(int level, bool log_console, string path){
 }
 
 
-/*
- * Log a message in Logger.<BR>
- *  typeOfLog: ERROR, WARNING, INFO, DEBUG.
- *  Default typeOfLog is DEBUG.
- *  return string was logged.
- *
- */
+
 string Log(string message, LogLevel typeOfLog){
     string full_msg = "";
 	if (!LogSetting.init){

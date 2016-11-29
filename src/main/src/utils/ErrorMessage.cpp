@@ -1,9 +1,6 @@
 #include <utils/ErrorMessage.h>
 
-namespace std {
-
-ErrorMessage::ErrorMessage() {
-}
+using namespace std;
 
 string ErrorMessage::summary(){
 	string summary = "";
@@ -26,7 +23,3 @@ bool ErrorMessage::empty(){
 	return error.empty();
 }
 
-ErrorMessage::~ErrorMessage() {
-}
-
-} /* namespace std */

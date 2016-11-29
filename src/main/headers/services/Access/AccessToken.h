@@ -14,7 +14,18 @@ private:
 public:
 	AccessToken(){};
 
+	/**
+	 * Decode a json from a encoded string
+	 * @param string with token/encode
+	 * @return Json::Value who is in the encoded string
+	 */
 	static Json::Value decode( string token );
+
+	/**
+	 * Generate an encode Json with ALGORITHM and KEY
+	 * @param json to be encoded
+	 * @return string of encoded json.
+	 */
 	static string encode( Json::Value json );
 
 	virtual ~AccessToken(){};

@@ -70,15 +70,7 @@ string charToHex(unsigned char c) {
 	return s.str();
 }
 
-/**
- * @author CGICPP
- * Convert encoded characters in form data to normal ASCII.
- * <P>For example, %21 is converted to ! and + is converted to a space.
- * Normally, this is called internally to decode the query string or post
- * data.</P>
- * @param src The src string containing the encoded characters
- * @return The converted string
- */
+
 string StringUtils::unescapeString(const string &src) {
   string result;
   string::const_iterator iter;
@@ -102,18 +94,14 @@ string StringUtils::unescapeString(const string &src) {
   return result;
 }
 
-/**
- * Reverse work that makes unescapeString
- * @param src The src string containing the encode characters
- * @return The converted string
- */
+
 string StringUtils::urlEncode(const string &toEncode) {
 	std::ostringstream out;
 
 	for(std::string::size_type i=0; i < toEncode.length(); ++i) {
 		short t = toEncode.at(i);
 		if(
-				t == 45 ||          	// hyphen
+				t == 45 || t == 47 ||   // hyphen
 				(t >= 48 && t <= 57) || // 0-9
 				(t >= 65 && t <= 90) || // A-Z
 				t == 95 ||          	// underscore

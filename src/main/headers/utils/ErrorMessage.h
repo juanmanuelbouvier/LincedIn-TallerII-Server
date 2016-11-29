@@ -4,13 +4,13 @@
 #include <string>
 #include <map>
 
-namespace std {
+using namespace std;
 
 class ErrorMessage {
 private:
 	map<string,string> error;
 public:
-	ErrorMessage();
+	ErrorMessage(){};
 	string summary();
 
 	void addError(string key, string error);
@@ -19,9 +19,7 @@ public:
 	bool empty();
 	operator bool() const { return !error.empty(); }
 
-	virtual ~ErrorMessage();
+	virtual ~ErrorMessage(){};
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_HEADERS_UTILS_ERRORMESSAGE_H_ */

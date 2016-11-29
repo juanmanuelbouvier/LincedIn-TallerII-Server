@@ -9,6 +9,11 @@
 
 using namespace std;
 
+/**
+ * Builder for request and response.
+ * It is useful because Response and Request aren't editables
+ * Message Builder has the common things of Response and Request (header and body)
+ */
 class MessageBuilder {
 protected:
 	map<string,string> headers;
@@ -17,6 +22,7 @@ protected:
 
 public:
 	MessageBuilder();
+
 
 	MessageBuilder* setBody(string body);
 	MessageBuilder* addHeader(map<string,string> theHeathers);
@@ -65,6 +71,9 @@ public:
 
 	HTTPResponse* build();
 
+	/**
+	 * Wrappers of the most builders uses.
+	 */
 	static HTTPResponse* createJsonResponse(int code, Json::Value body);
 	static HTTPResponse* createJsonResponse(int code, string body);
 	static HTTPResponse* createEmptyResponse(int code, string phrase);

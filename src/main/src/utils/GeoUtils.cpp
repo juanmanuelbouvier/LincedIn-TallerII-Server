@@ -47,8 +47,8 @@ list<Location> GeoUtils::getNeighbours(Location from, double rangeLocation, int 
 
 	int lat = roundNumber(from.latitude, decimals)*delComma;
 	int lon = roundNumber(from.longitude, decimals)*delComma;
-	int rangeLat = roundNumber(range.latitude, decimals)*delComma;
-	int rangeLon = roundNumber(range.longitude, decimals)*delComma;
+	int rangeLat = roundNumber(range.offset_latitude, decimals)*delComma;
+	int rangeLon = roundNumber(range.offset_longitude, decimals)*delComma;
 
 	rangeLat = (rangeLat == 0) ? 1 : rangeLat;
 	rangeLon = (rangeLon == 0) ? 1 : rangeLon;

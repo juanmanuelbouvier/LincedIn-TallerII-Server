@@ -6,12 +6,18 @@
 
 using namespace std;
 
+/**
+ * Index all information of users with elastic search.
+ */
 class UsersIndexer {
 private:
 	static Json::Value fusion(Json::Value old, Json::Value neew);
 	static void collect(string key, Json::Value value);
 public:
-	//Interface for threads
+	/**
+	 * Index all users.
+	 * @note If the elastic client is close, the work will be canceled and only log an error
+	 */
 	static void index();
 };
 

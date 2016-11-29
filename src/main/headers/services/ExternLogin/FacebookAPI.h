@@ -21,8 +21,16 @@ private:
 public:
 	FacebookAPI(){ client = new ServerClient(); };
 
+	/**
+	 * Constant who has a format of date specified in Facebook Docs.
+	 */
 	static const string FB_BirthdayDateFormat;
 
+	/**
+	 * Get information of FB TOKEN.
+	 * @param Facebook Token as String
+	 * @return Json Value with the token information.
+	 */
 	Json::Value getInfoFromToken( string token );
 
 	virtual ~FacebookAPI(){ delete client; };
