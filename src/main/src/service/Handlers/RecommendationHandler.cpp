@@ -6,6 +6,7 @@
 #include <utils/TokenUtils.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <services/HTTP/HTTPResponseConstants.h>
+#include <services/Firebase/FirebaseClient.h>
 
 HTTPResponse* RecommendationHandler::handle(HTTPRequest* request) {
 
@@ -49,6 +50,9 @@ HTTPResponse* RecommendationHandler::handle(HTTPRequest* request) {
 		if (error) {
 			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,error.summary());
 		}
+
+		string firebase_id = User::getFirebaseID(user_id);
+		FirebaseClient::sendNotifications(firebase_id,user_id_auth + " te ha recomendado.",user_id_auth + ": " + body["description"].asString());
 		return ResponseBuilder::createEmptyResponse(CODE_OK,"RECOMMENDATION SENT");
 
 	}

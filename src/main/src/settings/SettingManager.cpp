@@ -12,8 +12,11 @@ using namespace std;
 #define DEFAULT_LOG_LEVEL		DEBUG
 #define DEFAULT_LOG_STDOUT		true
 #define DEFAULT_LOG_FILE		"LincedInAppServer.log"
-#define DEFAULT_SHARED_URL 		"lincedin.herokuapp.com:80"
+#define DEFAULT_SHARED_URL 		"https://lincedin.herokuapp.com:80"
 #define DEFAULT_DB_FOLDER		"db"
+#define DEFAULT_FIREBASE_URL	"https://fcm.googleapis.com"
+#define DEFAULT_FIREBASE_API_KEY "AIzaSyDNaCWDbQI1vJcIJTxTBaX2zbZjkdiIXRY"
+
 
 SettingManager* SettingManager::settingsInstance = NULL;
 
@@ -54,6 +57,8 @@ string SettingManager::getJSONStructure(){
 				"\t}\n"
 				"\tport: type int\tSets port for incomming connections. Default: " + to_string(DEFAULT_SERVER_PORT) + "\n"
 				"\tshared_server_url: type string\t Url to shared server client. Format \"(URL|IP):PORT\". Default: \"" + string(DEFAULT_SHARED_URL) + "\"\n"
+				"\tfirebase_url: type string\t Url to firebase server client. Format \"(URL)\". Default: \"" + string(DEFAULT_FIREBASE_URL) + "\"\n"
+				"\tfirebase_api_key: type string\t Api key to firebase server. Default: \"" + string(DEFAULT_FIREBASE_API_KEY) + "\"\n"
 			"}\n\n";
 	return message;
 }
@@ -157,4 +162,22 @@ void SettingManager::initDefaultLogger(){
 	LoggerInit(DEFAULT_LOG_LEVEL,DEFAULT_LOG_STDOUT,DEFAULT_LOG_FILE);
 }
 
+
+string SettingManager::getFirebaseURL(){
+	string url = getDirectValue("firebase_url");
+	if (url != ""){
+		return url;
+	}
+	Log("No URL for Firebase API was detected. Using default: \"" + string(DEFAULT_FIREBASE_URL) + "\"",WARNING);
+	return DEFAULT_FIREBASE_URL;
+}
+
+string SettingManager::getFirebaseApiKey(){
+	string key = getDirectValue("firebase_api_key");
+	if (key != ""){
+		return key;
+	}
+	Log("No api key for Firebase API was detected. Using default: \"" + string(DEFAULT_FIREBASE_API_KEY) + "\"",WARNING);
+	return DEFAULT_FIREBASE_API_KEY;
+}
 

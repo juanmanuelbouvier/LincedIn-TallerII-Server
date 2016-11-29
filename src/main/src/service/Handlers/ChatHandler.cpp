@@ -9,7 +9,7 @@
 #include <utils/TokenUtils.h>
 #include <list>
 #include <services/HTTP/HTTPResponseConstants.h>
-
+#include <services/Firebase/FirebaseClient.h>
 
 static HTTPResponse* getChatFromUser(User user) {
 	list<Chat> chats = Chat::getChatsFromUser(user.getID());
@@ -36,6 +36,20 @@ static HTTPResponse* getOnlineFriendsFromUser(User user) {
 
 }
 
+void sendFirebaseNotification(Chat chat,User user_source,string message){
+	string fullName = user_source.getFullName();
+	string id = user_source.getID();
+	Json::Value participants = chat.getParticipants();
+
+	for (auto itr : participants) {
+	    string user_destination_id = itr.asString();
+	    if (user_destination_id == id)
+	    	continue;
+	    string firebase_id = User::getFirebaseID(user_destination_id);
+		FirebaseClient::sendNotifications(firebase_id,"Nuevo mensaje de " + fullName,fullName + ": " + message);
+	}
+}
+
 static HTTPResponse* handleChat(HTTPRequest* request,string chat_id, User user) {
 	if (!Chat::exist(chat_id)) {
 		return ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,"Chat");
@@ -53,6 +67,7 @@ static HTTPResponse* handleChat(HTTPRequest* request,string chat_id, User user) 
 		}
 		string message = body["message"].asString();
 		if (chat.addMessage(user.getID(),message)){
+			sendFirebaseNotification(chat,user,message);
 			return ResponseBuilder::createJsonResponse(CODE_OK,chat.getLastMessage());
 		}
 		ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"INTERNAL ERROR");

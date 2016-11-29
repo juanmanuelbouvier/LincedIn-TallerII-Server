@@ -1,0 +1,21 @@
+#ifndef SRC_MAIN_SRC_SERVICE_FIREBASE_FIREBASECLIENT_H_
+#define SRC_MAIN_SRC_SERVICE_FIREBASE_FIREBASECLIENT_H_
+
+#include <services/Server/ServerClient.h>
+#include <services/HTTP/Message/HTTPResponse.h>
+#include <extern/json.h>
+#include <string>
+
+using namespace std;
+
+class FirebaseClient {
+private:
+	static HTTPResponse* sendRequest(HTTPRequest* request);
+	static HTTPResponse* doPOST( Json::Value body );
+
+public:
+	static bool sendNotifications(string to,string title,string text);
+
+};
+
+#endif /* SRC_MAIN_SRC_SERVICE_FIREBASE_FIREBASECLIENT_H_ */

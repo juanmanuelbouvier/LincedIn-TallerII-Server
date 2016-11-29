@@ -62,7 +62,7 @@ private:
 	string code;
 	string phrase;
 	static Json::Value createErrorJSON(string message,int internal_code);
-
+	static HTTPResponse* createJsonResponse(int code, string body);
 public:
 	ResponseBuilder();
 
@@ -71,12 +71,12 @@ public:
 
 	HTTPResponse* build();
 
+
 	/**
 	 * Wrappers of the most builders uses.
 	 */
+	static HTTPResponse* createEmptyResponse(int code,string message);
 	static HTTPResponse* createJsonResponse(int code, Json::Value body);
-	static HTTPResponse* createJsonResponse(int code, string body);
-	static HTTPResponse* createEmptyResponse(int code, string phrase);
 	static HTTPResponse* createErrorResponse(int code, string error);
 	static HTTPResponse* createErrorResponse(int code, string error,int internal_code);
 

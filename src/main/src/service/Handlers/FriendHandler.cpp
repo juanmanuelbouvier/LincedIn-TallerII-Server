@@ -7,6 +7,7 @@
 #include <extern/json.h>
 #include <list>
 #include <services/HTTP/HTTPResponseConstants.h>
+#include <services/Firebase/FirebaseClient.h>
 
 using namespace std;
 
@@ -56,7 +57,8 @@ HTTPResponse* _actionUser(string method,string source_user_id,string user_destin
 		if (error){
 			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,"Usuario ya es parte de la red");
 		}
-
+		string firebase_id = User::getFirebaseID(user_destination_id);
+		FirebaseClient::sendNotifications(firebase_id,"Solicitud de amistad","El usuario " + source_user_id + " te ha enviado una solicitud de amistad.");
 		return ResponseBuilder::createEmptyResponse(CODE_OK,"Solicitud para agregar a la red enviada");
 
 	} else if (method == "DELETE"){

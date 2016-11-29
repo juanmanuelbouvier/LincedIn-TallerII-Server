@@ -39,6 +39,9 @@ public:
 	void initLogger();
 	void initDefaultLogger();
 
+	string getFirebaseURL();
+	string getFirebaseApiKey();
+
 	virtual ~SettingManager(){};
 };
 

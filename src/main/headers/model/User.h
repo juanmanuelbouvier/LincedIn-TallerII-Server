@@ -35,7 +35,10 @@ public:
 	static bool checkPassword( string user_id,string password );
 	Json::Value asJSON();
 	string getID();
+	string getFullName();
 	string getFirebaseID();
+
+	static string getFirebaseID(string id);
 
 	virtual ~User();
 };
