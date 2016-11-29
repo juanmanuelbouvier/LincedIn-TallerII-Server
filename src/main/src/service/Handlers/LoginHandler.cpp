@@ -14,6 +14,7 @@
 Json::Value createBody(string user_id) {
 	Json::Value responseBody;
 	responseBody["message"] = "Hi, " + user_id;
+	responseBody["user_id"] = user_id;
 	responseBody["token"] = TokenUtils::generateSessionToken( user_id );
 	Log("Token created for \"" + user_id + "\"\n\ttoken: " + responseBody["token"].asString());
 	return responseBody;

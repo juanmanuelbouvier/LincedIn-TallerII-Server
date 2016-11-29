@@ -72,7 +72,9 @@ HTTPResponse* SearchHandler::handle(HTTPRequest* request) {
 	if ( !elasticQuery.empty() ) {
 		string text = query["text"].asString();
 		ElasticClient el("localhost:9200");
-		toJoin["text"] = el.search("lincedin","user",elasticQuery, true);
+		if (el.isAlive()) {
+			toJoin["text"] = el.search("lincedin","user",elasticQuery, true);
+		}
 	}
 
 	// 3. Search with geolocation
