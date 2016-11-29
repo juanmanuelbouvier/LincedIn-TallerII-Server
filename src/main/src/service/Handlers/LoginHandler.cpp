@@ -54,6 +54,7 @@ HTTPResponse* createUserFromFacebookData( Json::Value fb_data ) {
 	Json::Value birth = DateUtils::parseDate(fb_data["birthday"].asString(),FacebookAPI::FB_BirthdayDateFormat);
 	data["date_of_birth"] = ( existBirth ) ? birth : Json::nullValue;
 	data["password"] =  StringUtils::generateRandomPassword();
+	data["firebase_id"] = fb_data["firebase_id"];
 
 	ErrorMessage errors = User::check(data);
 	return (errors) ? ResponseBuilder::createErrorResponse(408,errors.summary(),408) : createUser(data);
@@ -66,11 +67,18 @@ HTTPResponse* facebookLogin(Json::Value data) {
 	string fb_token = data["fb_token"].asString();
 	FacebookAPI fb;
 	Json::Value fb_data = fb.getInfoFromToken( fb_token );
+	fb_data["firebase_id"] = data["firebase_id"];
 	Log("Facebook response of token:\n" + fb_data.toStyledString());
 	if ( fb_data["email"].isString() ) {
 		string email = fb_data["email"].asString();
 		string user_id = User::getIdByEmail( email );
 		if ( !user_id.empty() ) {
+			if (User::getFirebaseID(user_id) != fb_data["firebase_id"].asString()){
+				User user = User(user_id);
+				Json::Value data_old_user = user.asJSON();
+				data_old_user["firebase_id"] = fb_data["firebase_id"];
+				User::update(user_id,data_old_user);
+			}
 			return ResponseBuilder::createJsonResponse(CODE_OK, createBody(user_id) );
 		}
 		Log("User not in LincedIn database. Attemp to create it");
