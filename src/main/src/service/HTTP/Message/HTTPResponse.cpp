@@ -30,7 +30,7 @@ HTTPResponse::HTTPResponse(string _code, string _phrase, string _body, map<strin
 void HTTPResponse::generateRawMessage(){
 	//Status-line
 	httpRawMessage = HTTP_VERSION;
-	httpRawMessage += " " + code + " " + phrase + HTTP_CRLF;
+	httpRawMessage += ' ' + code + ' ' + phrase + HTTP_CRLF;
 
 	//Zero or more headers
 	for (map<string,string>::iterator it = headers.begin(); it != headers.end(); ++it) {

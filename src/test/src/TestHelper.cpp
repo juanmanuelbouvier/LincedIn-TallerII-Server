@@ -53,7 +53,7 @@ User TestHelper::createUser(string id) {
 	data["first_name"] = "Facundo";
 	data["last_name"] = "Etchanchu";
 	data["description"] = "Yo papá, quién si no.";
-	data["email"] = "fme@lincedin.com";
+	data["email"] = id +"@lincedin.com";
 	data["date_of_birth"] = "1964-04-12 16:22:00";
 	data["password"] = "123456";
 	data["education"] = Json::arrayValue;
