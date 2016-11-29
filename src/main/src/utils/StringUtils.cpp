@@ -185,9 +185,5 @@ string StringUtils::generateFileMessage( string file, int line ) {
 }
 
 string StringUtils::replaceUnderscoresForHyphens(string input){
-	string s = input;
-	std::transform(s.begin(), s.end(), s.begin(), [](char ch) {
-	    return ch == ' ' ? '-' : ch;
-	});
-	return s;
+	return replace(input, " ", "-");
 }
