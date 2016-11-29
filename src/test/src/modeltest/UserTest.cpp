@@ -15,14 +15,14 @@ TEST(UserTest, existUser){
 
 TEST(UserTest, createBasicUser){
 	TestHelper::settinUpTestModel();
-	string id = "fme";
+	string id = "elPepo";
 
 	Json::Value data;
 	data["id"] = id;
-	data["first_name"] = "Facundo";
-	data["last_name"] = "Etchanchu";
-	data["description"] = "Yo papá, quién si no.";
-	data["email"] = "fme@lincedin.com";
+	data["first_name"] = "René";
+	data["last_name"] = "Ríos";
+	data["description"] = "Yo papá, el pepo.";
+	data["email"] = "pepo@lincedin.com";
 	data["date_of_birth"] = "1964-04-12 16:22:00";
 	data["profile_picture"] = "ASD123456";
 	data["password"] = "123456";
@@ -53,14 +53,14 @@ TEST(UserTest, createBasicUser){
 TEST(UserTest, createCompleteUser){
 	TestHelper::settinUpTestModel();
 
-	string id = "fme";
+	string id = "elPepo";
 
 	Json::Value data;
 	data["id"] = id;
-	data["first_name"] = "Facundo";
-	data["last_name"] = "Etchanchu";
-	data["description"] = "Yo papá, quién si no.";
-	data["email"] = "fme@lincedin.com";
+	data["first_name"] = "René";
+	data["last_name"] = "Ríos";
+	data["description"] = "Yo papá, el pepo.";
+	data["email"] = "pepo@lincedin.com";
 	data["date_of_birth"] = "1964-04-12 16:22:00";
 	data["profile_picture"] = "ASD123456";
 	data["password"] = "123456";
@@ -121,7 +121,7 @@ TEST(UserTest, createCompleteUser){
 TEST(UserTest, updateUser){
 	TestHelper::settinUpTestModel();
 
-	string id = "fme";
+	string id = "elPepo";
 
 	User user = TestHelper::createUser(id);
 
@@ -142,7 +142,7 @@ TEST(UserTest, updateUser){
 
 
 	//update email
-	dataUpdate["email"] = "fme@gmail.com";
+	dataUpdate["email"] = "elpeponuevo@gmail.com";
 
 	ErrorMessage error = User::update(id,dataUpdate);
 
@@ -180,16 +180,20 @@ TEST(UserTest, ErrorUser){
 TEST(UserTest, AddTwoUserWithEqualID){
 	TestHelper::settinUpTestModel();
 
-	string id = "fme";
+	string id = "elPepo";
 
 	User user = TestHelper::createUser(id);
 
 	Json::Value data = user.asJSON();
 	data["password"] = "ASD123";
+	data["email"] = "elpepo2@cataratas.com";
 
 	User user2 = User::create(data);
 
 	EXPECT_NE(id,user2.getID());
+
+	User::remove(user.getID());
+	User::remove(user2.getID());
 }
 
 

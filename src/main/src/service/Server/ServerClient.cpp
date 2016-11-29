@@ -2,6 +2,8 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <services/Logger/Logger.h>
 
+#include <iostream>
+
 #define MAX_CICLES 200
 
 using namespace std;
@@ -18,6 +20,8 @@ ServerClient::ServerClient() {
 HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
 	sendingRequest = true;
+
+	cout << request->toString() << endl;
 
 	int cicles = 0;
 	while (sendingRequest) {
