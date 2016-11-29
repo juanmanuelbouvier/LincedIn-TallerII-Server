@@ -8,19 +8,17 @@ using namespace std;
 
 #define FIREBASE_URI "/fcm/send"
 
-FirebaseClient::FirebaseClient(){
-	client = new ServerClient();
-	firebaseURL = SettingManager::getInstance()->getFirebaseURL();
-	apiKey = SettingManager::getInstance()->getFirebaseApiKey();
-}
-
 HTTPResponse* FirebaseClient::sendRequest(HTTPRequest* request) {
+	ServerClient* client = new ServerClient();
+	string firebaseURL = SettingManager::getInstance()->getFirebaseURL();
 	HTTPResponse* response = ( client->connectToUrl(firebaseURL) ) ? client->sendRequest(request) : ResponseBuilder::createErrorResponse(500,"CANNOT_CONNECT_FIREBASE");
 
+	delete client;
 	return response;
 }
 
 HTTPResponse* FirebaseClient::doPOST( Json::Value body){
+	string apiKey = SettingManager::getInstance()->getFirebaseApiKey();
 
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->POST()->setUri(FIREBASE_URI);
@@ -42,6 +40,10 @@ HTTPResponse* FirebaseClient::doPOST( Json::Value body){
 }
 
 bool FirebaseClient::sendNotifications(string to,string title,string text){
+
+	if (to.empty())
+		return false;
+
 	Json::Value body;
 	body["to"] = to;
 
@@ -65,8 +67,4 @@ bool FirebaseClient::sendNotifications(string to,string title,string text){
 
 	return false;
 
-}
-
-FirebaseClient::~FirebaseClient(){
-	delete client;
 }

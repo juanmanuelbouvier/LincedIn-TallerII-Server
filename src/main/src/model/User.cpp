@@ -190,6 +190,10 @@ string User::getID(){
 	return this->id;
 }
 
+string User::getFullName(){
+	return this->full_name;
+}
+
 string User::getFirebaseID(){
 	return this->firebase_id;
 }
@@ -318,6 +322,12 @@ Json::Value User::asJSON(){
 
 Json::Value User::getAllUsers(){
 	return getDB()->getAllKeys();
+}
+
+string User::getFirebaseID(string id){
+	if (!getDB()->exist(id))
+		return "";
+	return getDB()->getJSON(id)["firebase_id"].asString();
 }
 
 User::~User() {

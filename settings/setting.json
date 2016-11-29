@@ -8,5 +8,5 @@
 	"shared_server_url": "https://lincedin.herokuapp.com",
 	"db_folder": "db",
 	"firebase_url": "https://fcm.googleapis.com",
-	"firebase_api_key": ""
+	"firebase_api_key": "AIzaSyDNaCWDbQI1vJcIJTxTBaX2zbZjkdiIXRY"
 }

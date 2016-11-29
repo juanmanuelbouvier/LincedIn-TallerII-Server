@@ -15,7 +15,7 @@ using namespace std;
 #define DEFAULT_SHARED_URL 		"https://lincedin.herokuapp.com:80"
 #define DEFAULT_DB_FOLDER		"db"
 #define DEFAULT_FIREBASE_URL	"https://fcm.googleapis.com"
-#define DEFAULT_FIREBASE_API_KEY ""
+#define DEFAULT_FIREBASE_API_KEY "AIzaSyDNaCWDbQI1vJcIJTxTBaX2zbZjkdiIXRY"
 
 
 SettingManager* SettingManager::settingsInstance = NULL;

@@ -10,17 +10,12 @@ using namespace std;
 
 class FirebaseClient {
 private:
-	ServerClient* client;
-	string firebaseURL;
-	string apiKey;
-
-	HTTPResponse* sendRequest(HTTPRequest* request);
-	HTTPResponse* doPOST( Json::Value body );
+	static HTTPResponse* sendRequest(HTTPRequest* request);
+	static HTTPResponse* doPOST( Json::Value body );
 
 public:
-	FirebaseClient();
-	bool sendNotifications(string to,string title,string text);
-	~FirebaseClient();
+	static bool sendNotifications(string to,string title,string text);
+
 };
 
 #endif /* SRC_MAIN_SRC_SERVICE_FIREBASE_FIREBASECLIENT_H_ */
