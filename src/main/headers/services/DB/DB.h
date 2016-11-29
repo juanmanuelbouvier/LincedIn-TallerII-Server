@@ -37,6 +37,8 @@ public:
 
 	void iterateAllKeyJson( void(*f)(string key, Json::Value value), Json::Value& collector );
 
+	Json::Value getAllKeys();
+
 	bool exist(string key);
 
 	virtual ~DB();

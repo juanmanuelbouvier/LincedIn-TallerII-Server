@@ -2,6 +2,7 @@
 
 #define HTTP_VERSION "HTTP/1.1"
 const string HTTP_CRLF = "\r\n";
+const int SP = 32;
 
 HTTPResponse::HTTPResponse(struct http_message* msg){
 	httpRawMessage = string(msg->message.p, msg->message.len);
@@ -30,7 +31,7 @@ HTTPResponse::HTTPResponse(string _code, string _phrase, string _body, map<strin
 void HTTPResponse::generateRawMessage(){
 	//Status-line
 	httpRawMessage = HTTP_VERSION;
-	httpRawMessage += ' ' + code + ' ' + phrase + HTTP_CRLF;
+	httpRawMessage += char(SP) + code + char(SP) + phrase + HTTP_CRLF;
 
 	//Zero or more headers
 	for (map<string,string>::iterator it = headers.begin(); it != headers.end(); ++it) {

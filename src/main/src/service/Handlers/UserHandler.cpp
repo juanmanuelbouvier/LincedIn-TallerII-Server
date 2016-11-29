@@ -53,6 +53,12 @@ Json::Value _loadUser(string user_id) {
 	}
 }
 
+HTTPResponse* getUsers() {
+	Json::Value body;
+	body["users"] = User::getAllUsers();
+	return ResponseBuilder::createJsonResponse(CODE_OK,body);
+}
+
 HTTPResponse* handleProfile(HTTPRequest* http_request) {
 	map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/user/:user_id");
 	string user_id = path["user_id"];
@@ -116,14 +122,18 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 		return handleProfile(http_request);
 	}
 
-	if ( PathUtils::matchPathRegexp(http_request->getURI(),"/user") && http_request->isPOST() ) {
+	if ( PathUtils::matchPathRegexp(http_request->getURI(),"/user")) {
+		if (http_request->isPOST()){
+			Json::Value data = JSONUtils::stringToJSON( http_request->getBody() );
+			if (data.isMember("error")){
+				return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"Error in data.");
+			}
 
-		Json::Value data = JSONUtils::stringToJSON( http_request->getBody() );
-		if (data.isMember("error")){
-			return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"Error in data.");
+			return createUserFromData(data);
+
+		} else if (http_request->isGET()){
+			return getUsers();
 		}
-
-		return createUserFromData(data);
 	}
 	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST, "BAD REQUEST",CODE_BAD_REQUEST);
 }

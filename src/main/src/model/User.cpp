@@ -303,6 +303,10 @@ Json::Value User::asJSON(){
 
 }
 
+Json::Value User::getAllUsers(){
+	return getDB()->getAllKeys();
+}
+
 User::~User() {
 
 }

@@ -118,6 +118,20 @@ void DB::iterateAllKeyJson( void (*f)(string key, Json::Value value), Json::Valu
 	delete it;
 }
 
+Json::Value DB::getAllKeys(){
+	Json::Value keys(Json::arrayValue);
+	if (!opened) {
+		return keys;
+	}
+	leveldb::Iterator* it = db->NewIterator(leveldb::ReadOptions());
+	for (it->SeekToFirst(); it->Valid(); it->Next()) {
+		string key = it->key().ToString();
+		keys.append(key);
+	}
+	delete it;
+	return keys;
+}
+
 DB::~DB() {
 	delete db;
 }

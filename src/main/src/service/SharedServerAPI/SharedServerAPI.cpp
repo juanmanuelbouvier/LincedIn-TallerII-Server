@@ -24,7 +24,6 @@ HTTPResponse* SharedServerAPI::sendRequest(HTTPRequest* request) {
 HTTPResponse* SharedServerAPI::doGet( string uri ){
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->GET()->setUri(uri);
-	builder = (RequestBuilder*)builder->appendHeader("connection","keep-alive");
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
@@ -36,7 +35,6 @@ HTTPResponse* SharedServerAPI::doGet( string uri ){
 HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->POST()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
-	builder = (RequestBuilder*)builder->appendHeader("connection","keep-alive");
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
@@ -47,7 +45,6 @@ HTTPResponse* SharedServerAPI::doPost( string uri, string body ){
 
 HTTPResponse* SharedServerAPI::doPut(string uri, string body){
 	RequestBuilder* builder = new RequestBuilder();
-	builder = (RequestBuilder*)builder->appendHeader("connection","keep-alive");
 	builder = (RequestBuilder*)builder->PUT()->setUri(uri)->appendHeader("Content-type","application/json")->setBody(body);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
@@ -60,7 +57,6 @@ HTTPResponse* SharedServerAPI::doPut(string uri, string body){
 HTTPResponse* SharedServerAPI::doDelete(string uri){
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->DELETE()->setUri(uri);
-	builder = (RequestBuilder*)builder->appendHeader("connection","keep-alive");
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
