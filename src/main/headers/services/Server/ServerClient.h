@@ -19,6 +19,8 @@ private:
 
 	void handleHTTPReply(void* data);
 
+	void setDefault();
+
 	static void eventHandler(mg_connection* connection,int event_code,void* data);
 protected:
 	int cicles;

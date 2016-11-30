@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:latest
 
 RUN apt-get -y update
 RUN apt-get install -y git curl g++ make cmake valgrind doxygen graphviz python3-setuptools pkg-config libsnappy-dev libleveldb-dev lcov libjansson-dev openssl libssl-dev

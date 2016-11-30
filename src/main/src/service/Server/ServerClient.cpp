@@ -17,19 +17,22 @@ ServerClient::ServerClient() {
 	waitHTTPReply = false;
 
 }
-#include <utils/DateUtils.h>
-HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
-	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
-	sendingRequest = true;
+
+void ServerClient::setDefault() {
 	waitHTTPReply = false;
 	if (response != NULL) {
 		delete response;
 		response = NULL;
 	}
-
-	int init = DateUtils::timestamp();
-
 	cicles = 0;
+}
+
+HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
+	setDefault();
+
+	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
+
+	sendingRequest = true;
 	while (sendingRequest) {
 		if (cicles > MAX_CICLES) {
 			LOG(url + " does not respond. Returning TIMEOUT response",WARNING);
@@ -41,11 +44,6 @@ HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 		mg_mgr_poll(&eventClientManager, 1000);
 		cicles++;
 	}
-	int fin = DateUtils::timestamp() - init;
-	if (fin > 1) {
-		printf("TIME: %d\nRequest\n%s\n====\nResponse:\n%s\n",fin,request->toString().c_str(),response->toString().c_str());
-	}
-
 	return response;
 }
 
