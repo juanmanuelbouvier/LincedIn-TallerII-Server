@@ -101,7 +101,7 @@ string StringUtils::urlEncode(const string &toEncode) {
 	for(std::string::size_type i=0; i < toEncode.length(); ++i) {
 		short t = toEncode.at(i);
 		if(
-				t == 45 || t == 47 ||   // hyphen
+				t == 45 || t == 47 ||   // hyphen and /
 				(t >= 48 && t <= 57) || // 0-9
 				(t >= 65 && t <= 90) || // A-Z
 				t == 95 ||          	// underscore

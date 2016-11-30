@@ -73,7 +73,6 @@ Json::Value SharedServerAPI::processResponse(HTTPResponse* response, int expecte
 	} else {
 		res["error"] = response->getBody();
 	}
-	delete response;
 	return res;
 }
 
@@ -92,7 +91,12 @@ Json::Value SharedServerAPI::updateObject(string url,string body){
 
 Json::Value SharedServerAPI::deleteObject(string url){
 	HTTPResponse* response = doDelete(url);
-	return processResponse(response,204);
+	Json::Value result = processResponse(response,214);
+	if (result.isMember("error")) {
+		result = processResponse(response,204);
+	}
+	delete response;
+	return result;
 }
 
 //skills

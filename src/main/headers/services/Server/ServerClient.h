@@ -20,7 +20,8 @@ private:
 	void handleHTTPReply(void* data);
 
 	static void eventHandler(mg_connection* connection,int event_code,void* data);
-
+protected:
+	int cicles;
 public:
 	/**
 	 * Connect to url.
@@ -29,8 +30,14 @@ public:
 	 */
 	bool connectToUrl(string url);
 
+	/**
+	 * Send request to the client.
+	 * @param Request to be sended
+	 * @return Response of the server. If the time of response exceed MAX_CICLES. Return timeout response
+	 */
 	HTTPResponse* sendRequest(HTTPRequest* request);
 
+	bool waitHTTPReply;
 	ServerClient();
 	virtual ~ServerClient();
 };
