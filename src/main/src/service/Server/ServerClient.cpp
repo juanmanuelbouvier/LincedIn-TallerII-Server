@@ -21,7 +21,6 @@ ServerClient::ServerClient() {
 void ServerClient::setDefault() {
 	waitHTTPReply = false;
 	if (response != NULL) {
-		delete response;
 		response = NULL;
 	}
 	cicles = 0;

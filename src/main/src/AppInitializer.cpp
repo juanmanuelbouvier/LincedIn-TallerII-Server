@@ -71,14 +71,16 @@ void closeSignal(int signal) {
 void* closeWithSIGINT( void* server ) {
 	signal(SIGINT, closeSignal);
 	while (!CLOSE_SIGINT) {
-		sleep(1);
+		sleep(0.5);
 	}
+	cout << " ===> SIGINT Signal detected" << endl;
 	Server* theServer = (Server*)server;
 	theServer->stop();
 	return NULL;
 }
 
 void* callIndexers( void* data ) {
+	sleep(60);
 	while (true) {
 		UsersIndexer::index();
 		sleep(60*20);
