@@ -17,7 +17,7 @@ void TestHelper::settinUpTestModel() {
 					"\"show_in_stout\" : false,"
 					"\"level\" : 3"
 				"},"
-			"\"shared_server_url\": \"" + LOCAL + "\""
+			"\"shared_server_url\": \"" + HEROKU + "\""
 			"}";
 
 	ofstream out(".temp-test/setting-model.json");

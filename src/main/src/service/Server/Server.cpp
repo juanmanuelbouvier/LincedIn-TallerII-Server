@@ -49,12 +49,13 @@ void Server::eventHandler(struct mg_connection* connection, int eventCode, void*
 
 		if (thisServer->HTTPHandler->isHandledRequest(theRequest)){
 			HTTPResponse* mensaje = thisServer->HTTPHandler->handle(theRequest);
-			if (!mensaje){
+			delete theRequest;
+			if (mensaje == NULL){
 				map<string,string> emptyHeaders;
-				mensaje = new HTTPResponse("400","ERROR","",emptyHeaders);
+				mensaje = new HTTPResponse("500","ERROR","",emptyHeaders);
 			}
 			mg_printf(connection, "%s",mensaje->toString().c_str());
-
+			delete mensaje;
 		} else {
 			struct mg_serve_http_opts opts = { .document_root = (thisServer->documentRoot).c_str() };
 			mg_serve_http(connection, (struct http_message *)eventData, opts);

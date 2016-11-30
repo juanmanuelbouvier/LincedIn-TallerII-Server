@@ -95,11 +95,11 @@ HTTPResponse* createChatFromUser(User user, Json::Value data) {
 			Chat chat = Chat::create(participants);
 			Json::Value body;
 			body["chat_id"] = chat.getId();
-			ResponseBuilder::createJsonResponse(CODE_OK,body);
+			return ResponseBuilder::createJsonResponse(CODE_OK,body);
 		}
-		ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error.summary());
+		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error.summary());
 	}
-	ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"Not defined Participants in body");
+	return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"Not defined Participants in body");
 
 
 }
