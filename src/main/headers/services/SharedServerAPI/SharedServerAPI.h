@@ -9,6 +9,10 @@
 
 using namespace std;
 
+/**
+ * SharedServerAPI abstract all request of SharedServer.
+ */
+
 class SharedServerAPI {
 private:
 	ServerClient* client;
@@ -26,7 +30,6 @@ private:
 public:
 	SharedServerAPI();
 
-	// API Rest
 	Json::Value getSkills();
 	Json::Value getSkill(string name);
 	Json::Value setSkill(string name,string description, string category);

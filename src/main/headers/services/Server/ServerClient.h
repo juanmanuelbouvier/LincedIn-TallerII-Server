@@ -22,7 +22,11 @@ private:
 	static void eventHandler(mg_connection* connection,int event_code,void* data);
 
 public:
-
+	/**
+	 * Connect to url.
+	 * @param url to connect.
+	 * @return True if could connect.
+	 */
 	bool connectToUrl(string url);
 
 	HTTPResponse* sendRequest(HTTPRequest* request);

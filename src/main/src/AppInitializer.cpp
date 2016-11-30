@@ -132,5 +132,6 @@ int main(int argc, char **argv) {
 
 	delete server;
 	cleanMemory();
+
 	return 0;
 }

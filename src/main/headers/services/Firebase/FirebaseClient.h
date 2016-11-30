@@ -14,6 +14,13 @@ private:
 	static HTTPResponse* doPOST( Json::Value body );
 
 public:
+	/**
+	 * Send notification to user from server using Firebas.
+	 * @param Firebase id of dest.
+	 * @param Title of notification
+	 * @param Body notification
+	 * @return True if could be sended
+	 */
 	static bool sendNotifications(string to,string title,string text);
 
 };
