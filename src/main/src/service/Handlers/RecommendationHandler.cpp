@@ -20,7 +20,9 @@ HTTPResponse* RecommendationHandler::handle(HTTPRequest* request) {
 
 	if (PathUtils::matchPathRegexp(request->getURI(),"/recommendations") and request->isGET()){
 		if (auth){
-			Json::Value recomendations = Recommendation::getArraySentRecommendations(user_id_auth);
+			Json::Value recomendations;
+			recomendations["recommendations_sent"] = Recommendation::getArraySentRecommendations(user_id_auth);
+			recomendations["recommendations_received"] = Recommendation::getArrayReceivedRecommendations(user_id_auth);
 			return ResponseBuilder::createJsonResponse(CODE_OK,recomendations);
 		}else {
 			return ResponseBuilder::createErrorResponse(CODE_PERMISSION_DENIED,PHRASE_PERMISSION_DENIED);
@@ -35,7 +37,9 @@ HTTPResponse* RecommendationHandler::handle(HTTPRequest* request) {
 
 
 	if ( request->isGET() ) {
-		Json::Value recomendations = Recommendation::getArrayReceivedRecommendations(user_id);
+		Json::Value recomendations;
+		recomendations["recommendations_sent"] = Recommendation::getArraySentRecommendations(user_id);
+		recomendations["recommendations_received"] = Recommendation::getArrayReceivedRecommendations(user_id);
 		return ResponseBuilder::createJsonResponse(CODE_OK,recomendations);
 	}
 
