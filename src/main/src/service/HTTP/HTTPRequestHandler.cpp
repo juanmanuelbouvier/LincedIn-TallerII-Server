@@ -64,6 +64,8 @@ HTTPRequestHandler::HTTPRequestHandler() {
 }
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
+	count ++;
+	cout << "Request nro" + to_string(count) + " " + http_request->getMethod() " Uri-> " + http_request->getURI() << endl;
 	string uri = http_request->getURI();
 
 	//Se supone que por decision del server esto ya tiene que venir verificado
