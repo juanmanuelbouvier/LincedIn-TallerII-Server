@@ -37,7 +37,7 @@
 #define PHRASE_UNEXPECTED_ERROR "UNEXPECTED ERROR"
 
 
-static string prhaseByCode(int code) {
+static string phraseByCode(int code) {
 	switch (code) {
 		case CODE_PERMISSION_DENIED:
 			return PHRASE_PERMISSION_DENIED;
@@ -71,5 +71,39 @@ static string prhaseByCode(int code) {
 	}
 }
 
+
+static string phraseRFCByCode(int code) {
+	switch (code) {
+		case 401:
+			return "Unauthorized";
+
+		case 200:
+			return "OK";
+
+		case 201:
+			return "Created";
+
+		case 204:
+			return "No Content";
+
+		case 202:
+			return "Accepted";
+
+		case 404:
+			return "Not Found";
+
+		case 408:
+			return "Request Time-out";
+
+		case 400:
+			return "Bad Request";
+
+		case 500:
+			return "Internal Server Error";
+
+		default:
+			return "";
+	}
+}
 
 #endif /* SRC_MAIN_HEADERS_SERVICES_HANDLERS_HTTPRESPONSECONSTANTS_H_ */

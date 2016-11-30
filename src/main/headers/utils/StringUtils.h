@@ -85,6 +85,7 @@ public:
 	 * ej generateFileMessage("home/user/src/main/Text/text.cpp",245) ==> "main/Text/text.cpp::245"
 	 */
 	static string generateFileMessage( string file, int line );
+	static string replaceUnderscoresForHyphens(string input);
 };
 
 #endif /* SRC_MAIN_UTILS_STRINGUTILS_H_ */

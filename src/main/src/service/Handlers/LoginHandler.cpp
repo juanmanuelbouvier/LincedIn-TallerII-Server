@@ -25,6 +25,12 @@ HTTPResponse* normalLogin(Json::Value data) {
 		string password = data["password"].asString();
 		string user_id = ( data["email"].isString() ) ? User::getIdByEmail( data["email"].asString() ) : data["user_id"].asString();
 		if ( !user_id.empty() && User::exist(user_id) && User::checkPassword(user_id,password) ) {
+			if (User::getFirebaseID(user_id) != data["firebase_id"].asString()){
+				User user = User(user_id);
+				Json::Value data_old_user = user.asJSON();
+				data_old_user["firebase_id"] = data["firebase_id"];
+				User::update(user_id,data_old_user);
+			}
 			return ResponseBuilder::createJsonResponse(CODE_OK, createBody(user_id) );
 		}
 		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"WRONG PASSWORD");

@@ -171,3 +171,7 @@ string StringUtils::generateFileMessage( string file, int line ) {
 	file.erase(0,file.find("main/"));
 	return file + "::" + to_string(line);
 }
+
+string StringUtils::replaceUnderscoresForHyphens(string input){
+	return replace(input, " ", "-");
+}

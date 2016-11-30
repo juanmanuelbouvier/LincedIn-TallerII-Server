@@ -149,7 +149,7 @@ HTTPResponse* ResponseBuilder::createJsonResponse(int code, Json::Value body) {
 HTTPResponse* ResponseBuilder::createJsonResponse(int code, string body){
 	ResponseBuilder* builder = new ResponseBuilder();
 	builder = (ResponseBuilder*)builder->appendHeader("Content-type","application/json")->setBody(body);
-	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),prhaseByCode(code));
+	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),phraseByCode(code));
 	HTTPResponse* res = builder->build();
 	delete builder;
 	return res;
@@ -165,7 +165,7 @@ HTTPResponse* ResponseBuilder::createErrorResponse(int code, string error,int in
 
 	ResponseBuilder* builder = new ResponseBuilder();
 	builder = (ResponseBuilder*)builder->appendHeader("Content-type","application/json")->setBody(JSONUtils::JSONToString(error_json));
-	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),prhaseByCode(code));
+	builder = (ResponseBuilder*)builder->setCodeAndPhrase(std::to_string(code),phraseByCode(code));
 	HTTPResponse* res = builder->build();
 	delete builder;
 	return res;

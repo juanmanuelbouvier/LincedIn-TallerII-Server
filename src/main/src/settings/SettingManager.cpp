@@ -12,10 +12,10 @@ using namespace std;
 #define DEFAULT_LOG_LEVEL		DEBUG
 #define DEFAULT_LOG_STDOUT		true
 #define DEFAULT_LOG_FILE		"LincedInAppServer.log"
-#define DEFAULT_SHARED_URL 		"https://lincedin.herokuapp.com:80"
+#define DEFAULT_SHARED_URL 		"lincedin.herokuapp.com:80"
 #define DEFAULT_DB_FOLDER		"db"
-#define DEFAULT_FIREBASE_URL	"https://fcm.googleapis.com"
-#define DEFAULT_FIREBASE_API_KEY "AIzaSyDNaCWDbQI1vJcIJTxTBaX2zbZjkdiIXRY"
+#define DEFAULT_FIREBASE_URL	"fcm.googleapis.com"
+#define DEFAULT_FIREBASE_API_KEY "AIzaSyBE9xn7X8eo86rxJ_ggiQt6IPx-Oxsb1Kg"
 
 
 SettingManager* SettingManager::settingsInstance = NULL;

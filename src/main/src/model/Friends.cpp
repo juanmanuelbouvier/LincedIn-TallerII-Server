@@ -49,6 +49,11 @@ ErrorMessage Friends::add(string source_user_id, string destination_user_id){
 	ErrorMessage error;
 	bool accept = false;
 
+	if (source_user_id == destination_user_id){
+		error.addError("add friend","Cannot added yourself.");
+		return error;
+	}
+
 	//source
 	Json::Value source_friends = getUserFriendsValue(source_user_id);
 
