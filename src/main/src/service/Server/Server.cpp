@@ -15,7 +15,8 @@ Server::Server(int connectionPort) {
 	mongooseConnection = mg_bind_opt(&eventManager, port.c_str(), this->eventHandler, bindOptions);
 
 	if (mongooseConnection == NULL){
-		throw AppServerException( Log("Failed to create Server in port: " + port + " [check that it is not running]", ERROR ) );
+		Log("Failed to create Server in port: " + port + " [check that it is not running]", ERROR );
+		throw AppServerException( "Failed to create Server in port: " + port + " [check that it is not running]" );
 	} else {
 		settingUpConnection();
 	}
