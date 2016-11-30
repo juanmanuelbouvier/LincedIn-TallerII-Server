@@ -8,6 +8,11 @@ run: build
 	@mkdir -p logs
 	@mkdir -p resources
 	./config/build/bin/LincedInAppServer
+	
+run-gdb:
+	@mkdir -p logs
+	@mkdir -p resources
+	gdb -ex run -q ./config/build/bin/LincedInAppServer
 
 test: build
 	@mkdir -p .temp-test/
