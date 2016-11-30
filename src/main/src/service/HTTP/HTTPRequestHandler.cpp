@@ -17,13 +17,15 @@
 #include <string>
 #include <algorithm>
 
+#include <iostream>
+
 using namespace std;
 
 #define NOT_FOUND "HTTPRequestHandler::NOTFOUND"
 
 HTTPRequestHandler::HTTPRequestHandler() {
 	// Inicialize all Handlers.
-
+	count = 0;
 	//Defaults
 	DefaultHandler* defaultHandler = new DefaultHandler();
 	addHandler("/"		,defaultHandler);

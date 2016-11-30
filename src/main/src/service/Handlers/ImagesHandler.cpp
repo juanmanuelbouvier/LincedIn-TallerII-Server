@@ -62,7 +62,7 @@ HTTPResponse* ImagesHandler::handle(HTTPRequest* http_request) {
 		body["name"] = id;
 		body["content"] = base64;
 
-		return ResponseBuilder::createJsonResponse(200,body);
+		return ResponseBuilder::createJsonResponse(CODE_OK,body);
 	}
 
 	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST,PHRASE_BAD_REQUEST);

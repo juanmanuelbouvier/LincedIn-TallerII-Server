@@ -221,7 +221,7 @@ ErrorMessage User::check(Json::Value data){
 		error.addError("email","Email not specified");
 	}
 
-	if (data.isMember("skills")){
+	if (data.isMember("skills") and (data["skills"].size() > 0)){
 		Json::Value skills = data["skills"];
 		for( Json::ValueIterator itr = skills.begin() ; itr != skills.end() ; itr++ ) {
 			Json::Value val = skills[itr.index()];
@@ -231,7 +231,7 @@ ErrorMessage User::check(Json::Value data){
 		}
 	}
 
-	if (data.isMember("jobs")){
+	if (data.isMember("jobs") and (data["jobs"].size() > 0)){
 		Json::Value jobs = data["jobs"];
 		for( Json::ValueIterator itr = jobs.begin() ; itr != jobs.end() ; itr++ ) {
 			Json::Value val = jobs[itr.index()];
@@ -242,7 +242,7 @@ ErrorMessage User::check(Json::Value data){
 		}
 	}
 
-	if (data.isMember("education")){
+	if (data.isMember("education") and (data["education"].size() > 0)){
 		Json::Value educ = data["education"];
 		for( Json::ValueIterator itr = educ.begin() ; itr != educ.end() ; itr++ ) {
 			Json::Value val = educ[itr.index()];

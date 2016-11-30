@@ -24,6 +24,7 @@ HTTPResponse* createUserFromData( Json::Value data ) {
 	ErrorMessage error = User::check(data);
 
 	if (error) {
+		LOG("Error on create user: " + error.summary(),WARNING);
 		return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error.summary());
 	}
 
@@ -93,8 +94,10 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 
 		Json::Value data = JSONUtils::stringToJSON(http_request->getBody());
 
-		if (data.isMember("error"))
+		if (data.isMember("error")){
+			LOG("Error on parse data for update user: " + data["error"].asString(),WARNING);
 			return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"INVALID DATA");
+		}
 
 		if (!data.isMember("id"))
 			data["id"] = user_id;
@@ -103,6 +106,7 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 
 		if (errorMessage){
 			string error = "Parametros invalidos: " + errorMessage.summary();
+			LOG("Error, parameters invalid for update user: " + errorMessage.summary(),WARNING);
 			return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,error,CODE_BREACH_PRECONDITIONS);
 		}
 		return ResponseBuilder::createEmptyResponse(CODE_UPDATE,"UPDATED PROFILE");
@@ -111,8 +115,13 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 	}
 
 	if ( http_request->isDELETE() ){
-		return (User::remove(user_id)) ?
-			ResponseBuilder::createEmptyResponse(CODE_DELETE, "PROFILE DELETED") : ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR, "UNEXPECTED ERROR",CODE_UNEXPECTED_ERROR);
+		if (User::remove(user_id)){
+			LOG("User " + user_id + " deleted",INFO);
+			ResponseBuilder::createEmptyResponse(CODE_DELETE, "PROFILE DELETED");
+		} else {
+			LOG("Error on delete user " + user_id ,WARNING);
+			ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR, "UNEXPECTED ERROR",CODE_UNEXPECTED_ERROR);
+		}
 	}
 	return ResponseBuilder::createErrorResponse(CODE_BAD_REQUEST, "BAD REQUEST",CODE_BAD_REQUEST);
 }
@@ -128,6 +137,7 @@ HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
 		if (http_request->isPOST()){
 			Json::Value data = JSONUtils::stringToJSON( http_request->getBody() );
 			if (data.isMember("error")){
+				LOG("Error on parse data for add user: " + data["error"].asString(),WARNING);
 				return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"Error in data.");
 			}
 

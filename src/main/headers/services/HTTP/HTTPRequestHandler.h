@@ -9,7 +9,6 @@
 #include <map>
 #include <vector>
 
-
 using namespace std;
 
 /**
@@ -22,7 +21,7 @@ class HTTPRequestHandler {
 private:
 	map<string,Handler*> HTTPEndPointsHandlers;
 	vector<string> workingPaths;
-
+	int count;
 	string matchPath( string uri );
 	void registerPath( string path );
 	void accessLog(HTTPRequest* http_request);

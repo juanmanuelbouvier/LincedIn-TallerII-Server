@@ -31,7 +31,7 @@ Json::Value Education::listToArray(list<Education> education){
 }
 
 bool Education::check(Json::Value data){
-	if (!data.isMember("start_date") or !data.isMember("end_date") or !data.isMember("school_name") or !data.isMember("degree"))
+	if (!data.isMember("start_date") or !data.isMember("school_name") or !data.isMember("degree"))
 		return false;
 
 	return true;
