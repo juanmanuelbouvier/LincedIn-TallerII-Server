@@ -19,10 +19,11 @@ HTTPResponse* FirebaseClient::sendRequest(HTTPRequest* request) {
 
 HTTPResponse* FirebaseClient::doPOST( Json::Value body){
 	string apiKey = SettingManager::getInstance()->getFirebaseApiKey();
+	string firebaseURL = SettingManager::getInstance()->getFirebaseURL();
 
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->POST()->setUri(FIREBASE_URI);
-
+	builder = (RequestBuilder*)builder->appendHeader("Host",firebaseURL);
 	builder = (RequestBuilder*)builder->appendHeader("Content-Type","application/json");
 	builder = (RequestBuilder*)builder->appendHeader("Authorization","key=" + apiKey);
 
@@ -49,7 +50,7 @@ bool FirebaseClient::sendNotifications(string to,string title,string text){
 
 	Json::Value notification;
 	notification["title"] = title;
-	notification["text"] = text;
+	notification["body"] = text;
 
 	body["notification"] = notification;
 

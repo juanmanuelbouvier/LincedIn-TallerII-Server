@@ -10,6 +10,7 @@
 #include <exception/UserException.h>
 #include <string>
 #include <services/HTTP/HTTPResponseConstants.h>
+#include <services/Firebase/FirebaseClient.h>
 
 
 using namespace std;
@@ -118,6 +119,7 @@ HTTPResponse* handleProfile(HTTPRequest* http_request) {
 
 
 HTTPResponse* UserHandler::handle(HTTPRequest* http_request){
+
 	if ( PathUtils::matchPathRegexp(http_request->getURI(),"/user/:user_id") ) {
 		return handleProfile(http_request);
 	}
