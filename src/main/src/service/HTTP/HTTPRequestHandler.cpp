@@ -8,6 +8,7 @@
 #include <services/Handlers/LoginHandler.h>
 #include <services/Handlers/ImagesHandler.h>
 #include <services/Handlers/RecommendationHandler.h>
+#include <services/Handlers/GeolocalizationHandler.h>
 #include <services/Handlers/SearchHandler.h>
 #include <services/Logger/Logger.h>
 #include <services/Access/AccessLog.h>
