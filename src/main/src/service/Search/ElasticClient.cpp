@@ -56,7 +56,7 @@ Json::Value ElasticClient::search(string index, string type, Json::Value queryDa
 	builder = builder->GET()->setUri("/" + index + "/" + type + "/_search")->setBody(JSONUtils::JSONToString(queryData));
 
 	Json::Value result = sendRequest(builder);
-	Json::Value collect(Json::arrayValue);
+	Json::Value collect;
 
 	if ( result.isMember("response") && result["response"].isMember("hits") && result["response"]["hits"].isMember("hits") ) {
 		if (returnObject) {
