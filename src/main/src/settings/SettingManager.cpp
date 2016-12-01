@@ -16,6 +16,7 @@ using namespace std;
 #define DEFAULT_DB_FOLDER		"db"
 #define DEFAULT_FIREBASE_URL	"fcm.googleapis.com"
 #define DEFAULT_FIREBASE_API_KEY "AIzaSyBE9xn7X8eo86rxJ_ggiQt6IPx-Oxsb1Kg"
+#define DEFAULT_ELASTIC_HOST	"localhost:9200"
 
 
 SettingManager* SettingManager::settingsInstance = NULL;
@@ -179,5 +180,14 @@ string SettingManager::getFirebaseApiKey(){
 	}
 	Log("No api key for Firebase API was detected. Using default: \"" + string(DEFAULT_FIREBASE_API_KEY) + "\"",WARNING);
 	return DEFAULT_FIREBASE_API_KEY;
+}
+
+string SettingManager::getElasticHost(){
+	string key = getDirectValue("elastic_host");
+	if (key != ""){
+		return key;
+	}
+	Log("No host for elastic client was detected. Using default: \"" + string(DEFAULT_ELASTIC_HOST) + "\"",WARNING);
+	return DEFAULT_ELASTIC_HOST;
 }
 

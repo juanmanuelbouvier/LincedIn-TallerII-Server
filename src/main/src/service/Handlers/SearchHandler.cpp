@@ -72,7 +72,7 @@ HTTPResponse* SearchHandler::handle(HTTPRequest* request) {
 	Json::Value toJoin;
 	if ( !elasticQuery.empty() ) {
 		string text = query["text"].asString();
-		ElasticClient el("localhost:9200");
+		ElasticClient el;
 		if (el.isAlive()) {
 			toJoin["text"] = el.search("lincedin","user",elasticQuery, true);
 		}

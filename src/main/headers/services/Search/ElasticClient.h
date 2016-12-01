@@ -20,6 +20,8 @@ public:
 	 */
 	ElasticClient(string host);
 
+	ElasticClient();
+
 	/**
 	 * Check if Elastic is alive.
 	 * @return True if could connect to Elastic

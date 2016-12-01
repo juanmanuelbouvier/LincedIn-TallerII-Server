@@ -3,8 +3,6 @@
 #include <services/Logger/Logger.h>
 #include <services/Search/ElasticClient.h>
 
-#define ELASTIC_HOST "localhost:9200"
-
 Json::Value UsersIndexer::fusion(Json::Value old, Json::Value neew) {
 	Json::Value theFusion;
 	for ( auto key : old.getMemberNames() ) {
@@ -24,7 +22,7 @@ Json::Value cleanData(Json::Value data) {
 	return data;
 }
 void UsersIndexer::collect(string user_id, Json::Value data) {
-	ElasticClient e(ELASTIC_HOST);
+	ElasticClient e;
 	Json::Value last = e.get("lincedin","user","user_id");
 	string action = "Added";
 	data = cleanData(data);
@@ -41,7 +39,7 @@ void UsersIndexer::collect(string user_id, Json::Value data) {
 
 void UsersIndexer::index() {
 	Log("Attemp to index User Database",INFO);
-	ElasticClient e(ELASTIC_HOST);
+	ElasticClient e;
 	if (!e.isAlive() ) {
 		Log("Cannot index DB Users. Elastic client is close", WARNING);
 		return;

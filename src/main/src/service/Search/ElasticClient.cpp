@@ -1,9 +1,14 @@
 #include <services/Search/ElasticClient.h>
 #include <utils/JSONUtils.h>
-
+#include <settings/SettingManager.h>
 ElasticClient::ElasticClient(string aHost) {
 	client = new ServerClient();
 	host = aHost;
+}
+
+ElasticClient::ElasticClient() {
+	client = new ServerClient();
+	host = SettingManager::getInstance()->getElasticHost();
 }
 
 bool ElasticClient::isAlive() {

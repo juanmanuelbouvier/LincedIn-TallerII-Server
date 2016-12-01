@@ -65,6 +65,9 @@ public:
 	string getFirebaseURL();
 	string getFirebaseApiKey();
 
+
+	string getElasticHost();
+
 	virtual ~SettingManager(){};
 };
 
