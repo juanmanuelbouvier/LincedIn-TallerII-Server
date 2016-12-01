@@ -32,6 +32,8 @@ ErrorMessage Job::check(Json::Value job){
 		if (job["position"].isObject() and !JobPosition::exist(job["position"])){
 			error.addError("position", "Position does not exist.");
 		}
+	}else{
+		error.addError("position","Not defined position");
 	}
 
 	return error;
