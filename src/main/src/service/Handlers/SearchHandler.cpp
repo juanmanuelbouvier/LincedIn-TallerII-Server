@@ -57,32 +57,22 @@ HTTPResponse* SearchHandler::handle(HTTPRequest* request) {
 	Json::Value queryData;
 	if (query.isMember("text") && query["text"].isString()) {
 		LOG("Filter by Query Text: \"" + query["text"].asString() + "\"", DEBUG);
-		queryData["query"]["match"]["message"]["query"] = query["text"].asString();
-		queryData["query"]["match"]["message"]["operator"] = "or";
+		queryData["query"]["query_string"]["query"] = query["text"].asString();
 	}
 
 	//2. Filter Skills
 	if ( query.isMember("skill") ) {
-		queryData["query"]["nested"]["path"] = "skills";
-		Json::Value arraySkills(Json::arrayValue);
 		LOG("Filter by skills: " + query["skill"].toStyledString(), DEBUG);
 		if (query["skill"].isArray()) {
 			int size = query["skill"].size();
+			Json::Value arraySkills(Json::arrayValue);			
 			for (int i = 0; i < size; i++) {
-				Json::Value skillData;
-				Json::Value skillName;
-				skillName["skills.name"] = query["skill"][i].asString();
-				skillData["match"] = skillName;
-				arraySkills.append(skillData);
+				arraySkills.append(query["skill"][i].asString());
 			}
+			queryData["query"]["term"]["skills.name"] = arraySkills;
 		} else if (query["skill"].isString()) {
-			Json::Value skillData;
-			Json::Value skillName;
-			skillName["skills.name"] = query["skill"].asString();
-			skillData["match"] = skillName;
-			arraySkills.append(skillData);
+			queryData["query"]["term"]["skills.name"] = query["skill"].asString();
 		}
-		queryData["query"]["nested"]["query"]["bool"]["must"] = arraySkills;
 	}
 
 	Json::Value toJoin;

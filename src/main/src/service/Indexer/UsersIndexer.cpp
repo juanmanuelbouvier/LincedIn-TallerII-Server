@@ -49,10 +49,10 @@ void UsersIndexer::index() {
 
 	//Create an index
 	Json::Value index;
-	Json::Value type;
-	index["mapping"]["user"]["properties"]["skills"]["type"] = "nested";
-	index["mapping"]["user"]["properties"]["skills"]["properties"]["type"] = "string";
-	e.index("lincedin","","",index);
+	index["user"]["properties"]["skills"]["type"] = "object";
+	bool addMapping = e.index("lincedin","user","_mapping",index);
+	string result = addMapping ? "Cannot add" : "Added";
+	Log( result + " skills mapping",INFO);
 
 	Json::Value dummy(Json::nullValue);
 	Log("Start to index DB Users",INFO);
