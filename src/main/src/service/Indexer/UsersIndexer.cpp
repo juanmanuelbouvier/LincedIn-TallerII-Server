@@ -10,6 +10,9 @@ Json::Value UsersIndexer::fusion(Json::Value old, Json::Value neew) {
 	}
 	for ( auto key : neew.getMemberNames() ) {
 		theFusion[key] = neew[key];
+		if (key == "skills") {
+			theFusion[key]["type"] = "nested";
+		}
 	}
 	return theFusion;
 }
@@ -46,6 +49,13 @@ void UsersIndexer::index() {
 		Log("Cannot index DB Users. Elastic client is close", WARNING);
 		return;
 	}
+
+	//Create an index
+	Json::Value index;
+	Json::Value type;
+	type["type"] = "string";
+	index["mapping"]["user"]["properties"]["skills"]["type"] = "nested";
+	index["mapping"]["user"]["properties"]["skills"]["properties"]["name"] = type;
 
 	Json::Value dummy(Json::nullValue);
 	Log("Start to index DB Users",INFO);

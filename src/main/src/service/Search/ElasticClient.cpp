@@ -26,7 +26,8 @@ bool ElasticClient::isAlive() {
 bool ElasticClient::index(string index, string type, string id, Json::Value data) {
 	RequestBuilder* builder = new RequestBuilder();
 	string indexPath = id.empty() ? "" : "/" + id;
-	builder = builder->POST()->setBody(JSONUtils::JSONToString(data))->setUri("/" + index + "/" + type + indexPath);
+	string typePath = type.empty() ? "" : "/" + type;
+	builder = builder->POST()->setBody(JSONUtils::JSONToString(data))->setUri("/" + index + typePath + indexPath);
 	Json::Value result = this->sendRequest(builder);
 	return (result.isMember("response") && result["response"].isMember("result") && ( result["response"]["result"].asString() == "created" || result["response"]["result"].asString() == "updated")  );
 }
