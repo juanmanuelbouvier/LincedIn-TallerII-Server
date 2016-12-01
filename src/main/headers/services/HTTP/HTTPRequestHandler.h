@@ -50,6 +50,12 @@ public:
 	 */
 	bool addHandler(string uri_path, Handler* handler);
 
+	/**
+	 * Get Number of request they were processed
+	 * @return number of handled request
+	 */
+	int getCount() { return count; };
+
 	virtual ~HTTPRequestHandler();
 };
 

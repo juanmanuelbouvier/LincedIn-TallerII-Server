@@ -58,6 +58,7 @@ HTTPResponse* SharedServerAPI::doDelete(string uri){
 	RequestBuilder* builder = new RequestBuilder();
 	builder = (RequestBuilder*)builder->DELETE()->setUri(uri);
 	builder = (RequestBuilder*)builder->appendHeader("Host",string(sharedURL));
+	builder = (RequestBuilder*)builder->appendHeader("Connection","close");
 	HTTPRequest* theRequest = builder->build();
 	delete builder;
 	HTTPResponse* response = sendRequest(theRequest);

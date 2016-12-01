@@ -13,20 +13,23 @@ Json::Value joinResult(Json::Value dataSearch) {
 	 *  	"r1":{
 	 *  		"a" : ..
 	 *  		"b" : ..
+	 *  		"c" : ..
 	 *  	},
 	 * 		"r2":{
 	 * 			"a" : ..
+	 * 			"c" : ..
 	 * 		}
 	 *  }
 	 * Result: {
-	 * 		"a" : ..
+	 * 		"users_found" : ["a","c"]
 	 * }
 	 */
 	Json::Value::Members members = dataSearch.getMemberNames();
 	string firstMember = members[ members.size() - 1 ];
 	members.pop_back();
 	Json::Value firstResult = dataSearch[firstMember];
-	Json::Value joined;
+	Json::Value users_found(Json::arrayValue);
+
 	for ( auto m : firstResult.getMemberNames() ) {
 		Json::Value candidate;
 		candidate[m] = firstResult[m];
@@ -39,9 +42,11 @@ Json::Value joinResult(Json::Value dataSearch) {
 			candidate[m] = dataSearch[m2][m];
 		}
 		if (join) {
-			joined[m] = candidate[m];
+			users_found.append(m);
 		}
 	}
+	Json::Value joined;
+	joined["users_found"] = users_found;
 	return joined;
 }
 

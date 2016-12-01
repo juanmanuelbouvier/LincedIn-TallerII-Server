@@ -73,7 +73,7 @@ void* closeWithSIGINT( void* server ) {
 	while (!CLOSE_SIGINT) {
 		sleep(0.5);
 	}
-	cout << " ===> SIGINT Signal detected" << endl;
+	cout << " <=== SIGINT Signal detected" << endl;
 	Server* theServer = (Server*)server;
 	theServer->stop();
 	return NULL;
@@ -90,9 +90,10 @@ void* callIndexers( void* data ) {
 }
 
 void* logLive( void* data ) {
+	Server* server = (Server*)data;
 	while (true) {
 		sleep(60*60);
-		Log("Server info: OK",INFO);
+		Log("Server info: " + server->getStats(),INFO);
 	}
 	return NULL;
 }
@@ -128,7 +129,7 @@ int main(int argc, char **argv) {
 	ThreatUtils::startThreath(closeServerWithInput, server);
 	ThreatUtils::startThreath(closeWithSIGINT, server);
 	ThreatUtils::startThreath(callIndexers,NULL);
-	ThreatUtils::startThreath(logLive,NULL);
+	ThreatUtils::startThreath(logLive,server);
 	server->start();
 
 

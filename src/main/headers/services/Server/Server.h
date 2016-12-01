@@ -35,14 +35,24 @@ private:
 
 public:
 	/**
-	 * Create server in port. Throw exception if TODO (Si no puede)
+	 * Create server in port.
 	 * @param Port of the listening requests
+	 * @note Throw exception if the port is in use or not have permission
 	 */
 	Server(int port);
 
+	/**
+	 * Start to listen requests in assigned port
+	 */
 	void start();
 
 	void stop();
+
+	/**
+	 * Get the summary of the HTTP Requests
+	 * @return Pretty string with summary
+	 */
+	string getStats();
 
 	virtual ~Server();
 };

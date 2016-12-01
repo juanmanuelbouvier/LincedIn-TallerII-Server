@@ -72,6 +72,12 @@ void Server::stop(){
 	Log("Server close");
 }
 
+string Server::getStats() {
+	string message = (running) ? "OK. Server Running | " : "OK. ";
+	message += "Number of processed request: " + to_string(HTTPHandler->getCount());
+	return message;
+}
+
 Server::~Server() {
 	if (running) this->stop();
 	delete HTTPHandler;

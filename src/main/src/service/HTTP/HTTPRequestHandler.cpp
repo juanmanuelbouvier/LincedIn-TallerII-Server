@@ -70,7 +70,7 @@ HTTPRequestHandler::HTTPRequestHandler() {
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 	count ++;
-	cout << "Request nro" + to_string(count) + " " + http_request->getMethod() + " Uri-> " + http_request->getURI() << endl;
+	Log("Request #" + to_string(count) + " " + http_request->getMethod() + " Uri-> " + http_request->getURI(),INFO);
 	string uri = http_request->getURI();
 
 	//Se supone que por decision del server esto ya tiene que venir verificado
@@ -81,8 +81,6 @@ HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 
 
 	accessLog(http_request);
-	//AccessLog -> cada vez que se llama a un endpoint se actualizan los datos del usuario (ultima conexion y geolocalizacion)
-
 	return HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
 }
 

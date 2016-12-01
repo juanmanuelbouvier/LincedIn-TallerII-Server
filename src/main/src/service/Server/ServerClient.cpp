@@ -2,8 +2,8 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <services/Logger/Logger.h>
 
-#define MAX_CICLES 10
-#define WAIT_REPLY 5
+#define MAX_CICLES 50
+#define WAIT_REPLY 25
 
 using namespace std;
 
@@ -35,6 +35,7 @@ HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 	while (sendingRequest) {
 		if (cicles > MAX_CICLES) {
 			LOG(url + " does not respond. Returning TIMEOUT response",WARNING);
+			printf("TIMEOUT\n");
 			response = ResponseBuilder::createErrorResponse(408,"TIMEOUT");
 			sendingRequest = false;
 			waitHTTPReply = false;

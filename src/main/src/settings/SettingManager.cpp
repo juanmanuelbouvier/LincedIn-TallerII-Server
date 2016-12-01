@@ -55,11 +55,12 @@ string SettingManager::getJSONStructure(){
 					"\t\tlevel: type number \t\tSets log level. ERROR(0), WARNING(1), INFO(2), DEBUG(3). Default: " + to_string(DEFAULT_LOG_LEVEL) + "\n"
 					"\t\tfile: type string\t\tSet Path to write log. Default: \"" + string(DEFAULT_LOG_FILE) + "\"\n"
 					"\t\tshow_in_stdout: type boolean\tIf true the logs also be displayed in stdout. Default: " + (DEFAULT_LOG_STDOUT ? "true" : "false") + "\n"
-				"\t}\n"
-				"\tport: type int\tSets port for incomming connections. Default: " + to_string(DEFAULT_SERVER_PORT) + "\n"
-				"\tshared_server_url: type string\t Url to shared server client. Format \"(URL|IP):PORT\". Default: \"" + string(DEFAULT_SHARED_URL) + "\"\n"
-				"\tfirebase_url: type string\t Url to firebase server client. Format \"(URL)\". Default: \"" + string(DEFAULT_FIREBASE_URL) + "\"\n"
-				"\tfirebase_api_key: type string\t Api key to firebase server. Default: \"" + string(DEFAULT_FIREBASE_API_KEY) + "\"\n"
+				"\t},\n"
+				"\tport: type int\tSets port for incomming connections. Default: " + to_string(DEFAULT_SERVER_PORT) + ",\n"
+				"\tshared_server_url: type string\t Url to shared server client. Format \"(URL|IP):PORT\". Default: \"" + string(DEFAULT_SHARED_URL) + "\",\n"
+				"\tfirebase_url: type string\t Url to firebase server client. Format \"(URL)\". Default: \"" + string(DEFAULT_FIREBASE_URL) + "\",\n"
+				"\tfirebase_api_key: type string\t Api key to firebase server. Default: \"" + string(DEFAULT_FIREBASE_API_KEY) + "\",\n"
+				"\telastic_host: type string\t Elastic Search Client host. Default: \"" + string(DEFAULT_ELASTIC_HOST) + "\"\n"
 			"}\n\n";
 	return message;
 }
