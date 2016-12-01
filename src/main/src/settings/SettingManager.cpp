@@ -100,7 +100,7 @@ int SettingManager::getLogLevel(){
 		}
 	}
 
-	Log("not found or invalid level logger setting value. Using default.",WARNING);
+	cout <<"[WARNING] Not found or invalid level logger setting value. Using default: " << DEFAULT_LOG_LEVEL;
 	return DEFAULT_LOG_LEVEL;
 }
 
@@ -115,7 +115,7 @@ string SettingManager::getLogFile() {
 			}
 		}
 	}
-	Log("Invalid or not Found file logger setting. Using default.",WARNING);
+	cout << "[WARNING] Invalid or not Found file logger setting. Using default: " << DEFAULT_LOG_FILE << endl;
 	return DEFAULT_LOG_FILE;
 }
 
@@ -126,7 +126,7 @@ bool SettingManager::showLoggerInStdout(){
 			return booleanStdout.asBool();
 		}
 	}
-	Log("Cannot read show_in_stdout value. Work with default.",WARNING);
+	cout << "[WARNING] Cannot read show_in_stdout value. Work with default." << (DEFAULT_LOG_STDOUT ? "true" : "false") << endl;
 	return DEFAULT_LOG_STDOUT;
 }
 

@@ -18,8 +18,11 @@ public:
 	static ErrorMessage add(string source_user_id, string destination_user_id);
 	//list of accepted friends
 	static Json::Value listFriends(string user_id);
+
 	static Json::Value listPendingFriends(string user_id);
+
 	static Json::Value listFriendsOnline(string user_id);
+
 	static ErrorMessage remove(string source_user_id, string destination_user_id);
 };
 

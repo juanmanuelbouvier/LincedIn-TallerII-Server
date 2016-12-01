@@ -3,7 +3,7 @@
 #include <services/Logger/Logger.h>
 
 #define MAX_CICLES 10
-#define WAIT_REPLY 2
+#define WAIT_REPLY 5
 
 using namespace std;
 

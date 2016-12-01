@@ -79,6 +79,9 @@ Chat Chat::create( list<string> participants_id ) {
 	}
 
 	string chatId = generateID(participants_id);
+	if ( exist(chatId) ) {
+		return Chat(chatId);
+	}
 	Json::Value chat;
 	chat["participants"] = JSONUtils::listToArrayValue(participants_id);
 	chat["messages"] = Json::arrayValue;
@@ -94,11 +97,6 @@ ErrorMessage Chat::check( list<string> participants ) {
 	participants.unique();
 	if ( participants.size() < 2 || participants.size() != size ) {
 		error.addError("participants","The chat must have two or more disctinct participantas");;
-	}
-
-	string posibleChatId = generateID(participants);
-	if ( exist(posibleChatId) ) {
-		error.addError("id","Chat id " + posibleChatId + " already exist");
 	}
 
 	for ( const string& user_id : participants ) {

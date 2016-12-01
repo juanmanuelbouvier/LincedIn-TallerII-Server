@@ -43,7 +43,12 @@ TEST(ChatTest, TestCreateChat) {
 
 	Chat chat = Chat::create(participants);
 
-	EXPECT_TRUE(Chat::check(participants));
+	EXPECT_FALSE(Chat::check(participants));
+
+	EXPECT_NO_THROW(Chat::create(participants));
+
+	Chat chat2 = Chat::create(participants);
+	EXPECT_EQ(chat.getId(),chat2.getId());
 
 	EXPECT_EQ(chat.getId(), user1.getID() + "_" + user2.getID());
 

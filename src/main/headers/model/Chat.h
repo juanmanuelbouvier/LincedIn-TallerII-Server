@@ -55,6 +55,7 @@ public:
 	 * Create Chat with the participants
 	 * @param list of participants id.
 	 * @return Chat who be created.
+	 * @note. If chat already exist. Return de exist chat
 	 */
 	static Chat create( list<string> participants_id );
 
