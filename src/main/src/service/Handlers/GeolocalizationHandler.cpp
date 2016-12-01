@@ -7,7 +7,6 @@
 #include <services/HTTP/HTTPResponseConstants.h>
 
 HTTPResponse* findNear(HTTPRequest* request) {
-	//TODO: Method
 	Json::Value queryData = JSONUtils::queryToJson( request->getQuery() );
 	Json::Value found = Geolocalization::findUsersByLocation(queryData);
 	if (found.isMember("error")) {
@@ -32,9 +31,9 @@ HTTPResponse* sendLocation(HTTPRequest* request) {
 	return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED ERROR");
 }
 
-HTTPResponse* handler(HTTPRequest* request) {
+HTTPResponse* GeolocalizationHandler::handle(HTTPRequest* request) {
 	if ( PathUtils::matchPathRegexp(request->getURI(),"geolocalization/:user_id") ) {
-		map<string,string> path = PathUtils::routerParser(request->getURI(),"geolocalization/:user_id");
+		map<string,string> path = PathUtils::routerParser(request->getURI(),"/geolocalization/:user_id");
 		string user_id = path["user_id"];
 		if (!User::exist(user_id)) {
 			ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,"INVALID USER");
@@ -43,7 +42,7 @@ HTTPResponse* handler(HTTPRequest* request) {
 		return ResponseBuilder::createJsonResponse(CODE_OK,localization);
 	}
 
-	if ( PathUtils::matchPathRegexp(request->getURI(),"geolocalization") ) {
+	if ( PathUtils::matchPathRegexp(request->getURI(),"/geolocalization") ) {
 		if ( request->isGET() ) {
 			return findNear(request);
 		}

@@ -7,6 +7,9 @@ class HelloWorldJsonHandler : public Handler {
 public:
 	HelloWorldJsonHandler(){};
 
+	/**
+	 * It is a Dummy Handler to Debug and test
+	 */
 	HTTPResponse* handle(HTTPRequest* http_request);
 
 	virtual ~HelloWorldJsonHandler(){};

@@ -6,7 +6,9 @@
 class DefaultHandler : public Handler {
 public:
 	DefaultHandler(){};
-
+	/**
+	 * Default handler generate a dummy response of the request data.
+	 */
 	HTTPResponse* handle(HTTPRequest* http_request);
 
 	virtual ~DefaultHandler(){};

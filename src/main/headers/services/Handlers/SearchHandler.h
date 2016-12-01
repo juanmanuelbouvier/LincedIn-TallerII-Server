@@ -7,6 +7,14 @@ class SearchHandler : public Handler {
 public:
 	SearchHandler(){};
 
+	/**
+	 * Search User Handler can:
+	 *  - Filter user with match a query (1)
+	 *  - Filter user by skill (1)
+	 *  - Filter user by geolocalization
+	 *  - Filter most recommended users
+	 * @note `(1)` Depends on Elastic search
+	 */
 	HTTPResponse* handle(HTTPRequest* request);
 
 	virtual ~SearchHandler(){};

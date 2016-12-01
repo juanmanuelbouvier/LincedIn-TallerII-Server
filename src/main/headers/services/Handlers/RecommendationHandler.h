@@ -6,6 +6,11 @@
 class RecommendationHandler : public Handler {
 public:
 	RecommendationHandler(){};
+	/**
+	 * Recommendation Handler can:
+	 * 	- Send Reccomendation
+	 * 	- Get recommendation/s
+	 */
 	HTTPResponse* handle(HTTPRequest* request);
 	virtual ~RecommendationHandler(){};
 };

@@ -23,15 +23,8 @@ Job::Job(string date_since, string date_to, string company, string name_position
 ErrorMessage Job::check(Json::Value job){
 	ErrorMessage error;
 	//date_since
-	if (job.isMember("date_since")){
-		//TODO check correct format
-	} else {
+	if (!job.isMember("date_since")) {
 		error.addError("date_since","Not defined date_since");
-	}
-
-	//date_to
-	if (job.isMember("date_to")){
-		//TODO check correct format
 	}
 
 	//JobPosition

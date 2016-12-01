@@ -7,6 +7,12 @@ class FriendHandler : public Handler {
 public:
 
 	FriendHandler(){};
+
+	/**
+	 * Friend Handler can:
+	 *	- View pending friend requests
+	 *	- Send, Accept or decline friend requests
+	 */
 	HTTPResponse* handle(HTTPRequest* http_request);
 	virtual ~FriendHandler(){};
 

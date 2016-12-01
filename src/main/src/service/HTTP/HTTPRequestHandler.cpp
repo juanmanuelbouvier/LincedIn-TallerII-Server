@@ -61,6 +61,10 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	RecommendationHandler* recommendationHandler= new RecommendationHandler();
 	addHandler("/recommendations", recommendationHandler);
 	addHandler("/recommendations/:user_id", recommendationHandler);
+
+	GeolocalizationHandler* geolocalizationHandler = new GeolocalizationHandler();
+	addHandler("/geolocalization", geolocalizationHandler);
+	addHandler("/geolocalization/:user_id", geolocalizationHandler);
 }
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){

@@ -2,7 +2,7 @@
 #include <services/SharedServerAPI/SharedServerAPI.h>
 #include <exception/JobException.h>
 
-namespace std {
+using namespace std;
 
 JobPosition::JobPosition(string name) {
 	SharedServerAPI shared;
@@ -119,5 +119,3 @@ Json::Value JobPosition::asJSON(){
 JobPosition::~JobPosition() {
 	// TODO Auto-generated destructor stub
 }
-
-} /* namespace std */

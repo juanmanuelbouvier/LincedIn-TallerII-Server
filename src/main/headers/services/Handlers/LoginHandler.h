@@ -7,6 +7,12 @@ class LoginHandler : public Handler {
 public:
 	LoginHandler(){};
 
+	/**
+	 *  LoginHandler Can
+	 *   - Generate a session (Token) for user with password and email/userid
+	 *   - Generate a session for user who was logged with Facebook app
+	 *   - Create a user (if not exist) from Facebook User
+	 */
 	HTTPResponse* handle(HTTPRequest* request);
 
 	virtual ~LoginHandler(){};

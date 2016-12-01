@@ -9,6 +9,9 @@ class SharedServerHandler : public Handler {
 public:
 	SharedServerHandler(){};
 
+	/**
+	 * Shared Server Handler is a bridge to Shared Server
+	 */
 	HTTPResponse* handle(HTTPRequest* http_request);
 
 	vector<string> getKnowURLs();

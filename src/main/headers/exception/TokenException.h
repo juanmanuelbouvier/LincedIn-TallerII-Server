@@ -3,7 +3,7 @@
 
 #include <exception/AppServerException.h>
 
-namespace std {
+using namespace std;
 
 class TokenException : public AppServerException {
 public:
@@ -11,6 +11,5 @@ public:
 	virtual ~TokenException(){};
 };
 
-} /* namespace std */
 
 #endif /* SRC_MAIN_HEADERS_EXCEPTION_TOKENEXCEPTION_H_ */

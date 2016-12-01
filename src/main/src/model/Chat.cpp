@@ -1,5 +1,6 @@
-#include <exception/ChatException.h>
 #include <model/Chat.h>
+
+#include <exception/ChatException.h>
 #include <model/User.h>
 #include <utils/VectorUtils.h>
 #include <services/Logger/Logger.h>

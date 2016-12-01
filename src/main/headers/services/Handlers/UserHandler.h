@@ -8,6 +8,13 @@ class UserHandler : public Handler {
 public:
 	UserHandler(){};
 
+	/**
+	 * User handler can:
+	 *  - Get user data.
+	 *  - Edit user data.
+	 *  - Create user.
+	 *  - Remove user.
+	 */
 	HTTPResponse* handle(HTTPRequest* http_request);
 
 	virtual ~UserHandler(){};

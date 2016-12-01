@@ -3,14 +3,12 @@
 
 #include <exception/AppServerException.h>
 
-namespace std {
+using namespace std;
 
 class UserException : public AppServerException {
 public:
 	UserException(string message) : AppServerException(message){};
 	virtual ~UserException(){};
 };
-
-} /* namespace std */
 
 #endif /* SRC_MAIN_HEADERS_EXCEPTION_USEREXCEPTION_H_ */

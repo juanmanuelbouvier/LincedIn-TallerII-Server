@@ -7,6 +7,11 @@ class GeolocalizationHandler : public Handler {
 public:
 	GeolocalizationHandler(){};
 
+	/**
+	 * Geolocalization Handler can.
+	 * 	- Get neares friends.
+	 * 	- Post or get a geolocation of user.
+	 */
 	HTTPResponse* handle(HTTPRequest* request);
 
 	virtual ~GeolocalizationHandler(){};

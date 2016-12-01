@@ -8,6 +8,9 @@ using namespace std;
 class ImagesHandler : public Handler{
 public:
 	ImagesHandler(){};
+	/**
+	 * Image Handler can get image wha was stored in platform
+	 */
 	HTTPResponse* handle(HTTPRequest* http_request);
 	virtual ~ImagesHandler(){};
 };
