@@ -10,9 +10,6 @@ Json::Value UsersIndexer::fusion(Json::Value old, Json::Value neew) {
 	}
 	for ( auto key : neew.getMemberNames() ) {
 		theFusion[key] = neew[key];
-		if (key == "skills") {
-			theFusion[key]["type"] = "nested";
-		}
 	}
 	return theFusion;
 }
@@ -53,9 +50,9 @@ void UsersIndexer::index() {
 	//Create an index
 	Json::Value index;
 	Json::Value type;
-	type["type"] = "string";
 	index["mapping"]["user"]["properties"]["skills"]["type"] = "nested";
-	index["mapping"]["user"]["properties"]["skills"]["properties"]["name"] = type;
+	index["mapping"]["user"]["properties"]["skills"]["properties"]["type"] = "string";
+	e.index("lincedin","","",index);
 
 	Json::Value dummy(Json::nullValue);
 	Log("Start to index DB Users",INFO);
