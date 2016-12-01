@@ -54,32 +54,43 @@ HTTPResponse* SearchHandler::handle(HTTPRequest* request) {
 	Json::Value query = JSONUtils::queryToJson(request->getQuery());
 
 	//1. Search Query
-	string elasticQuery = "";
+	Json::Value queryData;
 	if (query.isMember("text") && query["text"].isString()) {
 		LOG("Filter by Query Text: \"" + query["text"].asString() + "\"", DEBUG);
-		elasticQuery = query["text"].asString();
+		queryData["query"]["match"]["message"]["query"] = query["text"].asString();
+		queryData["query"]["match"]["message"]["operator"] = "or";
 	}
 
 	//2. Filter Skills
 	if ( query.isMember("skill") ) {
-		elasticQuery += ",skill:";
+		queryData["query"]["nested"]["path"] = "skills";
+		Json::Value arraySkills(Json::arrayValue);
 		LOG("Filter by skills: " + query["skill"].toStyledString(), DEBUG);
 		if (query["skill"].isArray()) {
 			int size = query["skill"].size();
 			for (int i = 0; i < size; i++) {
-				elasticQuery += query["skill"][i].asString() + ( (i < size - 1) ? "," : "" );
+				Json::Value skillData;
+				Json::Value skillName;
+				skillName["skills.name"] = query["skill"][i].asString();
+				skillData["match"] = skillName;
+				arraySkills.append(skillData);
 			}
 		} else if (query["skill"].isString()) {
-			elasticQuery += query["skill"].asString();
+			Json::Value skillData;
+			Json::Value skillName;
+			skillName["skills.name"] = query["skill"].asString();
+			skillData["match"] = skillName;
+			arraySkills.append(skillData);
 		}
+		queryData["query"]["nested"]["query"]["bool"]["must"] = arraySkills;
 	}
 
 	Json::Value toJoin;
-	if ( !elasticQuery.empty() ) {
-		string text = query["text"].asString();
+	if ( queryData.getMemberNames().size() > 0 ) {
 		ElasticClient el;
+		printf("%s\n",queryData.toStyledString().c_str());
 		if (el.isAlive()) {
-			toJoin["text"] = el.search("lincedin","user",elasticQuery, true);
+			toJoin["text"] = el.search("lincedin","user",queryData, true);
 		}
 	}
 

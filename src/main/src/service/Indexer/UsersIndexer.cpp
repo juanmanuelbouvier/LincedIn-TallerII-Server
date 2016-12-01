@@ -19,6 +19,8 @@ Json::Value cleanData(Json::Value data) {
 	data.removeMember("last_edit_timestamp");
 	data.removeMember("password");
 	data.removeMember("register_timestamp");
+	data.removeMember("profile_picture");
+	data.removeMember("firebase_id");
 	return data;
 }
 void UsersIndexer::collect(string user_id, Json::Value data) {

@@ -35,7 +35,6 @@ HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
 	while (sendingRequest) {
 		if (cicles > MAX_CICLES) {
 			LOG(url + " does not respond. Returning TIMEOUT response",WARNING);
-			printf("TIMEOUT\n");
 			response = ResponseBuilder::createErrorResponse(408,"TIMEOUT");
 			sendingRequest = false;
 			waitHTTPReply = false;

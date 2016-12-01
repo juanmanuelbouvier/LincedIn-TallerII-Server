@@ -47,13 +47,13 @@ public:
 	Json::Value get(string index, string type, string id);
 
 	/**
-	 * Search document in <elastic>/index/type/_search?query
+	 * Search document in <elastic>/index/type/_search. The query is in body to advance search
 	 * @param The index
 	 * @param Type of document (e.j User)
 	 * @param Query with the elastic standard query (read Elastic Get Api).
 	 * @return Json Value who contains hits of the search.
 	 */
-	Json::Value search(string index, string type, string query, bool onlyID = false);
+	Json::Value search(string index, string type, Json::Value query, bool onlyID = false);
 
 	virtual ~ElasticClient();
 };

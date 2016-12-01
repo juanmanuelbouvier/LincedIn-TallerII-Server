@@ -60,6 +60,7 @@ string SettingManager::getJSONStructure(){
 				"\tshared_server_url: type string\t Url to shared server client. Format \"(URL|IP):PORT\". Default: \"" + string(DEFAULT_SHARED_URL) + "\",\n"
 				"\tfirebase_url: type string\t Url to firebase server client. Format \"(URL)\". Default: \"" + string(DEFAULT_FIREBASE_URL) + "\",\n"
 				"\tfirebase_api_key: type string\t Api key to firebase server. Default: \"" + string(DEFAULT_FIREBASE_API_KEY) + "\",\n"
+				"\tdb_folder: type string\t Folder who store DB files. Default: \"" + string(DEFAULT_DB_FOLDER) + "\",\n"
 				"\telastic_host: type string\t Elastic Search Client host. Default: \"" + string(DEFAULT_ELASTIC_HOST) + "\"\n"
 			"}\n\n";
 	return message;

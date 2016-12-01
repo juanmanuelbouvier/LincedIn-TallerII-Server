@@ -51,9 +51,9 @@ Json::Value ElasticClient::sendRequest(RequestBuilder* builder) {
 	return response;
 }
 
-Json::Value ElasticClient::search(string index, string type, string query, bool returnObject) {
+Json::Value ElasticClient::search(string index, string type, Json::Value queryData, bool returnObject) {
 	RequestBuilder* builder = new RequestBuilder();
-	builder = builder->GET()->setUri("/" + index + "/" + type + "/_search")->setQuery("q=" + query + "&default_operator=or");
+	builder = builder->GET()->setUri("/" + index + "/" + type + "/_search")->setBody(JSONUtils::JSONToString(queryData));
 
 	Json::Value result = sendRequest(builder);
 	Json::Value collect(Json::arrayValue);
