@@ -63,9 +63,11 @@ bool FirebaseClient::sendNotifications(string to,string title,string text){
 		return false;
 	}
 	else if (code == 200){
+		LOG("Firebase notification sent for user: " + to,INFO);
 		return true;
 	}
 
+	LOG("Error on sent firebase notification. Response code: " + to_string(code),WARNING);
 	return false;
 
 }

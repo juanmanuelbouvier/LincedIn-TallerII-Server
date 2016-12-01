@@ -63,7 +63,7 @@ static HTTPResponse* handleChat(HTTPRequest* request,string chat_id, User user) 
 	if ( request->isPOST() ) {
 		Json::Value body = JSONUtils::stringToJSON(request->getBody());
 		if (!body.isMember("message") || !body["message"].isString() || body["message"].asString().empty()) {
-			return ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,"NO MESSAGE");
+			return ResponseBuilder::createErrorResponse(CODE_BREACH_PRECONDITIONS,"NO MESSAGE");
 		}
 		string message = body["message"].asString();
 		if (chat.addMessage(user.getID(),message)){

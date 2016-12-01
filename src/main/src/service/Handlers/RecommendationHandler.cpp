@@ -57,6 +57,7 @@ HTTPResponse* RecommendationHandler::handle(HTTPRequest* request) {
 
 		string firebase_id = User::getFirebaseID(user_id);
 		FirebaseClient::sendNotifications(firebase_id,user_id_auth + " te ha recomendado.",user_id_auth + ": " + body["description"].asString());
+
 		return ResponseBuilder::createEmptyResponse(CODE_OK,"RECOMMENDATION SENT");
 
 	}
