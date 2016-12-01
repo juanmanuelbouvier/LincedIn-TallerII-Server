@@ -86,9 +86,9 @@ HTTPResponse* SearchHandler::handle(HTTPRequest* request) {
 	}
 
 	Json::Value toJoin;
-	if ( queryData.getMemberNames().size() > 0 ) {
+	if ( queryData.isMember("query") > 0 ) {
 		ElasticClient el;
-		printf("%s\n",queryData.toStyledString().c_str());
+		LOG("Elastic Query\n" + queryData.toStyledString(),DEBUG);
 		if (el.isAlive()) {
 			toJoin["text"] = el.search("lincedin","user",queryData, true);
 		}
