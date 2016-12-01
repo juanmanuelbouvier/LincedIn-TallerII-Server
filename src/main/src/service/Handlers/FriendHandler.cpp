@@ -79,6 +79,7 @@ HTTPResponse* _actionUser(string method,string source_user_id,string user_destin
 HTTPResponse* _friends(string source_user_id){
 
 	Json::Value friends = Friends::listFriends(source_user_id);
+	Json::Value online = Friends::listFriendsOnline(source_user_id);
 
 	Json::Value metadata;
 	metadata["version"] = "0.1";
@@ -88,6 +89,7 @@ HTTPResponse* _friends(string source_user_id){
 	Json::Value general;
 	general["metadata"] = metadata;
 	general["friends"] = friends;
+	general["online"] = online;
 
 	return ResponseBuilder::createJsonResponse(CODE_OK,general);
 

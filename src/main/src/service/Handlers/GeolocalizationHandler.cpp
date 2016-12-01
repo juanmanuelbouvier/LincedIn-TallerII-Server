@@ -11,9 +11,9 @@ HTTPResponse* findNear(HTTPRequest* request) {
 	Json::Value found = Geolocalization::findUsersByLocation(queryData);
 	if (found.isMember("error")) {
 		found["parameters"] = queryData;
-		return ResponseBuilder::createJsonResponse(CODE_NONEXISTEN,found);
+		return ResponseBuilder::createJsonResponse(CODE_OK,found);
 	}
-	return ResponseBuilder::createErrorResponse(CODE_OK,"PERMISSION DENIED");
+	return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"INTERNAL ERROR");
 }
 
 HTTPResponse* sendLocation(HTTPRequest* request) {
