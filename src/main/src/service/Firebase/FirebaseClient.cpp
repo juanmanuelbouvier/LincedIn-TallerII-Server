@@ -40,7 +40,7 @@ HTTPResponse* FirebaseClient::doPOST( Json::Value body){
 	return response;
 }
 
-bool FirebaseClient::sendNotifications(string to,string title,string text){
+bool FirebaseClient::sendNotifications(string to,string title,string text,Json::Value data){
 
 	if (to.empty())
 		return false;
@@ -53,6 +53,7 @@ bool FirebaseClient::sendNotifications(string to,string title,string text){
 	notification["body"] = text;
 
 	body["notification"] = notification;
+	body["data"] = data;
 
 	HTTPResponse* response = doPOST(body);
 	int code = response->getCode();

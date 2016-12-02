@@ -21,7 +21,7 @@ public:
 	 * @param Body notification
 	 * @return True if could be sended
 	 */
-	static bool sendNotifications(string to,string title,string text);
+	static bool sendNotifications(string to,string title,string text,Json::Value data);
 
 };
 

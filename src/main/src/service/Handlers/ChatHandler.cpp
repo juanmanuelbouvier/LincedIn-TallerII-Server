@@ -45,8 +45,11 @@ void sendFirebaseNotification(Chat chat,User user_source,string message){
 	    string user_destination_id = itr.asString();
 	    if (user_destination_id == id)
 	    	continue;
+	    Json::Value data_firebase;
+		data_firebase["action"] = "CHAT";
+		data_firebase["id"] = id;
 	    string firebase_id = User::getFirebaseID(user_destination_id);
-		FirebaseClient::sendNotifications(firebase_id,"Nuevo mensaje de " + fullName,fullName + ": " + message);
+		FirebaseClient::sendNotifications(firebase_id,"Nuevo mensaje de " + fullName,fullName + ": " + message,data_firebase);
 	}
 }
 

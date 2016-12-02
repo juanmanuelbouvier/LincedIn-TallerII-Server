@@ -14,6 +14,7 @@ using namespace std;
 HTTPResponse* _actionUser(string method,string source_user_id,string user_destination_id);
 HTTPResponse* _friends(string source_user_id);
 HTTPResponse* _pendingFriends(string user_source_id);
+HTTPResponse* _status(string source_user_id,string destination_user_id);
 
 HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 
@@ -33,6 +34,12 @@ HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 
 		return _pendingFriends(user_source_id);
 
+	} else if (PathUtils::matchPathRegexp(http_request->getURI(),"/friends/status/:user_id") and http_request->isGET()){
+
+		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/friends/status/:user_id");
+
+		return _status(user_source_id,path["user_id"]);
+
 	} else if (http_request->isGET()) {
 
 		return _friends(user_source_id);
@@ -43,6 +50,14 @@ HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 
 }
 
+
+HTTPResponse* _status(string source_user_id,string destination_user_id){
+
+	Json::Value body;
+	body["status"] = Friends::statusFriend(source_user_id,destination_user_id);
+
+	return ResponseBuilder::createJsonResponse(CODE_OK,body);
+}
 
 HTTPResponse* _actionUser(string method,string source_user_id,string user_destination_id){
 
@@ -57,8 +72,11 @@ HTTPResponse* _actionUser(string method,string source_user_id,string user_destin
 		if (error){
 			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,"Usuario ya es parte de la red");
 		}
+		Json::Value data_firebase;
+		data_firebase["action"] = "FRIEND_REQUEST";
+		data_firebase["id"] = source_user_id;
 		string firebase_id = User::getFirebaseID(user_destination_id);
-		FirebaseClient::sendNotifications(firebase_id,"Solicitud de amistad","El usuario " + source_user_id + " te ha enviado una solicitud de amistad.");
+		FirebaseClient::sendNotifications(firebase_id,"Solicitud de amistad","El usuario " + source_user_id + " te ha enviado una solicitud de amistad.",data_firebase);
 		return ResponseBuilder::createEmptyResponse(CODE_OK,"Solicitud para agregar a la red enviada");
 
 	} else if (method == "DELETE"){

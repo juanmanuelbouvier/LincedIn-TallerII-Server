@@ -54,9 +54,11 @@ HTTPResponse* RecommendationHandler::handle(HTTPRequest* request) {
 		if (error) {
 			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,error.summary());
 		}
-
+	    Json::Value data_firebase;
+		data_firebase["action"] = "RECOMMENDATION";
+		data_firebase["id"] = user_id_auth;
 		string firebase_id = User::getFirebaseID(user_id);
-		FirebaseClient::sendNotifications(firebase_id,user_id_auth + " te ha recomendado.",user_id_auth + ": " + body["description"].asString());
+		FirebaseClient::sendNotifications(firebase_id,user_id_auth + " te ha recomendado.",user_id_auth + ": " + body["description"].asString(),data_firebase);
 
 		return ResponseBuilder::createEmptyResponse(CODE_OK,"RECOMMENDATION SENT");
 

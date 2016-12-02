@@ -163,3 +163,24 @@ ErrorMessage Friends::remove(string source_user_id, string destination_user_id){
 
 	return error;
 }
+
+string Friends::statusFriend(string source_user_id,string destination_user_id){
+	Json::Value userDB = getDB()->getJSON(source_user_id);
+	Json::Value friends = userDB["friends"];
+
+	if (friends.isMember(destination_user_id)){
+		int state = friends[destination_user_id]["state"].asInt();
+		switch (state) {
+			case STATE_ACCEPTED:
+				return "ACCEPTED";
+			case STATE_PENDING_FOR_HIM:
+				return "PENDING_FOR_HIM";
+			case STATE_PENDING_FOR_ME:
+				return "PENDING_FOR_ME";
+			default:
+				return "NONE";
+		}
+	}
+
+	return "NONE";
+}

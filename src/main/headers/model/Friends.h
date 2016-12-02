@@ -53,6 +53,14 @@ public:
 	 * @return Error sumary, if exist any
 	 */
 	static ErrorMessage remove(string source_user_id, string destination_user_id);
+
+	/**
+	 * Return status of friendly
+	 * @param source user id
+	 * @param destination user id
+	 * @return NONE if not friendly
+	 */
+	static string statusFriend(string source_user_id,string destination_user_id);
 };
 
 #endif /* SRC_MAIN_SRC_MODEL_FRIENDS_H_ */
