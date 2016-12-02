@@ -113,18 +113,18 @@ Para ver de una forma mas amigable la documentación de la rest api ingresar [aq
 
 ### Docker
 Alternativamente, para no instalar todas las dependencias en el host, se creo un compose de docker en la cual se "virtualiza" ubuntu y se puede levantar el server<br/>
-**IMPORTANTE**: 
-	- En el setting.json se debe tener "elastic:9200" en el member "elastic_host". 
-	- El puerto en este archivo debe ser 8081. Si se desea cambiar el puerto, hay que modificar el Dockerfile y crear la imagen (build) nuevamente.
-	- Si hay problemas con el container de elastic search (_"bootstrap error"_) debe correrse el siguiente comando sobre el host: `sudo sysctl -w vm.max_map_count=262144`
+**IMPORTANTE**: <br/>
+	- En el setting.json se debe tener "elastic:9200" en el member "elastic_host". <br/>
+	- El puerto en este archivo debe ser 8081. Si se desea cambiar el puerto, hay que modificar el Dockerfile y crear la imagen (build) nuevamente.<br/>
+	- Si hay problemas con el container de elastic search (_"bootstrap error"_) debe correrse el siguiente comando sobre el host: `sudo sysctl -w vm.max_map_count=262144`<br/>
 
-Para correr docker hacer:
-`sudo docker-compose build`
-`sudo docker-compose up`
+Para correr docker hacer:<br/>
+`sudo docker-compose build`<br/>
+`sudo docker-compose up`<br/>
 
-Notas:
-	- El log de la ejecución se guarda en la carpeta logs del host.
-	- El setting es leido desde el host (puede modificarse y no es necesario rehacer el build)
-	- La carpeta db es compartida entre host-container. Ésto permite que los datos no dependan de Docker y haya persistencia. Es decir, podes levantar el server via Docker, trabajar y luego podes eliminar los containers e imagenes que las bases de datos no se van a perder.
+Notas:<br/>
+	- El log de la ejecución se guarda en la carpeta logs del host.<br/>
+	- El setting es leido desde el host (puede modificarse y no es necesario rehacer el build)<br/>
+	- La carpeta db es compartida entre host-container. Ésto permite que los datos no dependan de Docker y haya<br/> persistencia. Es decir, podes levantar el server via Docker, trabajar y luego podes eliminar los containers e imagenes que las bases de datos no se van a perder.<br/>
 
 
