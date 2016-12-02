@@ -37,8 +37,10 @@ Para compilar el proyecto hay que ejecutar el comando `make build`<br />
 El ejecutable se creará en el directorio _config/build/bin_<br />
 
 #### Correr
-Para ejecutar el proyecto con parametros default hay que ejecutar el comando `make run`<br />
-Ademas, se debe correr el container de elasticsearch para poder realizar busquedas (el server puede funcionar normalmente sin este feature). Para correr el container se debe hacer `sudo docker run -p 9200:9200 elasticsearch`. Si el container lanza error al intentar levantarse se debe correr el comando `sudo sysctl -w vm.max_map_count=262144` sobre el host.
+Para ejecutar el proyecto con parametros default hay que ejecutar el comando `make run` <br />
+
+Además, se debe correr el container de **elasticsearch** para poder realizar busquedas (el server puede funcionar normalmente sin este feature). Para correr el container se debe hacer `sudo docker run -p 9200:9200 elasticsearch`. Si el container lanza error al intentar levantarse se debe correr el comando `sudo sysctl -w vm.max_map_count=262144` sobre el host.
+
 El servidor estará escuchando en: [localhost:8081](http://localhost:8081).<br/>
 `El log se guardar en la carpeta logs y también funciona por stdout.`<br/><br/>
 
@@ -100,20 +102,20 @@ Borra los archivos generados al compilar y también toda la documentación gener
 ### Testing
 Para correr los tests unitarios una vez generado el ejecutable del servidor, ejecutar `make test` o ir al directorio `config/build/bin/` y correr `RunUnitTests`.<br />
 
-### Coverage
+### Coverage (actualmente ~93%)
 El coverage de los test se genera con el comando `make coverage-test`. Para visualizar los resultados abrir con el navegador el archivo `/config/build/coverage/index.html`.
 
 ### Valgrind
 Para correr el chequeo de memoria de valgrind, ejecutar el comando `make valgrind` o `make valgrind-test` una vez compilado el proyecto y generado el ejecutable correspondiente.<br />
 
 ### Documentacion de la RESTful API
-Para ver de una forma mas amigable la documentacion de la rest api ingresar [aqui](wiki/RESTful-API)
+Para ver de una forma mas amigable la documentación de la rest api ingresar [aqui](docs/RESTful_API/RestfulAPI_doc_swagger_markdown.md)
 
 ### Docker
-Alternativamente, para no instalar todas las dependencias en el host, se creo un compose de docker en la cual se "virtualiza" ubuntu y se puede levantar el server y escuchar en el puerto indicado.<br/>
+Alternativamente, para no instalar todas las dependencias en el host, se creo un compose de docker en la cual se "virtualiza" ubuntu y se puede levantar el server<br/>
 **IMPORTANTE**: 
 	- En el setting.json se debe tener "elastic:9200" en el member "elastic_host". 
-	- El puerto en este archivo debe ser 8081. Si se desea cambiar el puerto, hay que modificar el Dockerfile y crear la imagen nuevamente.
+	- El puerto en este archivo debe ser 8081. Si se desea cambiar el puerto, hay que modificar el Dockerfile y crear la imagen (build) nuevamente.
 	- Si hay problemas con el container de elastic search (_"bootstrap error"_) debe correrse el siguiente comando sobre el host: `sudo sysctl -w vm.max_map_count=262144`
 
 Para correr docker hacer:
@@ -121,8 +123,8 @@ Para correr docker hacer:
 `sudo docker-compose up`
 
 Notas:
-	- El log de la ejecucion se guarda en la carpeta logs del host.
+	- El log de la ejecución se guarda en la carpeta logs del host.
 	- El setting es leido desde el host (puede modificarse y no es necesario rehacer el build)
-	- La carpeta db es compartida entre host-container. Esto permite que los datos no dependan de Docker y haya persistencia. Es decir, podes levantar el server via Docker, trabajar y luego podes eliminar los containers e imagenes que las bases de datos no se van a perder.
+	- La carpeta db es compartida entre host-container. Ésto permite que los datos no dependan de Docker y haya persistencia. Es decir, podes levantar el server via Docker, trabajar y luego podes eliminar los containers e imagenes que las bases de datos no se van a perder.
 
 
