@@ -28,11 +28,10 @@ HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 
 		map<string,string> path = PathUtils::routerParser(http_request->getURI(),"/friends/:destination_user_id");
 
+		if ((path["destination_user_id"] == "pending") and http_request->isGET())
+			return _pendingFriends(user_source_id);
+
 		return _actionUser(http_request->getMethod(),user_source_id,path["destination_user_id"]);
-
-	} else if (PathUtils::matchPathRegexp(http_request->getURI(),"/friends/pending")){
-
-		return _pendingFriends(user_source_id);
 
 	} else if (PathUtils::matchPathRegexp(http_request->getURI(),"/friends/status/:user_id") and http_request->isGET()){
 
@@ -70,7 +69,7 @@ HTTPResponse* _actionUser(string method,string source_user_id,string user_destin
 		ErrorMessage error = Friends::add(source_user_id,user_destination_id);
 
 		if (error){
-			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,"Usuario ya es parte de la red");
+			return ResponseBuilder::createErrorResponse(CODE_ALREADY_EXIST,error.summary());
 		}
 		Json::Value data_firebase;
 		data_firebase["action"] = "FRIEND_REQUEST";

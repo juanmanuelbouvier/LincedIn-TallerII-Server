@@ -51,7 +51,6 @@ HTTPRequestHandler::HTTPRequestHandler() {
 	FriendHandler* friendHandler = new FriendHandler();
 	addHandler("/friends",friendHandler);
 	addHandler("/friends/:destination_user_id",friendHandler);
-	addHandler("/friends/pending",friendHandler);
 	addHandler("/friends/status/:user_id",friendHandler);
 
 	UserHandler* userHandler = new UserHandler();

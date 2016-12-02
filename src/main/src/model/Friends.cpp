@@ -1,6 +1,7 @@
 #include <model/Friends.h>
 #include <utils/DateUtils.h>
 #include <model/UserActivity.h>
+#include <iostream>
 
 using namespace std;
 
@@ -62,6 +63,9 @@ ErrorMessage Friends::add(string source_user_id, string destination_user_id){
 		int state = fr["state"].asInt();
 		if (state == STATE_ACCEPTED ){
 			error.addError("add friend","The friend is already on the red");
+			return error;
+		} else if (state == STATE_PENDING_FOR_HIM) {
+			error.addError("add friend","The frienship is pending accept by him");
 			return error;
 		}
 		accept = true;
@@ -127,16 +131,20 @@ Json::Value Friends::listPendingFriends(string user_id){
 	Json::Value friendsDB = userDB["friends"];
 
 	if(!userDB.isMember("error")){
-		for( Json::ValueIterator itr = friendsDB.begin() ; itr != friendsDB.end() ; itr++ ) {
-			Json::Value fr = friendsDB[itr.index()];
+
+		//iterar members
+		Json::Value::Members members = friendsDB.getMemberNames();
+		for( string& friend_id : members ) {
+			Json::Value fr = friendsDB[friend_id];
 			int state = fr["state"].asInt();
 			if ( (state == STATE_PENDING_FOR_HIM) or (state == STATE_PENDING_FOR_ME)) {
-				friends.append(fr);
+				friends.append(friend_id);
 			}
 		}
 	}
 
 	return friends;
+
 }
 
 ErrorMessage Friends::remove(string source_user_id, string destination_user_id){
