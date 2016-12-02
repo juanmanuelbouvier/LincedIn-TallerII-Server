@@ -79,7 +79,7 @@ ErrorMessage Friends::add(string source_user_id, string destination_user_id){
 	//}
 
 	destination_friends[source_user_id] = generateFriendData(accept ? STATE_ACCEPTED : STATE_PENDING_FOR_ME);
-	storeUser(destination_user_id,source_friends);
+	storeUser(destination_user_id,destination_friends);
 
 	return error;
 }
@@ -159,7 +159,7 @@ ErrorMessage Friends::remove(string source_user_id, string destination_user_id){
 	}
 
 	destination_friends.removeMember(source_user_id);
-	storeUser(destination_user_id,source_friends);
+	storeUser(destination_user_id,destination_friends);
 
 	return error;
 }
