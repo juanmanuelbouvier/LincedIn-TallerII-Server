@@ -121,16 +121,20 @@ int main(int argc, char **argv) {
 		Log("------------------------------------------------------------------",INFO);
 		Log("\t\tNew Run of: LincedInAppServer | Version: " + version,INFO);
 		Log("------------------------------------------------------------------",INFO);
+		ThreatUtils::startThreath(closeServerWithInput, server);
+		ThreatUtils::startThreath(closeWithSIGINT, server);
+		ThreatUtils::startThreath(callIndexers,NULL);
+		ThreatUtils::startThreath(logLive,server);
+		server->start();
 	} catch (AppServerException& e) {
+		Log("The server must be close because:\n" + string(e.what()) ,ERROR);
+		cleanMemory();
+		return 0;
+	} catch (exception& e) {
+		Log("The server must be close because (unexpected exception):\n" + string(e.what()) ,ERROR);
 		cleanMemory();
 		return 0;
 	}
-
-	ThreatUtils::startThreath(closeServerWithInput, server);
-	ThreatUtils::startThreath(closeWithSIGINT, server);
-	ThreatUtils::startThreath(callIndexers,NULL);
-	ThreatUtils::startThreath(logLive,server);
-	server->start();
 
 
 	delete server;

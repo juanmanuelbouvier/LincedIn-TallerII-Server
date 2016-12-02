@@ -62,6 +62,5 @@ void UsersIndexer::index() {
 	Log("Start to index DB Skills",INFO);
 	DBManager::getInstance()->getDB("Skills")->iterateAllKeyJson(collect,dummy);
 	Log("Finished Indexing on DB Skills",INFO);
-	DBManager::deleteInstance();
 
 }

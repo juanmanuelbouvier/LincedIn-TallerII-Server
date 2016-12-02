@@ -3,8 +3,7 @@ elastic:
   image: elasticsearch
   ports:
     - "9200:9200"
-  expose:
-    - "9200"
+    - "9300:9300"
   volumes:
     - ./db/_elastic:/usr/share/elasticsearch/data
 lincedin_appserver:  
@@ -18,5 +17,6 @@ lincedin_appserver:
     - "8080:8080"
   expose:
     - "8081"
+    - "8080"
   links:
     - elastic
