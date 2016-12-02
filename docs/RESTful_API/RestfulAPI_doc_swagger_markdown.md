@@ -675,6 +675,7 @@ Retorna un json con usuarios que machean en la búsqueda.
     "longitude" : string,
     "timestamp" : int 
  }
+ ```
 
 ### /geolocalization*?range=..&latitude..&longitude*
 ---
