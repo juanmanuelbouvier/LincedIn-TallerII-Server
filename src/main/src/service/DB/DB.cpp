@@ -15,9 +15,19 @@ DB::DB( string DBName ) {
 }
 
 bool DB::open() {
-	leveldb::Status status = leveldb::DB::Open(options, "./" + pathToDB, &db);
+	string dbName = "./" + pathToDB;
+	leveldb::Status status = leveldb::DB::Open(options, dbName, &db);
 	if ( !status.ok() ) {
-		Log("Unable to open/create database '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),ERROR);
+		LOG("Unable to open/create database '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),ERROR);
+		LOG("Attemp to repair it",INFO);
+		status = leveldb::RepairDB(dbName,options);
+		if (status.ok()) {
+			status = leveldb::DB::Open(options, dbName, &db);
+			if ( status.ok() ) {
+				Log("DB " + dbName + " repaired and opened");
+			}
+		}
+		LOG("Cannot repair " + nameOfDB,ERROR);
 		return false;
 	}
 	Log("Succefully opened database '" + nameOfDB + "'\n levelDB Status: " + status.ToString(),INFO);

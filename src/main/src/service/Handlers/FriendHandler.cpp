@@ -52,6 +52,9 @@ HTTPResponse* FriendHandler::handle(HTTPRequest* http_request) {
 
 HTTPResponse* _status(string source_user_id,string destination_user_id){
 
+	if (!User::exist(destination_user_id)) {
+		return ResponseBuilder::createErrorResponse(CODE_NONEXISTEN,destination_user_id + " not exist");
+	}
 	Json::Value body;
 	body["status"] = Friends::statusFriend(source_user_id,destination_user_id);
 

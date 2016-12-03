@@ -8,8 +8,10 @@
 
 HTTPResponse* findNear(HTTPRequest* request) {
 	Json::Value queryData = JSONUtils::queryToJson( request->getQuery() );
+	printf("%s\n",queryData.toStyledString().c_str());
 	Json::Value found = Geolocalization::findUsersByLocation(queryData);
-	if (found.isMember("error")) {
+	printf("%s\n",found.toStyledString().c_str());
+	if (!found.isMember("error")) {
 		found["parameters"] = queryData;
 		return ResponseBuilder::createJsonResponse(CODE_OK,found);
 	}

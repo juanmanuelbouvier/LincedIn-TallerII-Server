@@ -14,6 +14,8 @@
 #include <services/Access/AccessLog.h>
 #include <utils/PathUtils.h>
 #include <utils/TokenUtils.h>
+#include <services/HTTP/HTTPResponseConstants.h>
+#include <services/HTTP/Message/HTTPMessageBuilder.h>
 
 #include <string>
 #include <algorithm>
@@ -79,9 +81,15 @@ HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 		return HTTPEndPointsHandlers["/"]->handle(http_request);
 	}
 
-
-	accessLog(http_request);
-	return HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
+	HTTPResponse* response;
+	try {
+		accessLog(http_request);
+		response = HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
+	} catch (...) {
+		LOG("Unexpected Error",WARNING);
+		response = ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
+	}
+	return response;
 }
 
 bool HTTPRequestHandler::isHandledRequest(HTTPRequest* http_request) {
