@@ -52,6 +52,12 @@ public:
 	 */
 	static DB* getDB( string DBName );
 
+	/**
+	 * Start all Databases who is in DBs.h
+	 * @return True If all DBs could be opened
+	 */
+	static bool startAllDBs();
+
 	virtual ~DBManager();
 };
 

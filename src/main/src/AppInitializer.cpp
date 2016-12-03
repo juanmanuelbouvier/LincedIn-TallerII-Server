@@ -103,6 +103,12 @@ void cleanMemory() {
 	DBManager::deleteInstance();
 }
 
+void OpenAllDatabases() {
+	if (!DBManager::startAllDBs()){
+		throw AppServerException("Cannot Start DBManager. Check the permissions of " + SettingManager::getInstance()->getDBFolder() + " folder."
+				" (try chmod 776 on db folder)");
+	}
+}
 
 /**
 * Launchs the application server.<BR>
@@ -121,6 +127,7 @@ int main(int argc, char **argv) {
 		Log("------------------------------------------------------------------",INFO);
 		Log("\t\tNew Run of: LincedInAppServer | Version: " + version,INFO);
 		Log("------------------------------------------------------------------",INFO);
+		OpenAllDatabases();
 		ThreatUtils::startThreath(closeServerWithInput, server);
 		ThreatUtils::startThreath(closeWithSIGINT, server);
 		ThreatUtils::startThreath(callIndexers,NULL);
@@ -130,8 +137,8 @@ int main(int argc, char **argv) {
 		Log("The server must be close because:\n" + string(e.what()) ,ERROR);
 		cleanMemory();
 		return 0;
-	} catch (exception& e) {
-		Log("The server must be close because (unexpected exception):\n" + string(e.what()) ,ERROR);
+	} catch (...) {
+		Log("The server must be close because (unexpected exception)",ERROR);
 		cleanMemory();
 		return 0;
 	}

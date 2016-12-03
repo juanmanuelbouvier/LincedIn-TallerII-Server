@@ -1,19 +1,17 @@
 #include <model/Recommendation.h>
 #include <utils/DateUtils.h>
+#include <services/DB/DBs.h>
 
 #include <iostream>
-
-#define RECOMMENDATION_DB "Recommendations"
-#define RECOMMENDATION_COUNT "CountRecommendations"
 
 using namespace std;
 
 DB* Recommendation::getDB(){
-	return DBManager::getDB(RECOMMENDATION_DB);
+	return DBManager::getDB(Databases::DB_RECOMMENDATION);
 }
 
 DB* Recommendation::getCountDB(){
-	return DBManager::getDB(RECOMMENDATION_COUNT);
+	return DBManager::getDB(Databases::DB_RECOMMENDATION_COUNT);
 }
 
 Json::Value Recommendation::getUserRecommendations(string user_id){

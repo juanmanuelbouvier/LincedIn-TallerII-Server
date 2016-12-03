@@ -2,8 +2,8 @@
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
 #include <services/Logger/Logger.h>
 
-#define MAX_CICLES 50
-#define WAIT_REPLY 25
+#define MAX_CICLES 20
+#define WAIT_REPLY 10
 
 using namespace std;
 

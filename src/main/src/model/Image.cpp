@@ -1,14 +1,14 @@
 #include <model/Image.h>
 #include <services/Logger/Logger.h>
+#include <services/DB/DBs.h>
 
 using namespace std;
 
-#define IMAGE_DB "Image"
 #define METADATA_KEY "metadata"
 #define BASE_ID "lincedin"
 
 DB* Image::getDB(){
-	return DBManager::getDB(IMAGE_DB);
+	return DBManager::getDB(Databases::DB_IMAGE);
 }
 
 string Image::urlByBase64(string base64Image){

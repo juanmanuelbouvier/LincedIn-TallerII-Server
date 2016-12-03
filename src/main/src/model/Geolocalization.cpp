@@ -4,9 +4,7 @@
 #include <vector>
 #include <utils/StringUtils.h>
 #include <model/User.h>
-
-#define GEO_DB "Geolocalization"
-#define USER_GEO_DB "User_Geolocalization"
+#include <services/DB/DBs.h>
 
 #define PRECISION_KEY 2
 #define MAX_RANGE 300
@@ -15,11 +13,11 @@
 #define DEFAULT_DISTANCE_ERROR 1;
 
 DB* Geolocalization::getDB() {
-	return DBManager::getDB(GEO_DB);
+	return DBManager::getDB(Databases::DB_GEO);
 }
 
 DB* Geolocalization::getLastGeoDB() {
-	return DBManager::getDB(USER_GEO_DB);
+	return DBManager::getDB(Databases::DB_USER_GEO);
 }
 
 bool Geolocalization::remove(string user_id) {
@@ -44,7 +42,7 @@ bool Geolocalization::updateDBs(string key, Json::Value data ) {
 	if ( getDB()->exist(key) ) {
 		dbData = getDB()->getJSON(key);
 	}
-	dbData[user_id] = data[GEO_DB];
+	dbData[user_id] = data["Geolocalization"];
 	return ( noOldInformation && getDB()->storeJSON(key,dbData) && getLastGeoDB()->store(user_id,key) );
 }
 
@@ -88,7 +86,7 @@ bool Geolocalization::updateLocation( Json::Value data ) {
 
 	Json::Value dataToStore;
 	dataToStore["user_id"] = data["user_id"];
-	dataToStore[GEO_DB] = dataToGeoDB;
+	dataToStore["Geolocalization"] = dataToGeoDB;
 
 	Location location = { stod( data["latitude"].asString() ), stod( data["longitude"].asString() ) };
 	if (!GeoUtils::isValid(location)) {

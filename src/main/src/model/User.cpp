@@ -8,11 +8,18 @@
 #include <exception/SkillException.h>
 #include <exception/UserException.h>
 #include <exception/JobException.h>
-
-#define USER_DB "User"
-#define EMAIL_DB "Email"
+#include <services/DB/DBs.h>
 
 using namespace std;
+
+DB* User::getDB(){
+	return DBManager::getDB(Databases::DB_USER);
+}
+
+
+DB* User::getEmailDB(){
+	return DBManager::getDB(Databases::DB_EMAIL);
+}
 
 User User::create( Json::Value data ) {
 
@@ -176,15 +183,6 @@ User::User(string user_id) {
 
 }
 
-
-DB* User::getDB(){
-	return DBManager::getDB(USER_DB);
-}
-
-
-DB* User::getEmailDB(){
-	return DBManager::getDB(EMAIL_DB);
-}
 
 string User::getID(){
 	return this->id;

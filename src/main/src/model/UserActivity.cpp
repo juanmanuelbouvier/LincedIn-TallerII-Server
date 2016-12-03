@@ -3,14 +3,14 @@
 #include <utils/DateUtils.h>
 #include <extern/json.h>
 #include <services/Logger/Logger.h>
+#include <services/DB/DBs.h>
 
-#define USER_ACTIVITY_DB "UserActivity"
 #define SECONDS_OFFSET_ONLINE 2*60 //2 minutes
 
 using namespace std;
 
 DB* UserActivity::getDB(){
-	return DBManager::getDB(USER_ACTIVITY_DB);
+	return DBManager::getDB(Databases::DB_USER_ACTIVITY);
 }
 
 ErrorMessage UserActivity::recordAccess(string user_id){

@@ -2,8 +2,8 @@ cmake_minimum_required (VERSION 2.6)
 project (LincedInServer)
 
 # Compiler
-SET (CMAKE_CXX_FLAGS "-std=c++11 -g -O0 -fprofile-arcs -ftest-coverage")
-SET(CMAKE_C_FLAGS "-g -fprofile-arcs -O0 -ftest-coverage")
+SET (CMAKE_CXX_FLAGS "-std=c++11 -g -O3 -fprofile-arcs -ftest-coverage")
+SET(CMAKE_C_FLAGS "-g -fprofile-arcs -O3 -ftest-coverage")
 SET(CMAKE_EXE_LINKER_FLAGS "-O0 -fprofile-arcs -ftest-coverage")
 
 # CMake output directory

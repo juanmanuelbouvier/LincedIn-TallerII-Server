@@ -50,4 +50,40 @@ public:
 	virtual ~SharedServerAPI();
 };
 
+/**
+ * Simple Cache to avoid multiple response to SharedServer.
+ */
+class SharedServerCache {
+public:
+	/**
+	 * Check if endpoint is alive on Cache
+	 * @param endpoint
+	 * @return True if alive, false if defeated
+	 */
+	static bool notDefeated(string endpoint);
+
+	/**
+	 * Get cached data.
+	 * @note This metod dont check time of cache data.
+	 * @param endpoint
+	 * @return Json Cached data
+	 */
+	static Json::Value get(string endpoint);
+
+	/**
+	 * Store data in cache
+	 * @param endpoint to chache
+	 * @param data to cache
+	 * @return data who was cache.
+	 */
+	static Json::Value store(string endpoint, Json::Value data);
+
+	/**
+	 * Set Defeat on cache data
+	 * @param key of chache to defeat
+	 * @return True if cache is defeated
+	 */
+	static bool setDefeat(string endpoint);
+};
+
 #endif /* SRC_MAIN_SERVICE_SHAREDSERVERAPI_SHAREDSERVERAPI_H_ */

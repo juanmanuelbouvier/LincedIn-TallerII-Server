@@ -1,18 +1,16 @@
 #include <model/Friends.h>
 #include <utils/DateUtils.h>
 #include <model/UserActivity.h>
-#include <iostream>
-
+#include <services/DB/DBs.h>
+#include <string>
 using namespace std;
-
-#define FRIENDS_DB "Friends"
 
 #define STATE_PENDING_FOR_ME 1
 #define STATE_PENDING_FOR_HIM 2
 #define STATE_ACCEPTED 3
 
 DB* Friends::getDB(){
-	return DBManager::getDB(FRIENDS_DB);
+	return DBManager::getDB(Databases::DB_FRIENDS);
 }
 
 Json::Value Friends::getUserFriendsValue(string user_id){

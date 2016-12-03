@@ -16,6 +16,8 @@
 #include <utils/TokenUtils.h>
 #include <services/HTTP/HTTPResponseConstants.h>
 #include <services/HTTP/Message/HTTPMessageBuilder.h>
+#include <exception/AppServerException.h>
+#include <exception>
 
 #include <string>
 #include <algorithm>
@@ -81,15 +83,19 @@ HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 		return HTTPEndPointsHandlers["/"]->handle(http_request);
 	}
 
-	HTTPResponse* response;
 	try {
 		accessLog(http_request);
-		response = HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
+		return HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
+	} catch (AppServerException& e) {
+		LOG("Unexpected Internal error: " + e.what(),WARNING);
+		return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
+	} catch (exception& e) {
+		LOG("Unexpected CPP Exception: " + e.what(),WARNING);
+		return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
 	} catch (...) {
 		LOG("Unexpected Error",WARNING);
-		response = ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
+		return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
 	}
-	return response;
 }
 
 bool HTTPRequestHandler::isHandledRequest(HTTPRequest* http_request) {

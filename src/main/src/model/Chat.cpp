@@ -6,17 +6,16 @@
 #include <services/Logger/Logger.h>
 #include <utils/JSONUtils.h>
 #include <utils/DateUtils.h>
+#include <services/DB/DBs.h>
 
 #define ID_SEPARATOR "_"
-#define CHAT_DB "Chat"
-#define CHATS_DB "Chats"
 
 DB* Chat::getDB(){
-	return DBManager::getDB(CHAT_DB);
+	return DBManager::getDB(Databases::DB_CHAT);
 }
 
 DB* Chat::getChatsDB(){
-	return DBManager::getDB(CHATS_DB);
+	return DBManager::getDB(Databases::DB_CHATS);
 }
 
 Chat::Chat( string chat_id ) {
