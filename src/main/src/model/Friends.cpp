@@ -92,7 +92,7 @@ Json::Value Friends::listFriends(string user_id){
 	Json::Value friendsDB = userDB["friends"];
 
 	if(!userDB.isMember("error")){
-
+		
 		//iterar members
 		Json::Value::Members members = friendsDB.getMemberNames();
 		for( string& friend_id : members ) {
@@ -124,21 +124,26 @@ Json::Value Friends::listFriendsOnline(string user_id){
 
 Json::Value Friends::listPendingFriends(string user_id){
 
-	Json::Value friends(Json::arrayValue);
+	Json::Value friends;
 	Json::Value userDB = getDB()->getJSON(user_id);
 	Json::Value friendsDB = userDB["friends"];
 
 	if(!userDB.isMember("error")){
-
-		//iterar members
+		Json::Value pending_for_me(Json::arrayValue);
+		Json::Value pending_for_him(Json::arrayValue);
+		
 		Json::Value::Members members = friendsDB.getMemberNames();
 		for( string& friend_id : members ) {
 			Json::Value fr = friendsDB[friend_id];
 			int state = fr["state"].asInt();
-			if ( (state == STATE_PENDING_FOR_HIM) or (state == STATE_PENDING_FOR_ME)) {
-				friends.append(friend_id);
+			if (state == STATE_PENDING_FOR_HIM) {
+				pending_for_him.append(friend_id);
+			} else if (state == STATE_PENDING_FOR_ME){
+				pending_for_me.append(friend_id);
 			}
 		}
+		friends["pending_for_me"] = pending_for_me;
+		friends["pending_for_him"] = pending_for_him;
 	}
 
 	return friends;
