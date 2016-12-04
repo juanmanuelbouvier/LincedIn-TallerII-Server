@@ -71,14 +71,8 @@ ErrorMessage Friends::add(string source_user_id, string destination_user_id){
 
 	source_friends[destination_user_id] = generateFriendData(accept ? STATE_ACCEPTED :STATE_PENDING_FOR_HIM);
 	storeUser(source_user_id,source_friends);
-
-	//destination
+	
 	Json::Value destination_friends = getUserFriendsValue(destination_user_id);
-
-	//if (destination_friends.isMember(source_user_id)){
-	//	error.addError("add friend","The friend is already on the list");
-	//	return error;
-	//}
 
 	destination_friends[source_user_id] = generateFriendData(accept ? STATE_ACCEPTED : STATE_PENDING_FOR_ME);
 	storeUser(destination_user_id,destination_friends);
