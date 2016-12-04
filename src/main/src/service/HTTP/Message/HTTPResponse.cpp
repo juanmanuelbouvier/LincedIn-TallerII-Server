@@ -1,7 +1,9 @@
 #include <services/HTTP/Message/HTTPResponse.h>
+#include <services/HTTP/HTTPResponseConstants.h>
 
 #define HTTP_VERSION "HTTP/1.1"
 const string HTTP_CRLF = "\r\n";
+const int SP = 32;
 
 HTTPResponse::HTTPResponse(struct http_message* msg){
 	httpRawMessage = string(msg->message.p, msg->message.len);
@@ -30,14 +32,14 @@ HTTPResponse::HTTPResponse(string _code, string _phrase, string _body, map<strin
 void HTTPResponse::generateRawMessage(){
 	//Status-line
 	httpRawMessage = HTTP_VERSION;
-	httpRawMessage += " " + code + " " + phrase + HTTP_CRLF;
+	httpRawMessage += char(SP) + code + char(SP) + phraseRFCByCode(std::atoi(code.c_str())) + HTTP_CRLF;
 
 	//Zero or more headers
 	for (map<string,string>::iterator it = headers.begin(); it != headers.end(); ++it) {
-		httpRawMessage += it->first + ":" + it->second + HTTP_CRLF;
+		httpRawMessage += it->first + ": " + it->second + HTTP_CRLF;
 	}
 	if (body.size() > 0) {
-		httpRawMessage += "Content-Length:" + body.length() + HTTP_CRLF;
+		httpRawMessage += "Content-Length: " + to_string(body.length()) + HTTP_CRLF;
 		//An Empty line indicating end of headers
 		httpRawMessage += HTTP_CRLF;
 

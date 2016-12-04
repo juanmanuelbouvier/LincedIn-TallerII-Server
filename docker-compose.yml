@@ -1,0 +1,22 @@
+#If elastic search not work "bootstrap error", run `sudo sysctl -w vm.max_map_count=262144`
+elastic:  
+  image: elasticsearch
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  volumes:
+    - ./db/_elastic:/usr/share/elasticsearch/data
+lincedin_appserver:  
+  build: .
+  volumes:
+    - ./db:/root/LincedIn/LincedIn-TallerII-Server/db
+    - ./logs:/root/LincedIn/LincedIn-TallerII-Server/logs
+    - ./settings:/root/LincedIn/LincedIn-TallerII-Server/settings
+  ports:
+    - "8081:8081"
+    - "8080:8080"
+  expose:
+    - "8081"
+    - "8080"
+  links:
+    - elastic

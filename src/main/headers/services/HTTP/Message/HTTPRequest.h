@@ -7,7 +7,9 @@
 
 using namespace std;
 
-
+/**
+ * Wrapper of a raw request.
+ */
 class HTTPRequest {
 private:
 	map<string,string> headers;
@@ -23,8 +25,19 @@ private:
 	void generateRawMessage();
 
 public:
+	/**
+	 * Create rquest with default values
+	 */
 	HTTPRequest();
+
+	/**
+	 * Create request from a mongoose message
+	 */
 	HTTPRequest(struct http_message* msg);
+
+	/**
+	 * Create response from specific parameters
+	 */
 	HTTPRequest(string method, string uri, string query, string body, map<string,string> headers);
 
 	string getMethod();
@@ -32,6 +45,12 @@ public:
 	string getQuery();
 	string getBody();
 	string getFromHeader(string key);
+
+	bool isGET();
+	bool isPOST();
+	bool isDELETE();
+	bool isPATCH();
+	bool isPUT();
 
 	string toString();
 

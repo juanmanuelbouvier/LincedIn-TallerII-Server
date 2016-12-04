@@ -4,5 +4,10 @@
 		"file" : "logs/LincedInAppServer.log",
 		"show_in_stout" : true,
 		"level" : 3
-	}
+	},
+	"shared_server_url": "lincedin.herokuapp.com",
+	"db_folder": "db",
+	"firebase_url":"fcm.googleapis.com",
+	"firebase_api_key": "AIzaSyBE9xn7X8eo86rxJ_ggiQt6IPx-Oxsb1Kg",
+	"elastic_host": "localhost:9200"
 }

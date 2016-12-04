@@ -1,4 +1,5 @@
 #include <services/HTTP/Message/HTTPRequest.h>
+#include <utils/StringUtils.h>
 
 #define HTTP_VERSION "HTTP/1.1"
 const string HTTP_CRLF = "\r\n";
@@ -44,30 +45,51 @@ HTTPRequest::HTTPRequest(string _method, string _uri, string _query, string _bod
 
 void HTTPRequest::generateRawMessage(){
 	//A Request-line
-	httpMessage = method + " " + uri + query + " " + HTTP_VERSION;
+	string queryWithSimbol = (query.empty()) ? "" : "?" + query;
+	httpMessage = method + " " + StringUtils::urlEncode(uri) + queryWithSimbol + " " + HTTP_VERSION;
 	httpMessage += HTTP_CRLF;
 
 	//Zero or more header
 	for (map<string,string>::iterator it = headers.begin(); it != headers.end(); ++it) {
-		httpMessage += it->first + ":" + it->second + HTTP_CRLF;
+		httpMessage += it->first + ": " + it->second + HTTP_CRLF;
 	}
 
 	//Optionally a message-body
 	if (body.length() > 0) {
-		httpMessage += "Content-Length:" + body.length() + HTTP_CRLF;
+		httpMessage += "Content-Length:" + to_string(body.length()) + HTTP_CRLF;
 		//An empty line (i.e., a line with nothing preceding the CRLF) indicating the end of the header fields
 		httpMessage += HTTP_CRLF;
 		httpMessage +=  body;
 	}
-
 	httpMessage += HTTP_CRLF;
 }
 
 string HTTPRequest::getMethod(){
 	return method;
 }
+
+bool HTTPRequest::isGET(){
+	return method == "GET";
+}
+
+bool HTTPRequest::isPOST(){
+	return method == "POST";
+}
+
+bool HTTPRequest::isDELETE() {
+	return method == "DELETE";
+}
+
+bool HTTPRequest::isPATCH() {
+	return method == "PATCH";
+}
+
+bool HTTPRequest::isPUT() {
+	return method == "PUT";
+}
+
 string HTTPRequest::getURI(){
-	return uri;
+	return StringUtils::unescapeString(uri);
 }
 string HTTPRequest::getQuery(){
 	return query;
@@ -77,7 +99,10 @@ string HTTPRequest::getBody(){
 }
 
 string HTTPRequest::getFromHeader(string key){
-	return headers[key];
+	if ( headers.find(key) != headers.end() ) {
+		return headers[key];
+	}
+	return "";
 }
 
 string HTTPRequest::toString(){

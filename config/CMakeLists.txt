@@ -2,9 +2,9 @@ cmake_minimum_required (VERSION 2.6)
 project (LincedInServer)
 
 # Compiler
-SET (CMAKE_CXX_FLAGS "-std=c++11 -g -fprofile-arcs -ftest-coverage")
-SET(CMAKE_C_FLAGS "-g -fprofile-arcs -ftest-coverage")
-SET(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
+SET (CMAKE_CXX_FLAGS "-std=c++11 -g -O3 -fprofile-arcs -ftest-coverage")
+SET(CMAKE_C_FLAGS "-g -fprofile-arcs -O3 -ftest-coverage")
+SET(CMAKE_EXE_LINKER_FLAGS "-O0 -fprofile-arcs -ftest-coverage")
 
 # CMake output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -35,6 +35,9 @@ include_directories("${APP_HEADERS}")
 set (SOURCES
     ${APP_SOURCE}/service/Logger/Logger.cpp
     
+    ${APP_SOURCE}/service/DB/DBManager.cpp
+    ${APP_SOURCE}/service/DB/DB.cpp
+    
     ${APP_SOURCE}/service/Server/Server.cpp
     ${APP_SOURCE}/service/Server/ServerClient.cpp
     
@@ -47,6 +50,25 @@ set (SOURCES
     ${APP_SOURCE}/service/Handlers/HelloWorldJsonHandler.cpp
     ${APP_SOURCE}/service/Handlers/DefaultHandler.cpp
     ${APP_SOURCE}/service/Handlers/SharedServerHandler.cpp
+    ${APP_SOURCE}/service/Handlers/UserHandler.cpp
+    ${APP_SOURCE}/service/Handlers/ChatHandler.cpp
+    ${APP_SOURCE}/service/Handlers/FriendHandler.cpp
+    ${APP_SOURCE}/service/Handlers/LoginHandler.cpp
+    ${APP_SOURCE}/service/Handlers/ImagesHandler.cpp
+    ${APP_SOURCE}/service/Handlers/RecommendationHandler.cpp
+    ${APP_SOURCE}/service/Handlers/GeolocalizationHandler.cpp
+    ${APP_SOURCE}/service/Handlers/SearchHandler.cpp
+    
+    ${APP_SOURCE}/service/ExternLogin/FacebookAPI.cpp
+    
+    ${APP_SOURCE}/service/Search/ElasticClient.cpp
+    
+    ${APP_SOURCE}/service/Indexer/UsersIndexer.cpp
+    
+    ${APP_SOURCE}/service/Firebase/FirebaseClient.cpp
+    
+    ${APP_SOURCE}/service/Access/AccessToken.cpp
+    ${APP_SOURCE}/service/Access/AccessLog.cpp
     
     ${APP_SOURCE}/service/SharedServerAPI/SharedServerAPI.cpp
     
@@ -54,8 +76,25 @@ set (SOURCES
     ${APP_SOURCE}/utils/PathUtils.cpp
     ${APP_SOURCE}/utils/StringUtils.cpp
     ${APP_SOURCE}/utils/VectorUtils.cpp
+    ${APP_SOURCE}/utils/JSONUtils.cpp
+    ${APP_SOURCE}/utils/TokenUtils.cpp
+    ${APP_SOURCE}/utils/ErrorMessage.cpp
+    ${APP_SOURCE}/utils/ThreatUtils.cpp
+    ${APP_SOURCE}/utils/GeoUtils.cpp
     
     ${APP_SOURCE}/settings/SettingManager.cpp
+    
+    ${APP_SOURCE}/model/Chat.cpp
+    ${APP_SOURCE}/model/Education.cpp
+    ${APP_SOURCE}/model/JobPosition.cpp
+    ${APP_SOURCE}/model/Job.cpp
+    ${APP_SOURCE}/model/Recommendation.cpp
+    ${APP_SOURCE}/model/Skill.cpp
+    ${APP_SOURCE}/model/User.cpp
+    ${APP_SOURCE}/model/Image.cpp
+    ${APP_SOURCE}/model/Friends.cpp
+    ${APP_SOURCE}/model/Geolocalization.cpp
+    ${APP_SOURCE}/model/UserActivity.cpp
     )
     
 set (MAIN_CPP
@@ -90,6 +129,7 @@ set (MONGOOSE_SOURCES
     )
 
 add_definitions(-DMG_ENABLE_THREADS)    
+add_definitions(-DMG_ENABLE_SSL)
 
 add_library (mongoose ${MONGOOSE_SOURCES})
 
@@ -106,12 +146,18 @@ target_link_libraries (LincedInAppServer mongoose json pthread)
 #LevelDB is installed from apt-get install libsnappy-dev libleveldb-dev
 target_link_libraries (LincedInAppServer snappy leveldb)
 
+
+# JWT for C ( require sudo apt-get install libjansson-dev)
+ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/extern_libraries/jwt)
+include_directories(${PROJECT_SOURCE_DIR}/extern_libraries/jwt/include)
+target_link_libraries (LincedInAppServer jwt)
+
 ### TESTING ###
 
 ################################
 # GTest
 ################################
-ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/googletest)
+ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/extern_libraries/googletest)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
@@ -122,8 +168,24 @@ include_directories(${TEST_HEADERS})
 
 add_executable(RunUnitTests
 	${TEST_SOURCE}/mainTests.cpp
+	${TEST_SOURCE}/TestHelper.cpp
+	
 	${TEST_SOURCE}/UtilsTest.cpp
 	${TEST_SOURCE}/SettingManagerTest.cpp
+	${TEST_SOURCE}/DBTest.cpp
+	${TEST_SOURCE}/AccessTokenTest.cpp
+	
+	${TEST_SOURCE}/modeltest/EducationTest.cpp
+	${TEST_SOURCE}/modeltest/RecommendationTest.cpp
+	${TEST_SOURCE}/modeltest/JobPositionTest.cpp
+	${TEST_SOURCE}/modeltest/JobTest.cpp
+	${TEST_SOURCE}/modeltest/SkillTest.cpp
+	${TEST_SOURCE}/modeltest/UserTest.cpp
+	${TEST_SOURCE}/modeltest/ChatTest.cpp
+	${TEST_SOURCE}/modeltest/ImageTest.cpp
+	${TEST_SOURCE}/modeltest/GeolocalizationTests.cpp
+	${TEST_SOURCE}/modeltest/UserActivityTest.cpp
+
 )
 # Test libraries
 target_link_libraries(RunUnitTests gtest gtest_main)
@@ -132,9 +194,22 @@ target_link_libraries(RunUnitTests gtest gtest_main)
 target_link_libraries (RunUnitTests lincedinapp)
 
 #External libraries
-target_link_libraries (RunUnitTests mongoose json pthread snappy leveldb)
+target_link_libraries (RunUnitTests mongoose json pthread snappy leveldb jwt)
 
 add_test(
 	NAME RunUnitTests
 	COMMAND RunUnitTests
 )
+
+
+### GCOV with LCOV ###
+## sudo apt-get install lcov 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake_modules/")
+set(CMAKE_BUILD_TYPE "Debug")
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    include(CodeCoverage)
+    setup_target_for_coverage(run_coverage RunUnitTests coverage)
+    setup_target_for_coverage(run_coverage_server LincedInAppServer coverage)
+    target_link_libraries(lincedinapp gcov)
+endif()

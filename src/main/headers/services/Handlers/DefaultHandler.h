@@ -5,11 +5,13 @@
 
 class DefaultHandler : public Handler {
 public:
-	DefaultHandler();
-
+	DefaultHandler(){};
+	/**
+	 * Default handler generate a dummy response of the request data.
+	 */
 	HTTPResponse* handle(HTTPRequest* http_request);
 
-	virtual ~DefaultHandler();
+	virtual ~DefaultHandler(){};
 };
 
 #endif /* SRC_MAIN_SERVICE_HANDLERS_DEFAULTHANDLER_H_ */

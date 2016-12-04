@@ -1,4 +1,9 @@
 #include <services/Server/ServerClient.h>
+#include <services/HTTP/Message/HTTPMessageBuilder.h>
+#include <services/Logger/Logger.h>
+
+#define MAX_CICLES 20
+#define WAIT_REPLY 10
 
 using namespace std;
 
@@ -7,45 +12,70 @@ ServerClient::ServerClient() {
 	sendingRequest = false;
 	mongooseClientConnection = NULL;
 	response = NULL;
+	url = "";
+	cicles = 0;
+	waitHTTPReply = false;
 
 }
 
+void ServerClient::setDefault() {
+	waitHTTPReply = false;
+	if (response != NULL) {
+		response = NULL;
+	}
+	cicles = 0;
+}
+
 HTTPResponse* ServerClient::sendRequest(HTTPRequest* request) {
+	setDefault();
+
 	mg_printf(mongooseClientConnection, "%s", request->toString().c_str());
+
 	sendingRequest = true;
 	while (sendingRequest) {
+		if (cicles > MAX_CICLES) {
+			LOG(url + " does not respond. Returning TIMEOUT response",WARNING);
+			response = ResponseBuilder::createErrorResponse(408,"TIMEOUT");
+			sendingRequest = false;
+			waitHTTPReply = false;
+			break;
+		}
 		mg_mgr_poll(&eventClientManager, 1000);
+		cicles++;
 	}
 	return response;
 }
 
 void ServerClient::handleHTTPReply(void* data){
-	//TODO: Change with http response
-
 	struct http_message* message = (struct http_message *)data;
 	response = new HTTPResponse(message);
 	sendingRequest = false;
-
 }
 
 
 void ServerClient::eventHandler(mg_connection* connection, int event_code, void* data) {
-	// FIXME: No esta llegando el reply
+	ServerClient* clientConnection = (ServerClient*) connection->user_data;
+	if (event_code == MG_EV_POLL && clientConnection->cicles >= WAIT_REPLY && clientConnection->waitHTTPReply) {
+		connection->flags |= MG_F_CLOSE_IMMEDIATELY;
+	}
 	if (event_code == MG_EV_HTTP_REPLY) {
-		ServerClient* clientConnection = (ServerClient*) connection->user_data;
 		clientConnection->handleHTTPReply(data);
 		connection->flags |= MG_F_CLOSE_IMMEDIATELY;
+	}
+	if (event_code == MG_EV_RECV) {
+		//HOTFIX: Mongoose <---> NodeJS Express
+		clientConnection->waitHTTPReply = true;
 	}
 }
 
 bool ServerClient::connectToUrl(string url){
-	mongooseClientConnection = mg_connect(&eventClientManager, url.c_str(), this->eventHandler);
-	if (mongooseClientConnection == NULL) {
-		return false;
+	mongooseClientConnection = mg_connect_http(&eventClientManager, this->eventHandler, url.c_str(),NULL,NULL);
+	if (mongooseClientConnection) {
+		mongooseClientConnection->user_data = this;
+		mg_set_protocol_http_websocket(mongooseClientConnection);
+		this->url = url;
 	}
-	mongooseClientConnection->user_data = this;
-	mg_set_protocol_http_websocket(mongooseClientConnection);
-	return true;
+	return (mongooseClientConnection != NULL);
 }
 
 ServerClient::~ServerClient() {

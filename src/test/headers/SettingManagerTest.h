@@ -1,7 +1,7 @@
-#ifndef SRC_TEST_SRC_SETTINGMANAGERTEST_H_
-#define SRC_TEST_SRC_SETTINGMANAGERTEST_H_
+#ifndef SRC_TEST_SETTINGMANAGERTEST_H_
+#define SRC_TEST_SETTINGMANAGERTEST_H_
 
-#include <extern/gtest/gtest.h>
+#include <gtest/gtest.h>
 
 
 class SettingManagerTest : public ::testing::Test {
@@ -27,4 +27,4 @@ protected:
 
 };
 
-#endif /* SRC_TEST_SRC_SETTINGMANAGERTEST_H_ */
+#endif /* SRC_TEST_SETTINGMANAGERTEST_H_ */

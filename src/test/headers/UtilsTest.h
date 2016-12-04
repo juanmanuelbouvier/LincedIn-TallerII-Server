@@ -1,7 +1,7 @@
 #ifndef SRC_TEST_UTILSTEST_H_
 #define SRC_TEST_UTILSTEST_H_
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 class UtilsTest : public ::testing::Test {
