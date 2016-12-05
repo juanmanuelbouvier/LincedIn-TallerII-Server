@@ -63,8 +63,6 @@ void* closeServerWithInput(void* server) {
 
 bool CLOSE_SIGINT = false;
 void closeSignal(int signal) {
-	istringstream oss("\n");
-	cin.rdbuf(oss.rdbuf());
 	CLOSE_SIGINT = true;
 }
 

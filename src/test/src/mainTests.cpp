@@ -7,17 +7,19 @@ int main(int argc, char **argv) {
   printf("Running main() from %s\n", __FILE__);
   testing::InitGoogleTest(&argc, argv);
   //If exist, remove old test garbage
-  system("rm -rf \".temp-test/\" *.log");
+  int ro = system("rm -rf \".temp-test/\" *.log");
 
   //Create enviroment temp for thest.
-  system("mkdir -p \".temp-test\"");
+  int ce = system("mkdir -p \".temp-test\"");
 
   int code = RUN_ALL_TESTS();
 
   DBManager::deleteInstance();
   SettingManager::deleteInstance();
   //Remove enviroment
-  system("rm -rf \".temp-test/\" *.log");
-
+  int re = system("rm -rf \".temp-test/\" *.log");
+  if (ro + ce + re == 0) {
+	  code = code + 0;
+  }
   return code;
 }

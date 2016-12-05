@@ -61,5 +61,8 @@ Json::Value Job::listToArray(list<Job> jobs){
 
 
 Job::~Job() {
+	if (position != NULL){
+		delete position;
+	}
 }
 

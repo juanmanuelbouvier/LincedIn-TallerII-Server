@@ -74,26 +74,31 @@ HTTPRequestHandler::HTTPRequestHandler() {
 
 HTTPResponse* HTTPRequestHandler::handle(HTTPRequest* http_request){
 	count ++;
-	Log("Request #" + to_string(count) + " " + http_request->getMethod() + " Uri-> " + http_request->getURI(),INFO);
+	Log("Request #" + to_string(count) + " " + http_request->getMethod() + " URI-> " + http_request->getURI(),INFO);
 	string uri = http_request->getURI();
 
-	//Se supone que por decision del server esto ya tiene que venir verificado
 	if ( !isHandledRequest(http_request) ){
 		Log("No Handler for endpoint = `" + uri + "` go to DefaultHandler",INFO);
 		return HTTPEndPointsHandlers["/"]->handle(http_request);
 	}
-
+	string endpoint = matchPath(uri);
+	LOG("Call handler of endpoint: " + endpoint,DEBUG);
 	try {
 		accessLog(http_request);
-		return HTTPEndPointsHandlers[matchPath(uri)]->handle(http_request);
+		Handler* handler = HTTPEndPointsHandlers[endpoint];
+		if (endpoint == NOT_FOUND) {
+			throw AppServerException("Can't handler endpoint.");
+
+		}
+		return handler->handle(http_request);
 	} catch (AppServerException& e) {
-		LOG("Unexpected Internal error: " + e.what(),WARNING);
+		LOG("Unexpected Internal error in (\"" + endpoint + "\" handler) : " + e.what(),WARNING);
 		return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
 	} catch (exception& e) {
-		LOG("Unexpected CPP Exception: " + e.what(),WARNING);
+		LOG("Unexpected CPP Exception in (\"" + endpoint + "\" handler) : " + e.what(),WARNING);
 		return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
 	} catch (...) {
-		LOG("Unexpected Error",WARNING);
+		LOG("Unexpected Error in (\"" + endpoint + "\" handler) :",WARNING);
 		return ResponseBuilder::createErrorResponse(CODE_UNEXPECTED_ERROR,"UNEXPECTED INTERNAL ERROR");
 	}
 }

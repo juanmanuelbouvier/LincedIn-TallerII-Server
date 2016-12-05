@@ -101,9 +101,7 @@ bool JobPosition::setCategory(string new_category){
 bool JobPosition::remove(){
 	SharedServerAPI shared;
 	Json::Value res = shared.deleteJobPosition(name,category);
-	if (res.isMember("ok"))
-		return true;
-	return false;
+	return (res.isMember("ok"));
 }
 
 
