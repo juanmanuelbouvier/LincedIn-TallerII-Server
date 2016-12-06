@@ -127,4 +127,23 @@ Notas:<br/>
 	- El setting es leido desde el host (puede modificarse y no es necesario rehacer el build)<br/>
 	- La carpeta db es compartida entre host-container. Ésto permite que los datos no dependan de Docker y haya<br/> persistencia. Es decir, podes levantar el server via Docker, trabajar y luego podes eliminar los containers e imagenes que las bases de datos no se van a perder.<br/>
 
+### Generar distribucion DEB
+Para generar el archivo debian hacer:
+
+`sudo make package`
+
+El archivo se genera dentro de la carpeta dist.
+
+Luego podras ser instalado con el siguiente comando:
+
+`sudo dpkg -i dist/<<NOMBRE_DEL_DEB>>.deb`
+
+Nota, es importante usar prilegios para ejecutar las lineas anteriores.
+
+La instalacion se realizara dentro de `/usr/share/bin/LincedInAppServer`
+
+Podra ser corrido de la siguiente forma:
+
+`sudo ./usr/share/bin/LincedInAppServer/LincedInAppServer`
+
 

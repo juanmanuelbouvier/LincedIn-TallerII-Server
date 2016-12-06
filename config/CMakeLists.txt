@@ -141,16 +141,17 @@ set (JSON_SOURCES
     )
 add_library(json ${JSON_SOURCES})
 
-target_link_libraries (LincedInAppServer mongoose json pthread)
+target_link_libraries (lincedinapp mongoose pthread json)
 
 #LevelDB is installed from apt-get install libsnappy-dev libleveldb-dev
-target_link_libraries (LincedInAppServer snappy leveldb)
+target_link_libraries (lincedinapp snappy leveldb)
 
 
 # JWT for C ( require sudo apt-get install libjansson-dev)
 ADD_SUBDIRECTORY (${PROJECT_SOURCE_DIR}/extern_libraries/jwt)
 include_directories(${PROJECT_SOURCE_DIR}/extern_libraries/jwt/include)
-target_link_libraries (LincedInAppServer jwt)
+target_link_libraries (lincedinapp jwt_static)
+target_link_libraries (lincedinapp jwt)
 
 ### TESTING ###
 
@@ -194,7 +195,7 @@ target_link_libraries(RunUnitTests gtest gtest_main)
 target_link_libraries (RunUnitTests lincedinapp)
 
 #External libraries
-target_link_libraries (RunUnitTests mongoose json pthread snappy leveldb jwt)
+#target_link_libraries (RunUnitTests mongoose json pthread snappy leveldb jwt_static)
 
 add_test(
 	NAME RunUnitTests
@@ -210,6 +211,28 @@ set(CMAKE_BUILD_TYPE "Debug")
 if(CMAKE_COMPILER_IS_GNUCXX)
     include(CodeCoverage)
     setup_target_for_coverage(run_coverage RunUnitTests coverage)
-    setup_target_for_coverage(run_coverage_server LincedInAppServer coverage)
-    target_link_libraries(lincedinapp gcov)
+    #setup_target_for_coverage(run_coverage_server LincedInAppServer coverage)
+    #target_link_libraries(lincedinapp gcov)
 endif()
+
+
+### DEB INSTALATION ###
+## /opt/LincedInAppServer
+SET(CPACK_GENERATOR "DEB")
+SET(DESTINATION_DIR "/usr/share/bin/LincedInAppServer")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Bill Gates") 
+#libsnappy-dev libleveldb-dev lcov libjansson-dev openssl libssl-dev
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libleveldb-dev, libsnappy-dev, libjansson-dev, libssl-dev, pkg-config, lcov")
+
+INSTALL(TARGETS LincedInAppServer DESTINATION "${DESTINATION_DIR}")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/../db" DESTINATION "${DESTINATION_DIR}")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/../settings" DESTINATION "${DESTINATION_DIR}")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/../logs" DESTINATION "${DESTINATION_DIR}")
+
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)             
+
+
+INCLUDE(CPack)

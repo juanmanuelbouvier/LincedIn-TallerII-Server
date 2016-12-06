@@ -13,6 +13,10 @@ run-gdb:
 	@mkdir -p logs
 	@mkdir -p resources
 	gdb -ex run -q ./config/build/bin/LincedInAppServer
+	
+package:
+	@mkdir -p dist
+	@cd config && cmake -H. -Bbuild && cd build && sudo make package && mv *.deb ../../dist/
 
 test: build
 	@mkdir -p .temp-test/
