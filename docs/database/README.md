@@ -5,15 +5,15 @@
 - key: 
 	`user_id : string`
 - value:
-```json
+```javascript
 	{
-		“network”: [ 
-			id1,
-			id2,
-			…,
-			idn
+		"network": [ 
+			"id1",
+			"id2",
+			"…",
+			"idn"
 		],
-		“count”: n
+		"count": n
 	}
 ```
 
@@ -23,13 +23,13 @@
 - value:
 ```javascript
 	{
-		“chats”: [
-			chat_id1,
-			chat_id2,
-			…
-			chat_idn
+		"chats": [
+			"chat_id1",
+			"chat_id2",
+			"…",
+			"chat_idn"
 		],
-		“total”: n
+		"total": n
 	}
 ```
 
@@ -40,36 +40,36 @@
 - value:
 ```javascript
 	{	
-		“participants” : [
+		"participants" : [
 			"user_id1",
 			"user_id2",
 			…,
 			"user_idn"
 		],
-		“messages”: [
+		"messages": [
 			{
 				"user_id" : string,
-				“message” : string,
-				“timestamp” : int,	
+				"message" : string,
+				"timestamp" : int,	
 			},
 			{
 				"user_id" : string,
-				“message” : string,
-				“timestamp” : int,
+				"message" : string,
+				"timestamp" : int,
 			},
 			{
 				"user_id" : string,
-				“message” : string,
-				“timestamp” : int,	
+				"message" : string,
+				"timestamp" : int,	
 			},
 			...
 			{
 				"user_id" : string,
-				“message” : string,
-				“timestamp” : int,
+				"message" : string,
+				"timestamp" : int,
 			}
 		],
-		“total”: n
+		"total": n
 	}
 ```
 Note: The "messages" array is sorted by message timestamp.
@@ -83,39 +83,39 @@ Note: The "messages" array is sorted by message timestamp.
 - value:
 ```javascript
 	{	
-		“first_name” : string,
-		“last_name” : string,
+		"first_name" : string,
+		"last_name" : string,
 		"description" : string,
-		“password” : string | encrypt
-		“register_timestamp” : integer,
-		“last_edit_timestamp” : integer,
-		“email” : string,
-		“date_of_birth”: string,
-		“skills_names” : [
+		"password" : string | encrypt
+		"register_timestamp" : integer,
+		"last_edit_timestamp" : integer,
+		"email" : string,
+		"date_of_birth": string,
+		"skills_names" : [
 			name of skill : string,
 			name of other skill : string
 		],
-		“jobs” : [
+		"jobs" : [
 			{
-				“date_since” : string,
-				“date_to” : string (not required),
-				“company” : string,
-				“name_position” : string,
+				"date_since" : string,
+				"date_to" : string (not required),
+				"company" : string,
+				"name_position" : string,
 			}
 		],
-		“education” : [
+		"education" : [
 			{
-				“start_date” : string,
-				“end_date” : string (not required),
-				“school_name” : string,
-				“degree” : string,
+				"start_date" : string,
+				"end_date" : string (not required),
+				"school_name" : string,
+				"degree" : string,
 			}
 		],
-		“recommendations_received” : [
+		"recommendations_received" : [
 			{
-				“recommender” : string,
-				“text” : string,
-				“timestamp” : integer 
+				"recommender" : string,
+				"text" : string,
+				"timestamp" : integer 
 			}
 		]
 	}
@@ -128,19 +128,19 @@ Note: The "messages" array is sorted by message timestamp.
 - value:
 ```javascript
 	{	
-		“recommendations” : [
+		"recommendations" : [
 			{ 
-				“user_id” : string,
-				“description” : string,
-				“timestamp” : integer 
+				"user_id" : string,
+				"description" : string,
+				"timestamp" : integer 
 			},
 			{ 
-				“user_id” : string,
-				“description” : string,
-				“timestamp” : integer 
+				"user_id" : string,
+				"description" : string,
+				"timestamp" : integer 
 			}
 		]
-		“total” : n
+		"total" : n
 	}
 ```
 
@@ -153,13 +153,13 @@ Note: The "messages" array is sorted by message timestamp.
 - value:
 ```javascript
 	{	
-		“skills” : [
+		"skills" : [
 			skill1,
 			skill2,
 			…
 			skilln
 	        ]
-	        “total” : n
+	        "total" : n
         }
 ```
 
@@ -208,7 +208,7 @@ Por ejemplo:
 - value:
 ```javascript
 	{	
-		“last_accion_timestamp” : integer
+		"last_accion_timestamp" : integer
 		"other_util_value" : anything
 	}
 ```
