@@ -5,7 +5,7 @@
 - key: 
 	`user_id : string`
 - value:
-```javascript
+```json
 	{
 		“network”: [ 
 			id1,
@@ -158,9 +158,9 @@ Note: The "messages" array is sorted by message timestamp.
 			skill2,
 			…
 			skilln
-	]
-	“total” : n
-}
+	        ]
+	        “total” : n
+        }
 ```
 
 ### User_Geolocalization
