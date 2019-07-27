@@ -1,7 +1,7 @@
-##LevelDB Structure
+## LevelDB Structure
 
 
-###Users network
+### Users network
 - key: 
 	`user_id : string`
 - value:
@@ -76,7 +76,7 @@ Note: The "messages" array is sorted by message timestamp.
 
 
 
-###User
+### User
 
 - key:
 	`user_id : string`
@@ -147,7 +147,7 @@ Note: The "messages" array is sorted by message timestamp.
 
 
 
-###Skills
+### Skills
 - key:
 	`user_id : string`
 - value:
@@ -202,7 +202,7 @@ Por ejemplo:
 *lat: -25.2967829, lon: -57.5946782 === precision : 3 ===> geo_index = "-25.298-57.595"*
 
 
-###Activity
+### Activity
 - key: 
 	`user_id : string`
 - value:
@@ -216,7 +216,7 @@ Por ejemplo:
 
 
 
-###Configuration
+### Configuration
 - key:
 	`key_name : string`
 - value: 	
